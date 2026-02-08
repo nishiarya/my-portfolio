@@ -7,7 +7,6 @@ import {
   FiLayers,
   FiShield,
   FiActivity,
-  FiGitBranch,
   FiBox,
   FiSettings,
 } from "react-icons/fi";
