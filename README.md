@@ -74,45 +74,8 @@ export default defineConfig([
 ]);
 ```
 
-MAKE YOUR APP LIVE
+# Structure Created
 
-Step 1: Create a GitHub Repository
-
-1. Go to github.com/new
-2. Create a new repository named my-portfolio (or any name you prefer)
-3. Keep it Public (required for free Vercel deployment)
-4. Don't initialize with README (we already have code)
-5. Click Create repository
-
-Step 2: Push Your Code to GitHub
-Once you've created the repository, run these commands (replace YOUR_USERNAME with your GitHub username)
-cd /Users/nishant/git_repo/rn_repo/my-portfolio
-git remote add origin https://github.com/YOUR_GITHUB_USERNAME/my-portfolio.git
-git remote add origin https://github.com/nishiarya/my-portfolio.git
-git push -u origin main
-
-Step 3: Deploy on Vercel
-
-1. Go to vercel.com
-2. Click "Sign Up" → Choose "Continue with GitHub"
-3. Authorize Vercel to access your GitHub
-4. Click "Add New..." → "Project"
-5. Find and select your my-portfolio repository
-6. Vercel will auto-detect Vite settings:
-
-- Framework Preset: Vite
-- Build Command: npm run build
-- Output Directory: dist
-
-1. Click "Deploy"
-
-Step 4: Your Site is Live!
-Within 1-2 minutes, your portfolio will be live at:
-
-https://my-portfolio-YOUR_USERNAME.vercel.app
-https://my-portfolio-nishiarya.vercel.app
-
-Structure Created
 Directory: /public/awards/
 Each award now has a "View Certificate" link that points to:
 Award Image Filename
@@ -134,15 +97,53 @@ Star of the Month 2014 star-of-month-2014.png
 Face Off 2012 face-off-2012.png
 iApp Innovation 2011 iapp-innovation-2011.png
 
-How to Add Your Images
+# How to Add Your Images
 
 1. Save your certificate images to: public/awards/
 2. Name them exactly as listed above (or in the README file at public/awards/README.md)
 3. Supported formats: PNG (recommended), JPG, WebP
    The "View Certificate" link will automatically work once you add the images!
 
+# MAKE YOUR APP LIVE
+
+## Step 1: Create a GitHub Repository
+
+1. Go to github.com/new
+2. Create a new repository named my-portfolio (or any name you prefer)
+3. Keep it Public (required for free Vercel deployment)
+4. Don't initialize with README (we already have code)
+5. Click Create repository
+
+## Step 2: Push Your Code to GitHub
+
+Once you've created the repository, run these commands (replace YOUR_USERNAME with your GitHub username)
+cd /Users/nishant/git_repo/rn_repo/my-portfolio
+git remote add origin https://github.com/YOUR_GITHUB_USERNAME/my-portfolio.git
+git remote add origin https://github.com/nishiarya/my-portfolio.git
+git push -u origin main
+
+## Step 3: Deploy on Vercel
+
+1. Go to vercel.com
+2. Click "Sign Up" → Choose "Continue with GitHub"
+3. Authorize Vercel to access your GitHub
+4. Click "Add New..." → "Project"
+5. Find and select your my-portfolio repository
+6. Vercel will auto-detect Vite settings:
+
+- Framework Preset: Vite
+- Build Command: npm run build
+- Output Directory: dist
+
+7. Click "Deploy"
+
+Step 4: Your Site is Live!
+Within 1-2 minutes, your portfolio will be live at:
+
+https://my-portfolio-YOUR_USERNAME.vercel.app
+
 MY WEBSITE URL:
-https://my-portfolio-nishiarya.vercel.app/
+https://my-portfolio-nishiarya.vercel.app
 
 Note:
 No, you don't need to run deploy manually!
