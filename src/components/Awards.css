@@ -183,6 +183,7 @@
   .award-card {
     flex-direction: column;
     gap: 0.75rem;
+    padding: 1rem;
   }
 
   .award-icon {
@@ -190,5 +191,23 @@
     height: 36px;
     min-width: 36px;
     font-size: 1rem;
+  }
+
+  .award-title {
+    font-size: 0.938rem;
+  }
+
+  .award-description {
+    font-size: 0.813rem;
+  }
+
+  .award-certificate-link {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .year-label span {
+    font-size: 0.938rem;
+    padding: 0.5rem 0.875rem;
   }
 }

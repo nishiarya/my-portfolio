@@ -164,4 +164,13 @@
   .logo-text {
     display: none;
   }
+
+  .header-container {
+    padding: 0 16px;
+  }
+
+  .nav-link-mobile {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.938rem;
+  }
 }

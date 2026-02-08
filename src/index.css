@@ -271,6 +271,7 @@ img {
 @media (max-width: 768px) {
   :root {
     --section-padding: 60px 0;
+    --container-padding: 0 20px;
   }
 
   .section-title {
@@ -280,14 +281,28 @@ img {
   .section-subtitle {
     font-size: 1rem;
   }
+
+  .card {
+    padding: 1.5rem;
+  }
 }
 
 @media (max-width: 480px) {
   :root {
-    --container-padding: 0 16px;
+    --container-padding: 0 20px;
   }
 
   .section-title {
     font-size: 1.75rem;
+  }
+
+  .card {
+    padding: 1.25rem;
+    border-radius: 12px;
+  }
+
+  .btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.938rem;
   }
 }

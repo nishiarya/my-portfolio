@@ -131,6 +131,23 @@
   }
 
   .project-card {
-    padding: 1.5rem;
+    padding: 1.25rem;
+  }
+
+  .project-title {
+    font-size: 1.125rem;
+  }
+
+  .project-description {
+    font-size: 0.875rem;
+  }
+
+  .project-achievements li {
+    font-size: 0.813rem;
+  }
+
+  .tech-tag {
+    font-size: 0.688rem;
+    padding: 0.2rem 0.5rem;
   }
 }

@@ -211,6 +211,7 @@
 
   .resume-card {
     min-width: 100%;
+    padding: 1.25rem;
   }
 
   .resume-actions {
@@ -218,6 +219,36 @@
   }
 
   .preview-frame {
-    height: 400px;
+    height: 350px;
+  }
+
+  .resume-info h3 {
+    font-size: 1rem;
+  }
+
+  .resume-subtitle {
+    font-size: 0.813rem;
+  }
+
+  .resume-description {
+    font-size: 0.813rem;
+  }
+
+  .resume-features li {
+    font-size: 0.75rem;
+  }
+
+  .preview-header {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .preview-title {
+    font-size: 0.875rem;
+  }
+
+  .resume-note p {
+    font-size: 0.875rem;
   }
 }

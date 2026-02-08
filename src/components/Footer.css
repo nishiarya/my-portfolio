@@ -207,4 +207,26 @@
     gap: 1.5rem;
     text-align: center;
   }
+
+  .footer-logo .logo-name {
+    font-size: 1rem;
+  }
+
+  .footer-description {
+    font-size: 0.875rem;
+  }
+
+  .footer-links h4,
+  .footer-contact h4 {
+    font-size: 0.938rem;
+  }
+
+  .footer-links a,
+  .contact-list a {
+    font-size: 0.875rem;
+  }
+
+  .copyright {
+    font-size: 0.813rem;
+  }
 }

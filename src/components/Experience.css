@@ -210,5 +210,30 @@
 
   .summary-card {
     grid-template-columns: 1fr;
+    padding: 1.25rem;
+  }
+
+  .experience-card {
+    padding: 1.25rem;
+  }
+
+  .exp-title {
+    font-size: 1.125rem;
+  }
+
+  .exp-company {
+    font-size: 1rem;
+  }
+
+  .exp-highlights li {
+    font-size: 0.875rem;
+  }
+
+  .stat-number {
+    font-size: 1.75rem;
+  }
+
+  .stat-label {
+    font-size: 0.813rem;
   }
 }

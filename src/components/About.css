@@ -173,7 +173,23 @@
   }
 
   .passion-tag {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.813rem;
+  }
+
+  .about-card {
+    padding: 1.25rem;
+  }
+
+  .about-card h3 {
+    font-size: 1.25rem;
+  }
+
+  .highlight-card {
+    padding: 1.25rem;
+  }
+
+  .passions-section h3 {
+    font-size: 1.25rem;
   }
 }

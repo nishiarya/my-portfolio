@@ -215,10 +215,48 @@
   }
 
   .contact-form-section {
-    padding: 1.5rem;
+    padding: 1.25rem;
+    border-radius: 16px;
   }
 
   .contact-intro h3 {
-    font-size: 1.5rem;
+    font-size: 1.375rem;
+  }
+
+  .contact-intro p {
+    font-size: 0.938rem;
+  }
+
+  .contact-card {
+    padding: 1rem;
+  }
+
+  .contact-card-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .contact-value {
+    font-size: 0.938rem;
+  }
+
+  .contact-form h3 {
+    font-size: 1.25rem;
+  }
+
+  .form-group label {
+    font-size: 0.875rem;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: 0.875rem 1rem;
+    font-size: 0.938rem;
+  }
+
+  .availability-status {
+    font-size: 0.875rem;
+    padding: 0.75rem 1rem;
   }
 }
