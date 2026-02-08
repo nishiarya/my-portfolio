@@ -143,3 +143,17 @@ How to Add Your Images
 
 MY WEBSITE URL:
 https://my-portfolio-nishiarya.vercel.app/
+
+Note:
+No, you don't need to run deploy manually!
+Vercel automatically deploys whenever you push to GitHub. This is one of the best features of Vercel.
+
+What's happening now:
+Vercel detected your push to GitHub
+It's automatically building your project
+Once done, your site will be updated
+
+Check deployment status:
+Go to vercel.com/dashboard
+Click on your project
+You'll see the deployment status (Building → Ready)
