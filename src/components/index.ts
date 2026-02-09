@@ -1,3 +1,4 @@
+// Component exports from modular folders
 export { default as Header } from "./Header";
 export { default as Hero } from "./Hero";
 export { default as About } from "./About";
@@ -8,3 +9,15 @@ export { default as Awards } from "./Awards";
 export { default as Resume } from "./Resume";
 export { default as Contact } from "./Contact";
 export { default as Footer } from "./Footer";
+
+// Re-export data modules for convenience
+export * from "./About/About.data";
+export * from "./Awards/Awards.data";
+export * from "./Contact/Contact.data";
+export * from "./Experience/Experience.data";
+export * from "./Footer/Footer.data";
+export * from "./Header/Header.data";
+export * from "./Hero/Hero.data";
+export * from "./Projects/Projects.data";
+export * from "./Resume/Resume.data";
+export * from "./Skills/Skills.data";

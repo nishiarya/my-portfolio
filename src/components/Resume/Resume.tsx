@@ -2,40 +2,8 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { FiDownload, FiEye, FiFileText, FiCheck } from "react-icons/fi";
+import { resumeVersions } from "./Resume.data";
 import "./Resume.css";
-
-const resumeVersions = [
-  {
-    id: "v1",
-    title: "Resume Version 1",
-    subtitle: "Single Page - Compact Format",
-    description:
-      "A concise one-page resume highlighting key skills, experience, and achievements in a professional compact layout.",
-    features: [
-      "Single page format",
-      "Key highlights focused",
-      "Clean & professional",
-      "Quick overview",
-    ],
-    filename: "Resume_v1.pdf",
-    color: "#6366f1",
-  },
-  {
-    id: "v2",
-    title: "Resume Version 2",
-    subtitle: "Detailed - Two Page Format",
-    description:
-      "Comprehensive two-page resume with detailed project descriptions, technical skills, and career achievements.",
-    features: [
-      "Two page detailed format",
-      "Complete project history",
-      "Extensive skills list",
-      "Full career timeline",
-    ],
-    filename: "Resume_v2.pdf",
-    color: "#8b5cf6",
-  },
-];
 
 const Resume = () => {
   const ref = useRef(null);

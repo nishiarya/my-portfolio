@@ -1,43 +1,9 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import {
-  FiMail,
-  FiPhone,
-  FiMapPin,
-  FiLinkedin,
-  FiSend,
-  FiUser,
-  FiMessageSquare,
-} from "react-icons/fi";
+import { FiMail, FiSend, FiUser, FiMessageSquare } from "react-icons/fi";
+import { contactInfo, contactIntro } from "./Contact.data";
 import "./Contact.css";
-
-const contactInfo = [
-  {
-    icon: FiMail,
-    label: "Email",
-    value: "nishant.bitindia@gmail.com",
-    href: "mailto:nishant.bitindia@gmail.com",
-  },
-  {
-    icon: FiPhone,
-    label: "Phone",
-    value: "+91-9958101777",
-    href: "tel:+919958101777",
-  },
-  {
-    icon: FiMapPin,
-    label: "Location",
-    value: "Noida, India",
-    href: null,
-  },
-  {
-    icon: FiLinkedin,
-    label: "LinkedIn",
-    value: "Connect on LinkedIn",
-    href: "https://www.linkedin.com/in/nishant-singh-ba161a22",
-  },
-];
 
 const Contact = () => {
   const ref = useRef(null);
@@ -100,7 +66,7 @@ const Contact = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <div className="contact-intro">
-              <h3>Get In Touch</h3>
+              <h3>{contactIntro.title}</h3>
               <p>
                 Whether you're looking for a <strong>Tech Lead</strong> to drive
                 your mobile initiatives, need consultation on{" "}
@@ -109,10 +75,7 @@ const Contact = () => {
                 in building lasting professional relationships based on trust
                 and mutual respect.
               </p>
-              <p className="contact-quote">
-                "Great things in business are never done by one person. They're
-                done by a team of people."
-              </p>
+              <p className="contact-quote">"{contactIntro.quote}"</p>
             </div>
 
             <div className="contact-cards">

@@ -7,6 +7,7 @@ import {
   FiCode,
   FiSmartphone,
 } from "react-icons/fi";
+import { footerData } from "./Footer.data";
 import "./Footer.css";
 
 const Footer = () => {
@@ -29,15 +30,11 @@ const Footer = () => {
                 <FiCode className="icon-code" />
               </div>
               <span className="logo-text">
-                <span className="logo-name">Nishant Kumar Singh</span>
-                <span className="logo-title">Mobile Architect</span>
+                <span className="logo-name">{footerData.brand.name}</span>
+                <span className="logo-title">{footerData.brand.title}</span>
               </span>
             </div>
-            <p className="footer-description">
-              Tech Lead with 15.6+ years of experience in React Native & mobile
-              app development. Driven by commitment, reliability, and integrity
-              to deliver exceptional digital experiences.
-            </p>
+            <p className="footer-description">{footerData.brand.description}</p>
           </motion.div>
 
           <motion.div
@@ -49,12 +46,11 @@ const Footer = () => {
           >
             <h4>Quick Links</h4>
             <nav>
-              <a href="#about">About</a>
-              <a href="#skills">Skills</a>
-              <a href="#experience">Experience</a>
-              <a href="#projects">Projects</a>
-              <a href="#resume">Resume</a>
-              <a href="#contact">Contact</a>
+              {footerData.quickLinks.map((link) => (
+                <a key={link.href} href={link.href}>
+                  {link.label}
+                </a>
+              ))}
             </nav>
           </motion.div>
 
@@ -67,16 +63,16 @@ const Footer = () => {
           >
             <h4>Contact Info</h4>
             <div className="contact-list">
-              <a href="mailto:nishant.bitindia@gmail.com">
+              <a href={`mailto:${footerData.contact.email}`}>
                 <FiMail />
-                nishant.bitindia@gmail.com
+                {footerData.contact.email}
               </a>
-              <a href="tel:+919958101777">
+              <a href={`tel:${footerData.contact.phone.replace(/-/g, "")}`}>
                 <FiPhone />
-                +91-9958101777
+                {footerData.contact.phone}
               </a>
               <a
-                href="https://www.linkedin.com/in/nishant-singh-ba161a22"
+                href={footerData.contact.linkedIn}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -96,7 +92,7 @@ const Footer = () => {
         >
           <div className="footer-social">
             <a
-              href="https://www.linkedin.com/in/nishant-singh-ba161a22"
+              href={footerData.contact.linkedIn}
               target="_blank"
               rel="noopener noreferrer"
               className="social-btn"
@@ -105,7 +101,7 @@ const Footer = () => {
               <FiLinkedin />
             </a>
             <a
-              href="mailto:nishant.bitindia@gmail.com"
+              href={`mailto:${footerData.contact.email}`}
               className="social-btn"
               aria-label="Email"
             >
@@ -114,7 +110,7 @@ const Footer = () => {
           </div>
 
           <p className="copyright">
-            © {currentYear} Nishant Kumar Singh. Made with{" "}
+            © {currentYear} {footerData.brand.name}. Made with{" "}
             <FiHeart className="heart-icon" /> using React
           </p>
         </motion.div>

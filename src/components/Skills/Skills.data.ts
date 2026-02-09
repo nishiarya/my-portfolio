@@ -1,0 +1,100 @@
+import { FiSmartphone, FiCode, FiLayers, FiShield } from "react-icons/fi";
+import type { IconType } from "react-icons";
+
+export interface Skill {
+  name: string;
+  level: number;
+}
+
+export interface SkillCategory {
+  title: string;
+  icon: IconType;
+  color: string;
+  skills: Skill[];
+}
+
+export interface TechnicalTools {
+  [category: string]: string[];
+}
+
+export const skillCategories: SkillCategory[] = [
+  {
+    title: "Primary Skills",
+    icon: FiSmartphone,
+    color: "#6366f1",
+    skills: [
+      { name: "React Native", level: 95 },
+      { name: "JavaScript", level: 95 },
+      { name: "React.js", level: 90 },
+      { name: "TypeScript", level: 88 },
+    ],
+  },
+  {
+    title: "Mobile Development",
+    icon: FiLayers,
+    color: "#8b5cf6",
+    skills: [
+      { name: "iOS (Swift/Obj-C)", level: 85 },
+      { name: "Android", level: 75 },
+      { name: "Redux & RTK", level: 90 },
+      { name: "State Management", level: 92 },
+    ],
+  },
+  {
+    title: "Frontend Technologies",
+    icon: FiCode,
+    color: "#a855f7",
+    skills: [
+      { name: "HTML/CSS", level: 90 },
+      { name: "GraphQL", level: 80 },
+      { name: "REST APIs", level: 95 },
+      { name: "Hooks & HOC", level: 92 },
+    ],
+  },
+  {
+    title: "Security & Compliance",
+    icon: FiShield,
+    color: "#10b981",
+    skills: [
+      { name: "OWASP MASVS", level: 85 },
+      { name: "SAST & DAST", level: 80 },
+      { name: "Pen Testing", level: 75 },
+      { name: "GDPR", level: 80 },
+    ],
+  },
+];
+
+export const technicalTools: TechnicalTools = {
+  "DevOps & Tools": [
+    "Git",
+    "Bitbucket",
+    "Azure",
+    "Jenkins",
+    "Jira",
+    "Confluence",
+  ],
+  "Security Tools": ["Fortify", "Black Duck", "ZAP", "OWASP"],
+  Monitoring: [
+    "Bugsnag",
+    "Instabug",
+    "Firebase Crashlytics",
+    "Adobe Analytics",
+  ],
+  "IDE/Environment": ["Cursor AI", "VS Code", "Xcode", "Android Studio"],
+  Authentication: ["OAuth", "MFA", "Azure AD", "MSAL", "Biometrics"],
+  Payments: ["Adyen", "PayPal", "Stripe", "Authorize.net"],
+};
+
+export const coreCompetencies: string[] = [
+  "Mobile Solution Design",
+  "Frontend Architecture",
+  "Design Patterns",
+  "Agile Project Delivery",
+  "Microservices Integration",
+  "Performance Optimization",
+  "Cross-Functional Collaboration",
+  "Scalable Application Delivery",
+  "Code Quality & Best Practices",
+  "Team Leadership & Mentoring",
+  "Client & Stakeholder Management",
+];

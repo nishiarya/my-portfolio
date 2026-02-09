@@ -1,17 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu, FiX, FiSmartphone, FiCode } from "react-icons/fi";
+import { navLinks, brandInfo } from "./Header.data";
 import "./Header.css";
-
-const navLinks = [
-  { href: "#about", label: "About" },
-  { href: "#skills", label: "Skills" },
-  { href: "#experience", label: "Experience" },
-  { href: "#projects", label: "Projects" },
-  { href: "#awards", label: "Awards" },
-  { href: "#resume", label: "Resume" },
-  { href: "#contact", label: "Contact" },
-];
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -39,8 +30,8 @@ const Header = () => {
             <FiCode className="icon-code" />
           </div>
           <span className="logo-text">
-            <span className="logo-name">Nishant</span>
-            <span className="logo-title">Mobile Architect</span>
+            <span className="logo-name">{brandInfo.name}</span>
+            <span className="logo-title">{brandInfo.title}</span>
           </span>
         </a>
 

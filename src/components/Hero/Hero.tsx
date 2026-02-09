@@ -7,6 +7,7 @@ import {
   FiDownload,
   FiArrowRight,
 } from "react-icons/fi";
+import { heroData, codePreview } from "./Hero.data";
 import "./Hero.css";
 
 const Hero = () => {
@@ -50,11 +51,9 @@ const Hero = () => {
       >
         <div className="banner-content">
           <span className="banner-icon">📱</span>
-          <span className="banner-text">
-            Mobile Solution Architect & Tech Lead
-          </span>
+          <span className="banner-text">{heroData.bannerText}</span>
           <span className="banner-divider">|</span>
-          <span className="banner-highlight">React Native Expert</span>
+          <span className="banner-highlight">{heroData.bannerHighlight}</span>
           <span className="banner-icon">⚡</span>
         </div>
       </motion.div>
@@ -68,7 +67,7 @@ const Hero = () => {
             transition={{ delay: 0.2 }}
           >
             <span className="badge-dot"></span>
-            Available for opportunities
+            {heroData.availabilityText}
           </motion.div>
 
           <motion.h1
@@ -77,7 +76,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            Hi, I'm <span className="gradient-text">Nishant Kumar Singh</span>
+            Hi, I'm <span className="gradient-text">{heroData.name}</span>
           </motion.h1>
 
           <motion.h2
@@ -86,7 +85,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            Tech Lead | React-Native | Mobile App Solution Design & Architect
+            {heroData.title}
           </motion.h2>
 
           <motion.p
@@ -96,13 +95,12 @@ const Hero = () => {
             transition={{ delay: 0.5 }}
           >
             An engineer driven by{" "}
-            <span className="highlight">
-              commitment, reliability, integrity, and kindness
-            </span>
-            . With <span className="highlight">15.6+ years</span> of experience,
-            I architect and deliver scalable, secure, and performance-optimized
-            mobile applications for global enterprise clients across telecom,
-            real estate, and digital transformation domains.
+            <span className="highlight">{heroData.highlights[0]}</span>. With{" "}
+            <span className="highlight">{heroData.highlights[1]}</span> of
+            experience, I architect and deliver scalable, secure, and
+            performance-optimized mobile applications for global enterprise
+            clients across telecom, real estate, and digital transformation
+            domains.
           </motion.p>
 
           <motion.div
@@ -113,15 +111,15 @@ const Hero = () => {
           >
             <div className="info-item">
               <FiMapPin className="info-icon" />
-              <span>Noida, India</span>
+              <span>{heroData.location}</span>
             </div>
             <div className="info-item">
               <FiPhone className="info-icon" />
-              <span>+91-9958101777</span>
+              <span>{heroData.phone}</span>
             </div>
             <div className="info-item">
               <FiMail className="info-icon" />
-              <span>nishant.bitindia@gmail.com</span>
+              <span>{heroData.email}</span>
             </div>
           </motion.div>
 
@@ -146,14 +144,14 @@ const Hero = () => {
             transition={{ delay: 0.8 }}
           >
             <a
-              href="https://www.linkedin.com/in/nishant-singh-ba161a22"
+              href={heroData.linkedIn}
               target="_blank"
               rel="noopener noreferrer"
               className="social-link"
             >
               <FiLinkedin />
             </a>
-            <a href="mailto:nishant.bitindia@gmail.com" className="social-link">
+            <a href={`mailto:${heroData.email}`} className="social-link">
               <FiMail />
             </a>
           </motion.div>
@@ -178,22 +176,7 @@ const Hero = () => {
                   <span className="code-title">MobileArchitect.tsx</span>
                 </div>
                 <div className="code-body">
-                  <pre>
-                    {`const MobileArchitect = () => {
-  const skills = [
-    "React Native",
-    "TypeScript",
-    "iOS & Android"
-  ];
-  
-  return (
-    <Innovation 
-      experience="15.6+ years"
-      passion={true}
-    />
-  );
-};`}
-                  </pre>
+                  <pre>{codePreview}</pre>
                 </div>
               </div>
             </div>
