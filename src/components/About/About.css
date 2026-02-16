@@ -1,5 +1,6 @@
 .about {
-  background: var(--bg-secondary);
+  background: var(--bg-primary);
+  padding-top: 60px;
 }
 
 .about-content {

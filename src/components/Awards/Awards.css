@@ -1,5 +1,6 @@
 .awards {
   background: var(--bg-secondary);
+  padding-top: 50px;
 }
 
 .awards-timeline {

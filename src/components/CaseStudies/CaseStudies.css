@@ -1,5 +1,6 @@
 .case-studies {
   background: var(--bg-secondary);
+  padding-top: 50px;
 }
 
 .case-studies-grid {

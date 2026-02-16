@@ -1,5 +1,6 @@
 .projects {
   background: var(--bg-primary);
+  padding-top: 50px;
 }
 
 .projects-grid {
