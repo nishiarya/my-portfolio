@@ -25,8 +25,8 @@ export const skillCategories: SkillCategory[] = [
     skills: [
       { name: "React Native", level: 95 },
       { name: "JavaScript", level: 95 },
-      { name: "React.js", level: 90 },
-      { name: "TypeScript", level: 88 },
+      { name: "TypeScript", level: 75 },
+      { name: "React.js", level: 70 },
     ],
   },
   {
@@ -35,7 +35,7 @@ export const skillCategories: SkillCategory[] = [
     color: "#8b5cf6",
     skills: [
       { name: "iOS (Swift/Obj-C)", level: 85 },
-      { name: "Android", level: 75 },
+      { name: "Apple Developer Account Management", level: 95 },
       { name: "Redux & RTK", level: 90 },
       { name: "State Management", level: 92 },
     ],
@@ -52,14 +52,14 @@ export const skillCategories: SkillCategory[] = [
     ],
   },
   {
-    title: "Security & Compliance",
+    title: "Accessibility, Security & Compliance",
     icon: FiShield,
     color: "#10b981",
     skills: [
-      { name: "OWASP MASVS", level: 85 },
-      { name: "SAST & DAST", level: 80 },
-      { name: "Pen Testing", level: 75 },
-      { name: "GDPR", level: 80 },
+      { name: "Accessibility", level: 85 },
+      { name: "GDPR", level: 85 },
+      { name: "OWASP MASVS", level: 80 },
+      { name: "SCA, SAST, DAST & PenTesting Security Fixes", level: 80 },
     ],
   },
 ];

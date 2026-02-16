@@ -8,6 +8,11 @@ import {
 } from "react-icons/fi";
 import type { IconType } from "react-icons";
 
+export interface ProjectMetric {
+  value: string;
+  label: string;
+}
+
 export interface Project {
   icon: IconType;
   title: string;
@@ -16,6 +21,8 @@ export interface Project {
   achievements: string[];
   technologies: string[];
   color: string;
+  metrics?: ProjectMetric[];
+  demoUrl?: string;
 }
 
 export const projects: Project[] = [
@@ -39,6 +46,11 @@ export const projects: Project[] = [
       "ZAP",
     ],
     color: "#6366f1",
+    metrics: [
+      { value: "99%", label: "Vulnerabilities Fixed" },
+      { value: "15+", label: "Apps Secured" },
+      { value: "0", label: "Critical Issues" },
+    ],
   },
   {
     icon: FiSmartphone,
@@ -59,6 +71,11 @@ export const projects: Project[] = [
       "Digital Signature",
     ],
     color: "#8b5cf6",
+    metrics: [
+      { value: "36", label: "Processes Digitized" },
+      { value: "60%", label: "Cost Reduction" },
+      { value: "3", label: "Awards Won" },
+    ],
   },
   {
     icon: FiGlobe,
@@ -80,6 +97,11 @@ export const projects: Project[] = [
       "REST APIs",
     ],
     color: "#a855f7",
+    metrics: [
+      { value: "40%", label: "Support Calls Reduced" },
+      { value: "500K+", label: "Active Users" },
+      { value: "4.5★", label: "App Rating" },
+    ],
   },
   {
     icon: FiUsers,
@@ -95,6 +117,11 @@ export const projects: Project[] = [
     ],
     technologies: ["React Native", "Azure AD", "MSAL", "Push Notifications"],
     color: "#10b981",
+    metrics: [
+      { value: "30%", label: "Productivity Increase" },
+      { value: "5K+", label: "Daily Active Users" },
+      { value: "< 2s", label: "Load Time" },
+    ],
   },
   {
     icon: FiHome,
@@ -110,6 +137,11 @@ export const projects: Project[] = [
     ],
     technologies: ["iOS", "Salesforce", "SOQL", "REST APIs", "Swift"],
     color: "#f59e0b",
+    metrics: [
+      { value: "Real-time", label: "Agent Tracking" },
+      { value: "100+", label: "Field Agents" },
+      { value: "50%", label: "Efficiency Gain" },
+    ],
   },
   {
     icon: FiBluetooth,
@@ -125,5 +157,10 @@ export const projects: Project[] = [
     ],
     technologies: ["iOS", "Objective-C", "Bluetooth", "CoreBluetooth"],
     color: "#3b82f6",
+    metrics: [
+      { value: "2M+", label: "Downloads" },
+      { value: "#1", label: "App Store Rank" },
+      { value: "2 Weeks", label: "Top Ranking" },
+    ],
   },
 ];

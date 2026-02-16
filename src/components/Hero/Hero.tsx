@@ -44,37 +44,33 @@ const Hero = () => {
 
       {/* Banner */}
       <motion.div
-        className="hero-banner"
+        className="hero-top-banner"
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
-        <div className="banner-content">
-          <span className="banner-icon">📱</span>
-          <span className="banner-text">{heroData.bannerText}</span>
-          <span className="banner-divider">|</span>
-          <span className="banner-highlight">{heroData.bannerHighlight}</span>
-          <span className="banner-icon">⚡</span>
+        <div className="top-banner-content">
+          <div className="top-banner-left">
+            <span className="top-banner-icon">📱</span>
+            <span className="top-banner-text">{heroData.bannerText}</span>
+          </div>
+          <div className="top-banner-right">
+            <span className="top-banner-tech">React Native Expert</span>
+            <span className="top-banner-badge">
+              <span className="top-banner-dot"></span>
+              {heroData.bannerHighlight}
+            </span>
+          </div>
         </div>
       </motion.div>
 
       <div className="hero-container">
         <div className="hero-content">
-          <motion.div
-            className="hero-badge"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
-          >
-            <span className="badge-dot"></span>
-            {heroData.availabilityText}
-          </motion.div>
-
           <motion.h1
             className="hero-title"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.2 }}
           >
             Hi, I'm <span className="gradient-text">{heroData.name}</span>
           </motion.h1>
@@ -83,7 +79,7 @@ const Hero = () => {
             className="hero-subtitle"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
+            transition={{ delay: 0.3 }}
           >
             {heroData.title}
           </motion.h2>
@@ -92,7 +88,7 @@ const Hero = () => {
             className="hero-description"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.4 }}
           >
             An engineer driven by{" "}
             <span className="highlight">{heroData.highlights[0]}</span>. With{" "}
@@ -107,7 +103,7 @@ const Hero = () => {
             className="hero-info"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
+            transition={{ delay: 0.5 }}
           >
             <div className="info-item">
               <FiMapPin className="info-icon" />
@@ -127,7 +123,7 @@ const Hero = () => {
             className="hero-actions"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
+            transition={{ delay: 0.6 }}
           >
             <a href="#contact" className="btn btn-primary">
               Let's Connect <FiArrowRight />
@@ -141,7 +137,7 @@ const Hero = () => {
             className="hero-social"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
+            transition={{ delay: 0.7 }}
           >
             <a
               href={heroData.linkedIn}

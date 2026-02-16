@@ -2,10 +2,13 @@ import {
   Header,
   Hero,
   About,
+  Expertise,
   Skills,
   Experience,
   Projects,
+  CaseStudies,
   Awards,
+  Testimonials,
   Resume,
   Contact,
   Footer,
@@ -19,10 +22,13 @@ function App() {
       <main>
         <Hero />
         <About />
+        <Expertise />
         <Skills />
         <Experience />
         <Projects />
+        <CaseStudies />
         <Awards />
+        <Testimonials />
         <Resume />
         <Contact />
       </main>

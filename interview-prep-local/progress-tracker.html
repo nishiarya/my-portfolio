@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Win-Win Target the Job Hunt | Progress Tracker</title>
+    <style>
+      :root {
+        --primary: #6366f1;
+        --primary-light: #818cf8;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --info: #3b82f6;
+        --bg-dark: #0f172a;
+        --bg-card: #1e293b;
+        --bg-input: #334155;
+        --text: #e2e8f0;
+        --text-muted: #94a3b8;
+        --border: #475569;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        background: var(--bg-dark);
+        color: var(--text);
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+
+      /* Header */
+      .header {
+        background: linear-gradient(135deg, var(--bg-card) 0%, #2d1f54 100%);
+        padding: 30px;
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .header-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .header h1 {
+        font-size: 1.8rem;
+        background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .header-stats {
+        display: flex;
+        gap: 25px;
+      }
+
+      .stat-box {
+        text-align: center;
+        padding: 10px 20px;
+        background: var(--bg-input);
+        border-radius: 10px;
+      }
+
+      .stat-value {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: var(--primary-light);
+      }
+
+      .stat-label {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+      }
+
+      /* Main Container */
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+
+      /* Grid Layout */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+      }
+
+      .grid-full {
+        grid-column: 1 / -1;
+      }
+
+      /* Cards */
+      .card {
+        background: var(--bg-card);
+        border-radius: 15px;
+        padding: 25px;
+        border: 1px solid var(--border);
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .card-badge {
+        background: var(--primary);
+        color: white;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+      }
+
+      /* Progress Bars */
+      .progress-container {
+        margin-bottom: 15px;
+      }
+
+      .progress-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+      }
+
+      .progress-bar {
+        height: 10px;
+        background: var(--bg-input);
+        border-radius: 5px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        border-radius: 5px;
+        transition: width 0.5s ease;
+      }
+
+      .progress-fill.success {
+        background: linear-gradient(90deg, #10b981, #34d399);
+      }
+      .progress-fill.warning {
+        background: linear-gradient(90deg, #f59e0b, #fbbf24);
+      }
+      .progress-fill.danger {
+        background: linear-gradient(90deg, #ef4444, #f87171);
+      }
+      .progress-fill.info {
+        background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      }
+      .progress-fill.primary {
+        background: linear-gradient(90deg, #6366f1, #a855f7);
+      }
+
+      /* Checklist */
+      .checklist {
+        list-style: none;
+      }
+
+      .checklist-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        background: var(--bg-input);
+        transition: all 0.2s;
+      }
+
+      .checklist-item:hover {
+        background: #3d4f6a;
+      }
+
+      .checklist-item input[type="checkbox"] {
+        width: 22px;
+        height: 22px;
+        accent-color: var(--success);
+        cursor: pointer;
+      }
+
+      .checklist-item label {
+        flex: 1;
+        cursor: pointer;
+      }
+
+      .checklist-item.completed label {
+        text-decoration: line-through;
+        color: var(--text-muted);
+      }
+
+      .checklist-item .priority {
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 600;
+      }
+
+      .priority.high {
+        background: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+      }
+      .priority.medium {
+        background: rgba(245, 158, 11, 0.2);
+        color: #fbbf24;
+      }
+      .priority.low {
+        background: rgba(16, 185, 129, 0.2);
+        color: #34d399;
+      }
+
+      /* Application Tracker Table */
+      .table-container {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+      }
+
+      th {
+        background: var(--bg-input);
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+
+      tr:hover {
+        background: rgba(99, 102, 241, 0.1);
+      }
+
+      .status-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .status-badge.applied {
+        background: rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+      }
+      .status-badge.screening {
+        background: rgba(245, 158, 11, 0.2);
+        color: #fbbf24;
+      }
+      .status-badge.interview {
+        background: rgba(168, 85, 247, 0.2);
+        color: #c084fc;
+      }
+      .status-badge.offer {
+        background: rgba(16, 185, 129, 0.2);
+        color: #34d399;
+      }
+      .status-badge.rejected {
+        background: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+      }
+      .status-badge.pending {
+        background: rgba(148, 163, 184, 0.2);
+        color: #94a3b8;
+      }
+
+      /* Forms */
+      .form-row {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+      }
+
+      .form-group {
+        flex: 1;
+        min-width: 150px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px 15px;
+        background: var(--bg-input);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        font-size: 0.95rem;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+
+      /* Buttons */
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-light);
+      }
+
+      .btn-success {
+        background: var(--success);
+        color: white;
+      }
+
+      .btn-danger {
+        background: var(--danger);
+        color: white;
+      }
+
+      .btn-sm {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+      }
+
+      /* Study Materials */
+      .material-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px;
+        background: var(--bg-input);
+        border-radius: 10px;
+        margin-bottom: 10px;
+        text-decoration: none;
+        color: var(--text);
+        transition: all 0.2s;
+        border: 1px solid transparent;
+      }
+
+      .material-link:hover {
+        border-color: var(--primary);
+        background: rgba(99, 102, 241, 0.1);
+      }
+
+      .material-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+      }
+
+      .material-icon.react {
+        background: linear-gradient(135deg, #61dafb33, #61dafb66);
+      }
+      .material-icon.js {
+        background: linear-gradient(135deg, #f7df1e33, #f7df1e66);
+      }
+      .material-icon.system {
+        background: linear-gradient(135deg, #a855f733, #a855f766);
+      }
+      .material-icon.behavioral {
+        background: linear-gradient(135deg, #10b98133, #10b98166);
+      }
+
+      .material-info h4 {
+        font-size: 0.95rem;
+        margin-bottom: 3px;
+      }
+
+      .material-info p {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+      }
+
+      /* Daily Log */
+      .log-entry {
+        padding: 15px;
+        background: var(--bg-input);
+        border-radius: 10px;
+        margin-bottom: 10px;
+        border-left: 4px solid var(--primary);
+      }
+
+      .log-date {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-bottom: 5px;
+      }
+
+      .log-content {
+        font-size: 0.95rem;
+      }
+
+      /* Quick Actions */
+      .quick-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .quick-action {
+        padding: 12px 20px;
+        background: var(--bg-input);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 1px solid transparent;
+        font-size: 0.9rem;
+      }
+
+      .quick-action:hover {
+        border-color: var(--primary);
+        background: rgba(99, 102, 241, 0.1);
+      }
+
+      /* Timer */
+      .timer-display {
+        font-size: 3rem;
+        font-weight: bold;
+        text-align: center;
+        font-family: "Courier New", monospace;
+        color: var(--primary-light);
+        margin: 20px 0;
+      }
+
+      .timer-controls {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      /* Motivational Quote */
+      .quote-box {
+        background: linear-gradient(135deg, #6366f122, #a855f722);
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        border: 1px solid var(--primary);
+      }
+
+      .quote-text {
+        font-size: 1.2rem;
+        font-style: italic;
+        margin-bottom: 10px;
+      }
+
+      .quote-author {
+        color: var(--text-muted);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .header-content {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .header-stats {
+          justify-content: center;
+        }
+      }
+
+      /* Animations */
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      .pulse {
+        animation: pulse 2s infinite;
+      }
+
+      /* Print Styles */
+      @media print {
+        body {
+          background: white;
+          color: black;
+        }
+        .card {
+          border: 1px solid #ccc;
+        }
+        .btn,
+        .quick-actions {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div>
+          <h1>🎯 Win-Win Target the Job Hunt</h1>
+          <p style="color: var(--text-muted); margin-top: 5px">
+            Nishant Singh | React Native Tech Lead & Architect
+          </p>
+        </div>
+        <div class="header-stats">
+          <div class="stat-box">
+            <div class="stat-value" id="totalApplications">0</div>
+            <div class="stat-label">Applications</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="totalInterviews">0</div>
+            <div class="stat-label">Interviews</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="studyHours">0</div>
+            <div class="stat-label">Study Hours</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="daysActive">1</div>
+            <div class="stat-label">Days Active</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Motivational Quote -->
+      <div class="quote-box" style="margin-bottom: 30px">
+        <div class="quote-text" id="quoteText">
+          "Success is not final, failure is not fatal: it is the courage to
+          continue that counts."
+        </div>
+        <div class="quote-author">— Winston Churchill</div>
+      </div>
+
+      <div class="grid">
+        <!-- Today's Actions -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📋 Today's Action Items</div>
+            <span class="card-badge" id="todayProgress">0/0</span>
+          </div>
+          <ul class="checklist" id="todayChecklist">
+            <!-- Items will be loaded from localStorage -->
+          </ul>
+          <div style="margin-top: 15px">
+            <div class="form-row">
+              <input
+                type="text"
+                id="newTaskInput"
+                placeholder="Add new task..."
+                onkeypress="if(event.key==='Enter')addTask()"
+              />
+              <select id="newTaskPriority" style="width: auto">
+                <option value="high">High</option>
+                <option value="medium" selected>Medium</option>
+                <option value="low">Low</option>
+              </select>
+              <button class="btn btn-primary btn-sm" onclick="addTask()">
+                + Add
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Study Timer -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">⏱️ Study Timer (Pomodoro)</div>
+          </div>
+          <div class="timer-display" id="timerDisplay">25:00</div>
+          <div class="timer-controls">
+            <button class="btn btn-primary" onclick="startTimer()">
+              ▶ Start
+            </button>
+            <button class="btn btn-danger" onclick="pauseTimer()">
+              ⏸ Pause
+            </button>
+            <button
+              class="btn"
+              style="background: var(--bg-input)"
+              onclick="resetTimer()"
+            >
+              ↺ Reset
+            </button>
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+              gap: 10px;
+              margin-top: 15px;
+            "
+          >
+            <button
+              class="btn btn-sm"
+              style="background: var(--bg-input)"
+              onclick="setTimer(25)"
+            >
+              25 min
+            </button>
+            <button
+              class="btn btn-sm"
+              style="background: var(--bg-input)"
+              onclick="setTimer(45)"
+            >
+              45 min
+            </button>
+            <button
+              class="btn btn-sm"
+              style="background: var(--bg-input)"
+              onclick="setTimer(60)"
+            >
+              60 min
+            </button>
+          </div>
+        </div>
+
+        <!-- Overall Progress -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📊 Overall Progress</div>
+          </div>
+
+          <div class="progress-container">
+            <div class="progress-header">
+              <span>LinkedIn Optimization</span>
+              <span id="linkedinProgress">100%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill success" style="width: 100%"></div>
+            </div>
+          </div>
+
+          <div class="progress-container">
+            <div class="progress-header">
+              <span>Job Platform Setup</span>
+              <span id="platformProgress">100%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill success" style="width: 100%"></div>
+            </div>
+          </div>
+
+          <div class="progress-container">
+            <div class="progress-header">
+              <span>Technical Preparation</span>
+              <span id="techProgress">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div
+                class="progress-fill info"
+                id="techProgressBar"
+                style="width: 0%"
+              ></div>
+            </div>
+          </div>
+
+          <div class="progress-container">
+            <div class="progress-header">
+              <span>Applications Sent</span>
+              <span id="appProgress">0/50</span>
+            </div>
+            <div class="progress-bar">
+              <div
+                class="progress-fill primary"
+                id="appProgressBar"
+                style="width: 0%"
+              ></div>
+            </div>
+          </div>
+
+          <div class="progress-container">
+            <div class="progress-header">
+              <span>Networking (Referrals)</span>
+              <span id="networkProgress">0/20</span>
+            </div>
+            <div class="progress-bar">
+              <div
+                class="progress-fill warning"
+                id="networkProgressBar"
+                style="width: 0%"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Study Materials -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📚 Study Materials</div>
+          </div>
+
+          <a href="react-native-interview-guide.html" class="material-link">
+            <div class="material-icon react">⚛️</div>
+            <div class="material-info">
+              <h4>React Native Interview Guide</h4>
+              <p>150+ questions, code examples, tips</p>
+            </div>
+          </a>
+
+          <a href="#" class="material-link" onclick="alert('Coming soon!')">
+            <div class="material-icon js">JS</div>
+            <div class="material-info">
+              <h4>JavaScript Deep Dive</h4>
+              <p>Closures, Promises, Event Loop (Coming Soon)</p>
+            </div>
+          </a>
+
+          <a href="#" class="material-link" onclick="alert('Coming soon!')">
+            <div class="material-icon system">🏗️</div>
+            <div class="material-info">
+              <h4>System Design for Mobile</h4>
+              <p>Architecture patterns, scalability (Coming Soon)</p>
+            </div>
+          </a>
+
+          <a href="#" class="material-link" onclick="alert('Coming soon!')">
+            <div class="material-icon behavioral">👔</div>
+            <div class="material-info">
+              <h4>Behavioral Questions</h4>
+              <p>STAR method, leadership scenarios (Coming Soon)</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Job Applications Tracker -->
+      <div class="card grid-full" style="margin-bottom: 30px">
+        <div class="card-header">
+          <div class="card-title">💼 Job Applications Tracker</div>
+          <button
+            class="btn btn-primary btn-sm"
+            onclick="openAddApplicationModal()"
+          >
+            + Add Application
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Company</th>
+                <th>Position</th>
+                <th>Location</th>
+                <th>Applied Date</th>
+                <th>Status</th>
+                <th>Source</th>
+                <th>Notes</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="applicationsTable">
+              <!-- Applications will be loaded from localStorage -->
+            </tbody>
+          </table>
+        </div>
+        <p
+          id="noApplications"
+          style="
+            text-align: center;
+            color: var(--text-muted);
+            padding: 30px;
+            display: none;
+          "
+        >
+          No applications yet. Start applying and track your progress here!
+        </p>
+      </div>
+
+      <!-- Weekly Goals & Daily Log -->
+      <div class="grid">
+        <!-- Weekly Goals -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🎯 Weekly Goals</div>
+            <span class="card-badge" id="weeklyProgress">0/0</span>
+          </div>
+          <ul class="checklist" id="weeklyGoals">
+            <!-- Weekly goals loaded from localStorage -->
+          </ul>
+          <div style="margin-top: 15px">
+            <div class="form-row">
+              <input
+                type="text"
+                id="newGoalInput"
+                placeholder="Add weekly goal..."
+                onkeypress="if(event.key==='Enter')addWeeklyGoal()"
+              />
+              <button class="btn btn-primary btn-sm" onclick="addWeeklyGoal()">
+                + Add
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Daily Log -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📝 Daily Activity Log</div>
+            <button
+              class="btn btn-sm"
+              style="background: var(--bg-input)"
+              onclick="addLogEntry()"
+            >
+              + Add Entry
+            </button>
+          </div>
+          <div id="dailyLog">
+            <!-- Log entries loaded from localStorage -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card" style="margin-top: 30px">
+        <div class="card-header">
+          <div class="card-title">⚡ Quick Actions</div>
+        </div>
+        <div class="quick-actions">
+          <div
+            class="quick-action"
+            onclick="window.open('daily-schedule.html', '_self')"
+          >
+            📅 Daily Schedule
+          </div>
+          <div
+            class="quick-action"
+            onclick="window.open('https://www.linkedin.com/jobs/', '_blank')"
+          >
+            🔗 LinkedIn Jobs
+          </div>
+          <div
+            class="quick-action"
+            onclick="window.open('https://www.naukri.com/', '_blank')"
+          >
+            🔗 Naukri
+          </div>
+          <div
+            class="quick-action"
+            onclick="window.open('https://www.instahyre.com/', '_blank')"
+          >
+            🔗 Instahyre
+          </div>
+          <div
+            class="quick-action"
+            onclick="window.open('https://cutshort.io/', '_blank')"
+          >
+            🔗 Cutshort
+          </div>
+          <div
+            class="quick-action"
+            onclick="window.open('react-native-interview-guide.html', '_blank')"
+          >
+            📚 Study RN
+          </div>
+          <div
+            class="quick-action"
+            onclick="window.open('https://my-portfolio-nishiarya.vercel.app/', '_blank')"
+          >
+            🌐 My Portfolio
+          </div>
+          <div class="quick-action" onclick="exportData()">📤 Export Data</div>
+          <div
+            class="quick-action"
+            onclick="if(confirm('Reset all data?')) resetAllData()"
+          >
+            🔄 Reset Data
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Application Modal -->
+    <div
+      id="applicationModal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div
+        style="
+          background: var(--bg-card);
+          padding: 30px;
+          border-radius: 15px;
+          width: 90%;
+          max-width: 500px;
+          border: 1px solid var(--border);
+        "
+      >
+        <h3 style="margin-bottom: 20px">Add Job Application</h3>
+        <div class="form-group" style="margin-bottom: 15px">
+          <label>Company Name *</label>
+          <input type="text" id="appCompany" placeholder="e.g., Razorpay" />
+        </div>
+        <div class="form-group" style="margin-bottom: 15px">
+          <label>Position *</label>
+          <input
+            type="text"
+            id="appPosition"
+            placeholder="e.g., React Native Tech Lead"
+          />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Location</label>
+            <input
+              type="text"
+              id="appLocation"
+              placeholder="e.g., Bangalore (Remote)"
+            />
+          </div>
+          <div class="form-group">
+            <label>Source</label>
+            <select id="appSource">
+              <option value="LinkedIn">LinkedIn</option>
+              <option value="Naukri">Naukri</option>
+              <option value="Instahyre">Instahyre</option>
+              <option value="Cutshort">Cutshort</option>
+              <option value="Company Website">Company Website</option>
+              <option value="Referral">Referral</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom: 15px">
+          <label>Status</label>
+          <select id="appStatus">
+            <option value="applied">Applied</option>
+            <option value="screening">Screening</option>
+            <option value="interview">Interview</option>
+            <option value="offer">Offer</option>
+            <option value="rejected">Rejected</option>
+            <option value="pending">Pending</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom: 20px">
+          <label>Notes</label>
+          <textarea
+            id="appNotes"
+            rows="2"
+            placeholder="Any additional notes..."
+          ></textarea>
+        </div>
+        <div style="display: flex; gap: 10px; justify-content: flex-end">
+          <button
+            class="btn"
+            style="background: var(--bg-input)"
+            onclick="closeApplicationModal()"
+          >
+            Cancel
+          </button>
+          <button class="btn btn-primary" onclick="saveApplication()">
+            Save Application
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ==================== DATA STORAGE ====================
+      const STORAGE_KEYS = {
+        tasks: "jobHunt_tasks",
+        weeklyGoals: "jobHunt_weeklyGoals",
+        applications: "jobHunt_applications",
+        dailyLog: "jobHunt_dailyLog",
+        studyHours: "jobHunt_studyHours",
+        startDate: "jobHunt_startDate",
+        techProgress: "jobHunt_techProgress",
+      };
+
+      function getData(key) {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+      }
+
+      function setData(key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
+      }
+
+      // ==================== INITIALIZATION ====================
+      function init() {
+        // Set start date if not exists
+        if (!getData(STORAGE_KEYS.startDate)) {
+          setData(STORAGE_KEYS.startDate, new Date().toISOString());
+        }
+
+        // Initialize default tasks if empty
+        if (!getData(STORAGE_KEYS.tasks)) {
+          setData(STORAGE_KEYS.tasks, [
+            {
+              id: 1,
+              text: "Apply to 5 companies",
+              priority: "high",
+              completed: false,
+            },
+            {
+              id: 2,
+              text: "Send 3 referral requests",
+              priority: "high",
+              completed: false,
+            },
+            {
+              id: 3,
+              text: "Study React Native (1 hour)",
+              priority: "high",
+              completed: false,
+            },
+            {
+              id: 4,
+              text: "Practice coding problems",
+              priority: "medium",
+              completed: false,
+            },
+            {
+              id: 5,
+              text: "Update LinkedIn activity",
+              priority: "medium",
+              completed: false,
+            },
+          ]);
+        }
+
+        // Initialize weekly goals if empty
+        if (!getData(STORAGE_KEYS.weeklyGoals)) {
+          setData(STORAGE_KEYS.weeklyGoals, [
+            { id: 1, text: "Apply to 30+ companies", completed: false },
+            { id: 2, text: "Complete RN interview guide", completed: false },
+            { id: 3, text: "Send 10 referral requests", completed: false },
+            { id: 4, text: "Connect with 20 recruiters", completed: false },
+            { id: 5, text: "15+ hours of technical study", completed: false },
+          ]);
+        }
+
+        // Initialize applications if empty
+        if (!getData(STORAGE_KEYS.applications)) {
+          setData(STORAGE_KEYS.applications, []);
+        }
+
+        // Initialize daily log if empty
+        if (!getData(STORAGE_KEYS.dailyLog)) {
+          setData(STORAGE_KEYS.dailyLog, []);
+        }
+
+        // Initialize study hours if empty
+        if (!getData(STORAGE_KEYS.studyHours)) {
+          setData(STORAGE_KEYS.studyHours, 0);
+        }
+
+        renderAll();
+        updateStats();
+      }
+
+      // ==================== RENDER FUNCTIONS ====================
+      function renderAll() {
+        renderTasks();
+        renderWeeklyGoals();
+        renderApplications();
+        renderDailyLog();
+      }
+
+      function renderTasks() {
+        const tasks = getData(STORAGE_KEYS.tasks) || [];
+        const container = document.getElementById("todayChecklist");
+        container.innerHTML = "";
+
+        tasks.forEach((task) => {
+          const li = document.createElement("li");
+          li.className = `checklist-item ${task.completed ? "completed" : ""}`;
+          li.innerHTML = `
+                    <input type="checkbox" ${
+                      task.completed ? "checked" : ""
+                    } onchange="toggleTask(${task.id})">
+                    <label onclick="toggleTask(${task.id})">${task.text}</label>
+                    <span class="priority ${task.priority}">${
+            task.priority
+          }</span>
+                    <button class="btn btn-sm btn-danger" onclick="deleteTask(${
+                      task.id
+                    })" style="padding: 4px 8px;">×</button>
+                `;
+          container.appendChild(li);
+        });
+
+        const completed = tasks.filter((t) => t.completed).length;
+        document.getElementById(
+          "todayProgress"
+        ).textContent = `${completed}/${tasks.length}`;
+      }
+
+      function renderWeeklyGoals() {
+        const goals = getData(STORAGE_KEYS.weeklyGoals) || [];
+        const container = document.getElementById("weeklyGoals");
+        container.innerHTML = "";
+
+        goals.forEach((goal) => {
+          const li = document.createElement("li");
+          li.className = `checklist-item ${goal.completed ? "completed" : ""}`;
+          li.innerHTML = `
+                    <input type="checkbox" ${
+                      goal.completed ? "checked" : ""
+                    } onchange="toggleWeeklyGoal(${goal.id})">
+                    <label onclick="toggleWeeklyGoal(${goal.id})">${
+            goal.text
+          }</label>
+                    <button class="btn btn-sm btn-danger" onclick="deleteWeeklyGoal(${
+                      goal.id
+                    })" style="padding: 4px 8px;">×</button>
+                `;
+          container.appendChild(li);
+        });
+
+        const completed = goals.filter((g) => g.completed).length;
+        document.getElementById(
+          "weeklyProgress"
+        ).textContent = `${completed}/${goals.length}`;
+      }
+
+      function renderApplications() {
+        const applications = getData(STORAGE_KEYS.applications) || [];
+        const container = document.getElementById("applicationsTable");
+        const noApps = document.getElementById("noApplications");
+
+        if (applications.length === 0) {
+          container.innerHTML = "";
+          noApps.style.display = "block";
+          return;
+        }
+
+        noApps.style.display = "none";
+        container.innerHTML = "";
+
+        applications
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .forEach((app) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                    <td><strong>${app.company}</strong></td>
+                    <td>${app.position}</td>
+                    <td>${app.location || "-"}</td>
+                    <td>${new Date(app.date).toLocaleDateString()}</td>
+                    <td><span class="status-badge ${app.status}">${
+              app.status
+            }</span></td>
+                    <td>${app.source}</td>
+                    <td>${app.notes || "-"}</td>
+                    <td>
+                        <button class="btn btn-sm" style="background: var(--bg-input);" onclick="editApplication(${
+                          app.id
+                        })">✏️</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteApplication(${
+                          app.id
+                        })">🗑️</button>
+                    </td>
+                `;
+            container.appendChild(tr);
+          });
+      }
+
+      function renderDailyLog() {
+        const logs = getData(STORAGE_KEYS.dailyLog) || [];
+        const container = document.getElementById("dailyLog");
+        container.innerHTML = "";
+
+        if (logs.length === 0) {
+          container.innerHTML =
+            '<p style="text-align: center; color: var(--text-muted); padding: 20px;">No log entries yet. Add your daily activities!</p>';
+          return;
+        }
+
+        logs
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .slice(0, 5)
+          .forEach((log) => {
+            const div = document.createElement("div");
+            div.className = "log-entry";
+            div.innerHTML = `
+                    <div class="log-date">${new Date(
+                      log.date
+                    ).toLocaleString()}</div>
+                    <div class="log-content">${log.content}</div>
+                `;
+            container.appendChild(div);
+          });
+      }
+
+      // ==================== TASK FUNCTIONS ====================
+      function addTask() {
+        const input = document.getElementById("newTaskInput");
+        const priority = document.getElementById("newTaskPriority").value;
+        const text = input.value.trim();
+
+        if (!text) return;
+
+        const tasks = getData(STORAGE_KEYS.tasks) || [];
+        const newTask = {
+          id: Date.now(),
+          text: text,
+          priority: priority,
+          completed: false,
+        };
+        tasks.push(newTask);
+        setData(STORAGE_KEYS.tasks, tasks);
+
+        input.value = "";
+        renderTasks();
+      }
+
+      function toggleTask(id) {
+        const tasks = getData(STORAGE_KEYS.tasks) || [];
+        const task = tasks.find((t) => t.id === id);
+        if (task) {
+          task.completed = !task.completed;
+          setData(STORAGE_KEYS.tasks, tasks);
+          renderTasks();
+        }
+      }
+
+      function deleteTask(id) {
+        let tasks = getData(STORAGE_KEYS.tasks) || [];
+        tasks = tasks.filter((t) => t.id !== id);
+        setData(STORAGE_KEYS.tasks, tasks);
+        renderTasks();
+      }
+
+      // ==================== WEEKLY GOALS FUNCTIONS ====================
+      function addWeeklyGoal() {
+        const input = document.getElementById("newGoalInput");
+        const text = input.value.trim();
+
+        if (!text) return;
+
+        const goals = getData(STORAGE_KEYS.weeklyGoals) || [];
+        const newGoal = {
+          id: Date.now(),
+          text: text,
+          completed: false,
+        };
+        goals.push(newGoal);
+        setData(STORAGE_KEYS.weeklyGoals, goals);
+
+        input.value = "";
+        renderWeeklyGoals();
+      }
+
+      function toggleWeeklyGoal(id) {
+        const goals = getData(STORAGE_KEYS.weeklyGoals) || [];
+        const goal = goals.find((g) => g.id === id);
+        if (goal) {
+          goal.completed = !goal.completed;
+          setData(STORAGE_KEYS.weeklyGoals, goals);
+          renderWeeklyGoals();
+        }
+      }
+
+      function deleteWeeklyGoal(id) {
+        let goals = getData(STORAGE_KEYS.weeklyGoals) || [];
+        goals = goals.filter((g) => g.id !== id);
+        setData(STORAGE_KEYS.weeklyGoals, goals);
+        renderWeeklyGoals();
+      }
+
+      // ==================== APPLICATION FUNCTIONS ====================
+      function openAddApplicationModal() {
+        document.getElementById("applicationModal").style.display = "flex";
+      }
+
+      function closeApplicationModal() {
+        document.getElementById("applicationModal").style.display = "none";
+        // Clear form
+        document.getElementById("appCompany").value = "";
+        document.getElementById("appPosition").value = "";
+        document.getElementById("appLocation").value = "";
+        document.getElementById("appNotes").value = "";
+      }
+
+      function saveApplication() {
+        const company = document.getElementById("appCompany").value.trim();
+        const position = document.getElementById("appPosition").value.trim();
+        const location = document.getElementById("appLocation").value.trim();
+        const source = document.getElementById("appSource").value;
+        const status = document.getElementById("appStatus").value;
+        const notes = document.getElementById("appNotes").value.trim();
+
+        if (!company || !position) {
+          alert("Please fill in Company and Position");
+          return;
+        }
+
+        const applications = getData(STORAGE_KEYS.applications) || [];
+        const newApp = {
+          id: Date.now(),
+          company,
+          position,
+          location,
+          source,
+          status,
+          notes,
+          date: new Date().toISOString(),
+        };
+        applications.push(newApp);
+        setData(STORAGE_KEYS.applications, applications);
+
+        closeApplicationModal();
+        renderApplications();
+        updateStats();
+
+        // Auto add log entry
+        addAutoLogEntry(`Applied to ${company} for ${position} position`);
+      }
+
+      function deleteApplication(id) {
+        if (!confirm("Delete this application?")) return;
+        let applications = getData(STORAGE_KEYS.applications) || [];
+        applications = applications.filter((a) => a.id !== id);
+        setData(STORAGE_KEYS.applications, applications);
+        renderApplications();
+        updateStats();
+      }
+
+      function editApplication(id) {
+        // Simple edit via prompt for now
+        const applications = getData(STORAGE_KEYS.applications) || [];
+        const app = applications.find((a) => a.id === id);
+        if (!app) return;
+
+        const newStatus = prompt(
+          "Update status (applied/screening/interview/offer/rejected/pending):",
+          app.status
+        );
+        if (
+          newStatus &&
+          [
+            "applied",
+            "screening",
+            "interview",
+            "offer",
+            "rejected",
+            "pending",
+          ].includes(newStatus)
+        ) {
+          app.status = newStatus;
+          setData(STORAGE_KEYS.applications, applications);
+          renderApplications();
+          updateStats();
+
+          if (newStatus === "interview") {
+            addAutoLogEntry(`🎉 Got interview call from ${app.company}!`);
+          }
+        }
+      }
+
+      // ==================== DAILY LOG FUNCTIONS ====================
+      function addLogEntry() {
+        const content = prompt("What did you accomplish today?");
+        if (!content) return;
+
+        const logs = getData(STORAGE_KEYS.dailyLog) || [];
+        logs.push({
+          id: Date.now(),
+          content,
+          date: new Date().toISOString(),
+        });
+        setData(STORAGE_KEYS.dailyLog, logs);
+        renderDailyLog();
+      }
+
+      function addAutoLogEntry(content) {
+        const logs = getData(STORAGE_KEYS.dailyLog) || [];
+        logs.push({
+          id: Date.now(),
+          content,
+          date: new Date().toISOString(),
+        });
+        setData(STORAGE_KEYS.dailyLog, logs);
+        renderDailyLog();
+      }
+
+      // ==================== TIMER FUNCTIONS ====================
+      let timerInterval = null;
+      let timerSeconds = 25 * 60;
+
+      function updateTimerDisplay() {
+        const mins = Math.floor(timerSeconds / 60);
+        const secs = timerSeconds % 60;
+        document.getElementById("timerDisplay").textContent = `${mins
+          .toString()
+          .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+      }
+
+      function startTimer() {
+        if (timerInterval) return;
+        timerInterval = setInterval(() => {
+          timerSeconds--;
+          updateTimerDisplay();
+          if (timerSeconds <= 0) {
+            pauseTimer();
+            alert("⏰ Time is up! Take a break.");
+            // Add study time
+            const hours = getData(STORAGE_KEYS.studyHours) || 0;
+            setData(STORAGE_KEYS.studyHours, hours + 0.5);
+            updateStats();
+            timerSeconds = 25 * 60;
+            updateTimerDisplay();
+          }
+        }, 1000);
+      }
+
+      function pauseTimer() {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+
+      function resetTimer() {
+        pauseTimer();
+        timerSeconds = 25 * 60;
+        updateTimerDisplay();
+      }
+
+      function setTimer(mins) {
+        pauseTimer();
+        timerSeconds = mins * 60;
+        updateTimerDisplay();
+      }
+
+      // ==================== STATS FUNCTIONS ====================
+      function updateStats() {
+        const applications = getData(STORAGE_KEYS.applications) || [];
+        const interviews = applications.filter(
+          (a) => a.status === "interview"
+        ).length;
+        const studyHours = getData(STORAGE_KEYS.studyHours) || 0;
+        const startDate = new Date(getData(STORAGE_KEYS.startDate));
+        const today = new Date();
+        const daysActive = Math.max(
+          1,
+          Math.ceil((today - startDate) / (1000 * 60 * 60 * 24))
+        );
+
+        document.getElementById("totalApplications").textContent =
+          applications.length;
+        document.getElementById("totalInterviews").textContent = interviews;
+        document.getElementById("studyHours").textContent =
+          studyHours.toFixed(1);
+        document.getElementById("daysActive").textContent = daysActive;
+
+        // Update progress bars
+        const appTarget = 50;
+        const appPercent = Math.min(
+          100,
+          (applications.length / appTarget) * 100
+        );
+        document.getElementById(
+          "appProgress"
+        ).textContent = `${applications.length}/${appTarget}`;
+        document.getElementById(
+          "appProgressBar"
+        ).style.width = `${appPercent}%`;
+
+        const networkTarget = 20;
+        const referrals = applications.filter(
+          (a) => a.source === "Referral"
+        ).length;
+        const networkPercent = Math.min(100, (referrals / networkTarget) * 100);
+        document.getElementById(
+          "networkProgress"
+        ).textContent = `${referrals}/${networkTarget}`;
+        document.getElementById(
+          "networkProgressBar"
+        ).style.width = `${networkPercent}%`;
+      }
+
+      // ==================== UTILITY FUNCTIONS ====================
+      function exportData() {
+        const data = {
+          tasks: getData(STORAGE_KEYS.tasks),
+          weeklyGoals: getData(STORAGE_KEYS.weeklyGoals),
+          applications: getData(STORAGE_KEYS.applications),
+          dailyLog: getData(STORAGE_KEYS.dailyLog),
+          studyHours: getData(STORAGE_KEYS.studyHours),
+          startDate: getData(STORAGE_KEYS.startDate),
+          exportDate: new Date().toISOString(),
+        };
+
+        const blob = new Blob([JSON.stringify(data, null, 2)], {
+          type: "application/json",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `job-hunt-backup-${
+          new Date().toISOString().split("T")[0]
+        }.json`;
+        a.click();
+      }
+
+      function resetAllData() {
+        Object.values(STORAGE_KEYS).forEach((key) =>
+          localStorage.removeItem(key)
+        );
+        location.reload();
+      }
+
+      // ==================== QUOTES ====================
+      const quotes = [
+        {
+          text: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+          author: "Winston Churchill",
+        },
+        {
+          text: "The only way to do great work is to love what you do.",
+          author: "Steve Jobs",
+        },
+        {
+          text: "Believe you can and you're halfway there.",
+          author: "Theodore Roosevelt",
+        },
+        {
+          text: "It does not matter how slowly you go as long as you do not stop.",
+          author: "Confucius",
+        },
+        {
+          text: "The future belongs to those who believe in the beauty of their dreams.",
+          author: "Eleanor Roosevelt",
+        },
+        {
+          text: "Don't watch the clock; do what it does. Keep going.",
+          author: "Sam Levenson",
+        },
+        {
+          text: "Everything you've ever wanted is on the other side of fear.",
+          author: "George Addair",
+        },
+        {
+          text: "Hardships often prepare ordinary people for an extraordinary destiny.",
+          author: "C.S. Lewis",
+        },
+      ];
+
+      function showRandomQuote() {
+        const quote = quotes[Math.floor(Math.random() * quotes.length)];
+        document.getElementById("quoteText").textContent = `"${quote.text}"`;
+        document.querySelector(
+          ".quote-author"
+        ).textContent = `— ${quote.author}`;
+      }
+
+      // Initialize
+      init();
+      showRandomQuote();
+    </script>
+  </body>
+</html>

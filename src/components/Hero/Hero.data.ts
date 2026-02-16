@@ -29,7 +29,7 @@ export const heroData: HeroData = {
   linkedIn: "https://www.linkedin.com/in/nishant-singh-ba161a22",
   availabilityText: "Available for opportunities",
   bannerText: "Mobile Solution Architect & Tech Lead",
-  bannerHighlight: "React Native Expert",
+  bannerHighlight: "Open to Work",
 };
 
 export const codePreview = `const MobileArchitect = () => {

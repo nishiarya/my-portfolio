@@ -59,6 +59,35 @@
   font-size: 0.938rem;
 }
 
+/* Project Metrics */
+.project-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--bg-tertiary);
+  border-radius: 10px;
+}
+
+.project-metric {
+  text-align: center;
+}
+
+.project-metric .metric-value {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 800;
+  font-family: "Fira Code", monospace;
+  line-height: 1.2;
+}
+
+.project-metric .metric-label {
+  font-size: 0.688rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
 .project-achievements {
   flex: 1;
 }
@@ -149,5 +178,25 @@
   .tech-tag {
     font-size: 0.688rem;
     padding: 0.2rem 0.5rem;
+  }
+
+  .project-metrics {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  .project-metric .metric-value {
+    font-size: 1rem;
+  }
+
+  .project-metric .metric-label {
+    font-size: 0.625rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .project-metrics {
+    grid-template-columns: 1fr;
   }
 }

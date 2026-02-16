@@ -47,6 +47,20 @@ const Projects = () => {
 
               <p className="project-description">{project.description}</p>
 
+              {/* Project Metrics */}
+              {project.metrics && project.metrics.length > 0 && (
+                <div className="project-metrics">
+                  {project.metrics.map((metric) => (
+                    <div key={metric.label} className="project-metric">
+                      <span className="metric-value" style={{ color: project.color }}>
+                        {metric.value}
+                      </span>
+                      <span className="metric-label">{metric.label}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               <div className="project-achievements">
                 <h4>Key Achievements</h4>
                 <ul>

@@ -1,0 +1,2296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Native Interview Preparation Guide | Nishant Singh</title>
+    <style>
+        :root {
+            --primary: #61dafb;
+            --primary-dark: #21a1c4;
+            --bg-dark: #0a0a1a;
+            --bg-card: #12122a;
+            --bg-code: #1a1a2e;
+            --text: #e0e0e0;
+            --text-muted: #888;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --danger: #f87171;
+            --purple: #a78bfa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-card);
+            border-right: 1px solid #333;
+            overflow-y: auto;
+            padding: 20px 0;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #333;
+            margin-bottom: 15px;
+        }
+
+        .sidebar-header h2 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-header h2::before {
+            content: "⚛️";
+        }
+
+        .nav-section {
+            margin-bottom: 10px;
+        }
+
+        .nav-section-title {
+            padding: 10px 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 8px 20px 8px 30px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: rgba(97, 218, 251, 0.1);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .nav-link.active {
+            background: rgba(97, 218, 251, 0.15);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 30px 50px;
+            max-width: 1200px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--bg-card) 0%, #1a1a3e 100%);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #333;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 25px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Sections */
+        .section {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #333;
+        }
+
+        .section h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            color: var(--purple);
+            font-size: 1.2rem;
+            margin: 25px 0 15px;
+        }
+
+        .section h4 {
+            color: var(--success);
+            font-size: 1rem;
+            margin: 20px 0 10px;
+        }
+
+        /* Question Cards */
+        .question-card {
+            background: var(--bg-code);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .question-card.important {
+            border-left-color: var(--danger);
+        }
+
+        .question-card.medium {
+            border-left-color: var(--warning);
+        }
+
+        .question {
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .question::before {
+            content: "Q";
+            background: var(--primary);
+            color: var(--bg-dark);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .answer {
+            color: var(--text);
+            padding-left: 30px;
+        }
+
+        .answer ul, .answer ol {
+            margin: 10px 0 10px 20px;
+        }
+
+        .answer li {
+            margin-bottom: 5px;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: #0d0d1a;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            border: 1px solid #333;
+        }
+
+        .code-block code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            color: #e0e0e0;
+            white-space: pre;
+        }
+
+        .code-block .keyword { color: #c792ea; }
+        .code-block .string { color: #c3e88d; }
+        .code-block .function { color: #82aaff; }
+        .code-block .comment { color: #546e7a; }
+        .code-block .number { color: #f78c6c; }
+        .code-block .component { color: #ffcb6b; }
+
+        /* Tags */
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .tag.high { background: rgba(248, 113, 113, 0.2); color: var(--danger); }
+        .tag.medium { background: rgba(251, 191, 36, 0.2); color: var(--warning); }
+        .tag.low { background: rgba(74, 222, 128, 0.2); color: var(--success); }
+
+        /* Tips */
+        .tip {
+            background: rgba(97, 218, 251, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .warning {
+            background: rgba(248, 113, 113, 0.1);
+            border-left: 4px solid var(--danger);
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: var(--danger);
+            margin-bottom: 5px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background: var(--bg-code);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: rgba(97, 218, 251, 0.05);
+        }
+
+        /* Collapsible */
+        .collapsible {
+            background: var(--bg-code);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .collapsible-header {
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .collapsible-header:hover {
+            background: rgba(97, 218, 251, 0.1);
+        }
+
+        .collapsible-header h4 {
+            margin: 0;
+            color: #fff;
+        }
+
+        .collapsible-header .arrow {
+            color: var(--primary);
+            transition: transform 0.3s;
+        }
+
+        .collapsible.open .arrow {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .collapsible.open .collapsible-content {
+            max-height: 5000px;
+        }
+
+        .collapsible-body {
+            padding: 20px;
+            border-top: 1px solid #333;
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--bg-card);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 15px 20px;
+            z-index: 1000;
+        }
+
+        .progress-tracker h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 8px;
+            background: var(--bg-code);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--purple));
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .menu-toggle {
+                display: block;
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                z-index: 1001;
+                background: var(--primary);
+                color: var(--bg-dark);
+                border: none;
+                padding: 10px 15px;
+                border-radius: 8px;
+                cursor: pointer;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .sidebar, .progress-tracker, .menu-toggle {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .section {
+                break-inside: avoid;
+            }
+        }
+
+        /* Search */
+        .search-box {
+            padding: 10px 20px;
+            margin-bottom: 15px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            background: var(--bg-code);
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Quick Links */
+        .quick-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .quick-link {
+            background: var(--bg-code);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            border: 1px solid #333;
+        }
+
+        .quick-link:hover {
+            background: var(--primary);
+            color: var(--bg-dark);
+            border-color: var(--primary);
+        }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+        }
+
+        .checklist li {
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checklist input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+        }
+
+        .checklist label {
+            cursor: pointer;
+        }
+
+        .checklist input:checked + label {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <button class="menu-toggle" onclick="toggleSidebar()" style="display:none;">☰ Menu</button>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>RN Interview Guide</h2>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Search topics..." onkeyup="searchTopics()">
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Getting Started</div>
+            <a href="#overview" class="nav-link">📋 Overview</a>
+            <a href="#checklist" class="nav-link">✅ Preparation Checklist</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Core Concepts</div>
+            <a href="#fundamentals" class="nav-link">🎯 RN Fundamentals</a>
+            <a href="#components" class="nav-link">🧩 Components & Props</a>
+            <a href="#state" class="nav-link">📊 State Management</a>
+            <a href="#hooks" class="nav-link">🪝 React Hooks</a>
+            <a href="#lifecycle" class="nav-link">🔄 Lifecycle Methods</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Advanced Topics</div>
+            <a href="#architecture" class="nav-link">🏗️ New Architecture</a>
+            <a href="#performance" class="nav-link">⚡ Performance</a>
+            <a href="#navigation" class="nav-link">🧭 Navigation</a>
+            <a href="#native-modules" class="nav-link">📱 Native Modules</a>
+            <a href="#animations" class="nav-link">🎬 Animations</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">JavaScript Deep Dive</div>
+            <a href="#js-concepts" class="nav-link">📜 JS Concepts</a>
+            <a href="#typescript" class="nav-link">🔷 TypeScript</a>
+            <a href="#async" class="nav-link">⏳ Async Programming</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">System Design</div>
+            <a href="#system-design" class="nav-link">🎨 Mobile Architecture</a>
+            <a href="#scalability" class="nav-link">📈 Scalability</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Testing & DevOps</div>
+            <a href="#testing" class="nav-link">🧪 Testing</a>
+            <a href="#cicd" class="nav-link">🚀 CI/CD</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Leadership</div>
+            <a href="#behavioral" class="nav-link">👔 Behavioral Questions</a>
+            <a href="#leadership" class="nav-link">👥 Leadership Scenarios</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <div class="hero" id="overview">
+            <h1>React Native Interview Guide</h1>
+            <p>Comprehensive preparation material for Tech Lead & Architect roles</p>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">150+</div>
+                    <div class="stat-label">Questions</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Topics</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">50+</div>
+                    <div class="stat-label">Code Examples</div>
+                </div>
+            </div>
+            <div class="quick-links">
+                <a href="#fundamentals" class="quick-link">🎯 Start with Fundamentals</a>
+                <a href="#architecture" class="quick-link">🏗️ New Architecture</a>
+                <a href="#performance" class="quick-link">⚡ Performance</a>
+                <a href="#system-design" class="quick-link">🎨 System Design</a>
+            </div>
+        </div>
+
+        <!-- Preparation Checklist -->
+        <div class="section" id="checklist">
+            <h2>✅ Interview Preparation Checklist</h2>
+            <ul class="checklist">
+                <li><input type="checkbox" id="c1"><label for="c1">React Native Core Concepts</label></li>
+                <li><input type="checkbox" id="c2"><label for="c2">New Architecture (Fabric, TurboModules)</label></li>
+                <li><input type="checkbox" id="c3"><label for="c3">JavaScript Deep Dive (Closures, Promises, Event Loop)</label></li>
+                <li><input type="checkbox" id="c4"><label for="c4">TypeScript Advanced Concepts</label></li>
+                <li><input type="checkbox" id="c5"><label for="c5">State Management (Redux, Context, Zustand)</label></li>
+                <li><input type="checkbox" id="c6"><label for="c6">Navigation (React Navigation v6+)</label></li>
+                <li><input type="checkbox" id="c7"><label for="c7">Performance Optimization</label></li>
+                <li><input type="checkbox" id="c8"><label for="c8">Native Modules & Bridging</label></li>
+                <li><input type="checkbox" id="c9"><label for="c9">Testing (Jest, Detox, RTL)</label></li>
+                <li><input type="checkbox" id="c10"><label for="c10">System Design for Mobile Apps</label></li>
+                <li><input type="checkbox" id="c11"><label for="c11">CI/CD & App Distribution</label></li>
+                <li><input type="checkbox" id="c12"><label for="c12">Leadership & Behavioral Questions</label></li>
+            </ul>
+        </div>
+
+        <!-- React Native Fundamentals -->
+        <div class="section" id="fundamentals">
+            <h2>🎯 React Native Fundamentals</h2>
+
+            <div class="question-card important">
+                <div class="question">What is React Native and how does it work?</div>
+                <div class="answer">
+                    <p>React Native is a framework for building native mobile applications using JavaScript and React. It works by:</p>
+                    <ul>
+                        <li><strong>JavaScript Thread:</strong> Runs your business logic and React code</li>
+                        <li><strong>Native Thread:</strong> Handles UI rendering with native components</li>
+                        <li><strong>Bridge (Old Architecture):</strong> Serializes data between JS and Native threads using JSON</li>
+                        <li><strong>JSI (New Architecture):</strong> Direct communication without serialization</li>
+                    </ul>
+                    <div class="tip">
+                        <div class="tip-title">💡 Interview Tip</div>
+                        Always mention both old (Bridge) and new (JSI) architecture to show you're up-to-date.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card important">
+                <div class="question">What's the difference between React Native and other cross-platform frameworks?</div>
+                <div class="answer">
+                    <table>
+                        <tr>
+                            <th>Framework</th>
+                            <th>Rendering</th>
+                            <th>Performance</th>
+                            <th>Code Sharing</th>
+                        </tr>
+                        <tr>
+                            <td><strong>React Native</strong></td>
+                            <td>Native Components</td>
+                            <td>Near-Native</td>
+                            <td>~90%</td>
+                        </tr>
+                        <tr>
+                            <td>Flutter</td>
+                            <td>Custom Rendering (Skia)</td>
+                            <td>Near-Native</td>
+                            <td>~95%</td>
+                        </tr>
+                        <tr>
+                            <td>Ionic/Cordova</td>
+                            <td>WebView</td>
+                            <td>Lower</td>
+                            <td>~99%</td>
+                        </tr>
+                        <tr>
+                            <td>Native (Swift/Kotlin)</td>
+                            <td>Native</td>
+                            <td>Best</td>
+                            <td>0%</td>
+                        </tr>
+                    </table>
+                    <p><strong>RN Advantage:</strong> Uses actual native UI components, large ecosystem (React/JS), hot reloading, strong community.</p>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question">Explain the Virtual DOM in React Native context</div>
+                <div class="answer">
+                    <p>React Native uses a Virtual DOM (VDOM) similar to React web:</p>
+                    <ol>
+                        <li><strong>Initial Render:</strong> Creates VDOM tree from your components</li>
+                        <li><strong>State Change:</strong> Creates new VDOM tree</li>
+                        <li><strong>Diffing:</strong> Compares old vs new VDOM (Reconciliation)</li>
+                        <li><strong>Batch Updates:</strong> Calculates minimal changes needed</li>
+                        <li><strong>Native Update:</strong> Sends only changed parts to native side</li>
+                    </ol>
+                    <div class="code-block">
+<code><span class="comment">// React Native renders to native components, not DOM</span>
+<span class="keyword">import</span> { View, Text } <span class="keyword">from</span> <span class="string">'react-native'</span>;
+
+<span class="comment">// This JSX:</span>
+&lt;<span class="component">View</span>&gt;
+  &lt;<span class="component">Text</span>&gt;Hello&lt;/<span class="component">Text</span>&gt;
+&lt;/<span class="component">View</span>&gt;
+
+<span class="comment">// Becomes on iOS: UIView → UILabel</span>
+<span class="comment">// Becomes on Android: ViewGroup → TextView</span>
+</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question">What are the core components in React Native?</div>
+                <div class="answer">
+                    <table>
+                        <tr>
+                            <th>RN Component</th>
+                            <th>iOS</th>
+                            <th>Android</th>
+                            <th>Web Equivalent</th>
+                        </tr>
+                        <tr>
+                            <td>&lt;View&gt;</td>
+                            <td>UIView</td>
+                            <td>ViewGroup</td>
+                            <td>&lt;div&gt;</td>
+                        </tr>
+                        <tr>
+                            <td>&lt;Text&gt;</td>
+                            <td>UITextView</td>
+                            <td>TextView</td>
+                            <td>&lt;p&gt;, &lt;span&gt;</td>
+                        </tr>
+                        <tr>
+                            <td>&lt;Image&gt;</td>
+                            <td>UIImageView</td>
+                            <td>ImageView</td>
+                            <td>&lt;img&gt;</td>
+                        </tr>
+                        <tr>
+                            <td>&lt;ScrollView&gt;</td>
+                            <td>UIScrollView</td>
+                            <td>ScrollView</td>
+                            <td>&lt;div&gt; with overflow</td>
+                        </tr>
+                        <tr>
+                            <td>&lt;TextInput&gt;</td>
+                            <td>UITextField</td>
+                            <td>EditText</td>
+                            <td>&lt;input&gt;</td>
+                        </tr>
+                        <tr>
+                            <td>&lt;FlatList&gt;</td>
+                            <td>UITableView</td>
+                            <td>RecyclerView</td>
+                            <td>Virtual list</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="question-card medium">
+                <div class="question">Explain StyleSheet.create() and its benefits</div>
+                <div class="answer">
+                    <p><code>StyleSheet.create()</code> provides:</p>
+                    <ul>
+                        <li><strong>Validation:</strong> Checks style properties at creation time</li>
+                        <li><strong>Performance:</strong> Styles are sent to native only once</li>
+                        <li><strong>ID Reference:</strong> Returns IDs instead of objects</li>
+                    </ul>
+                    <div class="code-block">
+<code><span class="keyword">import</span> { StyleSheet } <span class="keyword">from</span> <span class="string">'react-native'</span>;
+
+<span class="comment">// ✅ Good - Uses StyleSheet.create</span>
+<span class="keyword">const</span> styles = StyleSheet.<span class="function">create</span>({
+  container: {
+    flex: <span class="number">1</span>,
+    padding: <span class="number">16</span>,
+    backgroundColor: <span class="string">'#fff'</span>,
+  },
+  title: {
+    fontSize: <span class="number">24</span>,
+    fontWeight: <span class="string">'bold'</span>,
+  },
+});
+
+<span class="comment">// ❌ Bad - Inline styles (re-created every render)</span>
+&lt;<span class="component">View</span> style={{ flex: <span class="number">1</span>, padding: <span class="number">16</span> }}&gt;
+</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Components & Props -->
+        <div class="section" id="components">
+            <h2>🧩 Components & Props</h2>
+
+            <div class="question-card important">
+                <div class="question">Functional vs Class Components - Which to use and why?</div>
+                <div class="answer">
+                    <p><strong>Always use Functional Components</strong> in modern React Native:</p>
+                    <table>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Functional</th>
+                            <th>Class</th>
+                        </tr>
+                        <tr>
+                            <td>Syntax</td>
+                            <td>Simpler, less boilerplate</td>
+                            <td>More verbose</td>
+                        </tr>
+                        <tr>
+                            <td>State</td>
+                            <td>useState hook</td>
+                            <td>this.state</td>
+                        </tr>
+                        <tr>
+                            <td>Lifecycle</td>
+                            <td>useEffect hook</td>
+                            <td>Multiple methods</td>
+                        </tr>
+                        <tr>
+                            <td>Performance</td>
+                            <td>Better (with hooks optimization)</td>
+                            <td>Good</td>
+                        </tr>
+                        <tr>
+                            <td>Testing</td>
+                            <td>Easier to test</td>
+                            <td>More complex</td>
+                        </tr>
+                        <tr>
+                            <td>Reusability</td>
+                            <td>Custom hooks</td>
+                            <td>HOCs, Render props</td>
+                        </tr>
+                    </table>
+                    <div class="code-block">
+<code><span class="comment">// ✅ Modern Functional Component</span>
+<span class="keyword">const</span> <span class="function">UserProfile</span> = ({ user, onUpdate }) => {
+  <span class="keyword">const</span> [isEditing, setIsEditing] = <span class="function">useState</span>(<span class="keyword">false</span>);
+  
+  <span class="function">useEffect</span>(() => {
+    <span class="function">fetchUserData</span>(user.id);
+  }, [user.id]);
+
+  <span class="keyword">return</span> (
+    &lt;<span class="component">View</span>&gt;
+      &lt;<span class="component">Text</span>&gt;{user.name}&lt;/<span class="component">Text</span>&gt;
+    &lt;/<span class="component">View</span>&gt;
+  );
+};
+</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question">What is Props Drilling and how to avoid it?</div>
+                <div class="answer">
+                    <p><strong>Props Drilling:</strong> Passing props through multiple component levels that don't need them.</p>
+                    <div class="code-block">
+<code><span class="comment">// ❌ Props Drilling Problem</span>
+&lt;<span class="component">App</span> user={user}&gt;
+  &lt;<span class="component">Layout</span> user={user}&gt;           <span class="comment">// doesn't use user</span>
+    &lt;<span class="component">Sidebar</span> user={user}&gt;        <span class="comment">// doesn't use user</span>
+      &lt;<span class="component">UserAvatar</span> user={user} /&gt;  <span class="comment">// actually uses user</span>
+    &lt;/<span class="component">Sidebar</span>&gt;
+  &lt;/<span class="component">Layout</span>&gt;
+&lt;/<span class="component">App</span>&gt;
+</code>
+                    </div>
+                    <p><strong>Solutions:</strong></p>
+                    <ol>
+                        <li><strong>React Context:</strong> For app-wide state (theme, auth, locale)</li>
+                        <li><strong>Redux/Zustand:</strong> For complex global state</li>
+                        <li><strong>Component Composition:</strong> Pass components as children</li>
+                    </ol>
+                    <div class="code-block">
+<code><span class="comment">// ✅ Solution: Context API</span>
+<span class="keyword">const</span> UserContext = <span class="function">createContext</span>();
+
+<span class="keyword">const</span> <span class="function">App</span> = () => (
+  &lt;<span class="component">UserContext.Provider</span> value={user}&gt;
+    &lt;<span class="component">Layout</span>&gt;
+      &lt;<span class="component">Sidebar</span>&gt;
+        &lt;<span class="component">UserAvatar</span> /&gt;  <span class="comment">// uses useContext(UserContext)</span>
+      &lt;/<span class="component">Sidebar</span>&gt;
+    &lt;/<span class="component">Layout</span>&gt;
+  &lt;/<span class="component">UserContext.Provider</span>&gt;
+);
+</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question">Explain React.memo() and when to use it</div>
+                <div class="answer">
+                    <p><code>React.memo()</code> is a Higher Order Component that memoizes functional components to prevent unnecessary re-renders.</p>
+                    <div class="code-block">
+<code><span class="keyword">import</span> React, { memo } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="comment">// Without memo - re-renders on every parent render</span>
+<span class="keyword">const</span> <span class="function">ExpensiveComponent</span> = ({ data }) => {
+  <span class="comment">// expensive rendering logic</span>
+  <span class="keyword">return</span> &lt;<span class="component">View</span>&gt;...&lt;/<span class="component">View</span>&gt;;
+};
+
+<span class="comment">// With memo - only re-renders if props change</span>
+<span class="keyword">const</span> <span class="function">ExpensiveComponent</span> = <span class="function">memo</span>(({ data }) => {
+  <span class="keyword">return</span> &lt;<span class="component">View</span>&gt;...&lt;/<span class="component">View</span>&gt;;
+});
+
+<span class="comment">// With custom comparison</span>
+<span class="keyword">const</span> <span class="function">ExpensiveComponent</span> = <span class="function">memo</span>(
+  ({ data }) => &lt;<span class="component">View</span>&gt;...&lt;/<span class="component">View</span>&gt;,
+  (prevProps, nextProps) => prevProps.data.id === nextProps.data.id
+);
+</code>
+                    </div>
+                    <div class="warning">
+                        <div class="warning-title">⚠️ Don't Overuse</div>
+                        memo() has overhead. Use only for components with expensive renders or frequent parent updates.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- State Management -->
+        <div class="section" id="state">
+            <h2>📊 State Management</h2>
+
+            <div class="question-card important">
+                <div class="question">Compare different state management solutions in React Native</div>
+                <div class="answer">
+                    <table>
+                        <tr>
+                            <th>Solution</th>
+                            <th>Best For</th>
+                            <th>Complexity</th>
+                            <th>Bundle Size</th>
+                        </tr>
+                        <tr>
+                            <td><strong>useState/useReducer</strong></td>
+                            <td>Local component state</td>
+                            <td>Low</td>
+                            <td>0 KB</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Context API</strong></td>
+                            <td>Theme, Auth, Locale</td>
+                            <td>Low-Medium</td>
+                            <td>0 KB</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Redux Toolkit</strong></td>
+                            <td>Complex apps, debugging</td>
+                            <td>Medium-High</td>
+                            <td>~10 KB</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Zustand</strong></td>
+                            <td>Simple global state</td>
+                            <td>Low</td>
+                            <td>~1 KB</td>
+                        </tr>
+                        <tr>
+                            <td><strong>MobX</strong></td>
+                            <td>Reactive state, OOP style</td>
+                            <td>Medium</td>
+                            <td>~15 KB</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Jotai/Recoil</strong></td>
+                            <td>Atomic state management</td>
+                            <td>Low-Medium</td>
+                            <td>~3-8 KB</td>
+                        </tr>
+                    </table>
+                    <div class="tip">
+                        <div class="tip-title">💡 Architect's Choice</div>
+                        For enterprise apps: Redux Toolkit + RTK Query for API caching.<br>
+                        For mid-size apps: Zustand or Context + useReducer.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card important">
+                <div class="question">Implement Redux with Redux Toolkit in React Native</div>
+                <div class="answer">
+                    <div class="code-block">
+<code><span class="comment">// store/userSlice.ts</span>
+<span class="keyword">import</span> { createSlice, createAsyncThunk } <span class="keyword">from</span> <span class="string">'@reduxjs/toolkit'</span>;
+
+<span class="keyword">export const</span> fetchUser = <span class="function">createAsyncThunk</span>(
+  <span class="string">'user/fetch'</span>,
+  <span class="keyword">async</span> (userId: <span class="keyword">string</span>) => {
+    <span class="keyword">const</span> response = <span class="keyword">await</span> api.<span class="function">getUser</span>(userId);
+    <span class="keyword">return</span> response.data;
+  }
+);
+
+<span class="keyword">const</span> userSlice = <span class="function">createSlice</span>({
+  name: <span class="string">'user'</span>,
+  initialState: { user: <span class="keyword">null</span>, loading: <span class="keyword">false</span>, error: <span class="keyword">null</span> },
+  reducers: {
+    <span class="function">logout</span>: (state) => {
+      state.user = <span class="keyword">null</span>;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .<span class="function">addCase</span>(fetchUser.pending, (state) => {
+        state.loading = <span class="keyword">true</span>;
+      })
+      .<span class="function">addCase</span>(fetchUser.fulfilled, (state, action) => {
+        state.loading = <span class="keyword">false</span>;
+        state.user = action.payload;
+      })
+      .<span class="function">addCase</span>(fetchUser.rejected, (state, action) => {
+        state.loading = <span class="keyword">false</span>;
+        state.error = action.error.message;
+      });
+  },
+});
+
+<span class="keyword">export const</span> { logout } = userSlice.actions;
+<span class="keyword">export default</span> userSlice.reducer;
+</code>
+                    </div>
+                    <div class="code-block">
+<code><span class="comment">// store/index.ts</span>
+<span class="keyword">import</span> { configureStore } <span class="keyword">from</span> <span class="string">'@reduxjs/toolkit'</span>;
+<span class="keyword">import</span> userReducer <span class="keyword">from</span> <span class="string">'./userSlice'</span>;
+
+<span class="keyword">export const</span> store = <span class="function">configureStore</span>({
+  reducer: {
+    user: userReducer,
+  },
+});
+
+<span class="keyword">export type</span> RootState = ReturnType&lt;<span class="keyword">typeof</span> store.getState&gt;;
+<span class="keyword">export type</span> AppDispatch = <span class="keyword">typeof</span> store.dispatch;
+</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question">What is Zustand and when would you choose it over Redux?</div>
+                <div class="answer">
+                    <p><strong>Zustand</strong> is a minimal state management library with a simple API:</p>
+                    <div class="code-block">
+<code><span class="keyword">import</span> { create } <span class="keyword">from</span> <span class="string">'zustand'</span>;
+
+<span class="keyword">interface</span> AuthState {
+  user: User | <span class="keyword">null</span>;
+  isAuthenticated: <span class="keyword">boolean</span>;
+  login: (user: User) => <span class="keyword">void</span>;
+  logout: () => <span class="keyword">void</span>;
+}
+
+<span class="keyword">const</span> useAuthStore = <span class="function">create</span>&lt;AuthState&gt;((set) => ({
+  user: <span class="keyword">null</span>,
+  isAuthenticated: <span class="keyword">false</span>,
+  
+  <span class="function">login</span>: (user) => <span class="function">set</span>({ user, isAuthenticated: <span class="keyword">true</span> }),
+  <span class="function">logout</span>: () => <span class="function">set</span>({ user: <span class="keyword">null</span>, isAuthenticated: <span class="keyword">false</span> }),
+}));
+
+<span class="comment">// Usage in component</span>
+<span class="keyword">const</span> <span class="function">Profile</span> = () => {
+  <span class="keyword">const</span> { user, logout } = <span class="function">useAuthStore</span>();
+  <span class="keyword">return</span> &lt;<span class="component">Button</span> onPress={logout} /&gt;;
+};
+</code>
+                    </div>
+                    <p><strong>Choose Zustand when:</strong></p>
+                    <ul>
+                        <li>You want minimal boilerplate</li>
+                        <li>Don't need Redux DevTools extensively</li>
+                        <li>Building small to medium apps</li>
+                        <li>Want fast learning curve for team</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- React Hooks -->
+        <div class="section" id="hooks">
+            <h2>🪝 React Hooks Deep Dive</h2>
+
+            <div class="question-card important">
+                <div class="question">Explain useCallback and useMemo with examples</div>
+                <div class="answer">
+                    <p><strong>useCallback:</strong> Memoizes a function reference<br>
+                    <strong>useMemo:</strong> Memoizes a computed value</p>
+                    <div class="code-block">
+<code><span class="keyword">import</span> { useCallback, useMemo, useState } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">const</span> <span class="function">ProductList</span> = ({ products, category }) => {
+  <span class="keyword">const</span> [sortOrder, setSortOrder] = <span class="function">useState</span>(<span class="string">'asc'</span>);
+
+  <span class="comment">// ✅ useMemo - for expensive calculations</span>
+  <span class="keyword">const</span> filteredProducts = <span class="function">useMemo</span>(() => {
+    <span class="keyword">return</span> products
+      .<span class="function">filter</span>(p => p.category === category)
+      .<span class="function">sort</span>((a, b) => 
+        sortOrder === <span class="string">'asc'</span> ? a.price - b.price : b.price - a.price
+      );
+  }, [products, category, sortOrder]); <span class="comment">// Only recalculates when these change</span>
+
+  <span class="comment">// ✅ useCallback - for function references (passed to children)</span>
+  <span class="keyword">const</span> handleProductPress = <span class="function">useCallback</span>((productId) => {
+    navigation.<span class="function">navigate</span>(<span class="string">'ProductDetail'</span>, { productId });
+  }, [navigation]);
+
+  <span class="keyword">return</span> (
+    &lt;<span class="component">FlatList</span>
+      data={filteredProducts}
+      renderItem={({ item }) => (
+        &lt;<span class="component">ProductCard</span>
+          product={item}
+          onPress={handleProductPress}  <span class="comment">// Stable reference</span>
+        /&gt;
+      )}
+    /&gt;
+  );
+};
+
+<span class="comment">// ProductCard uses React.memo, so stable onPress prevents re-renders</span>
+<span class="keyword">const</span> <span class="function">ProductCard</span> = <span class="function">memo</span>(({ product, onPress }) => {
+  <span class="keyword">return</span> (
+    &lt;<span class="component">TouchableOpacity</span> onPress={() => <span class="function">onPress</span>(product.id)}&gt;
+      &lt;<span class="component">Text</span>&gt;{product.name}&lt;/<span class="component">Text</span>&gt;
+    &lt;/<span class="component">TouchableOpacity</span>&gt;
+  );
+});
+</code>
+                    </div>
+                    <div class="warning">
+                        <div class="warning-title">⚠️ Common Mistake</div>
+                        Don't wrap everything in useCallback/useMemo. They have overhead. Use only when:
+                        <ul>
+                            <li>Passing callbacks to memoized children</li>
+                            <li>Expensive calculations (sorting large arrays)</li>
+                            <li>Values used in other hooks' dependency arrays</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card important">
+                <div class="question">Create a custom hook for API data fetching</div>
+                <div class="answer">
+                    <div class="code-block">
+<code><span class="comment">// hooks/useApi.ts</span>
+<span class="keyword">import</span> { useState, useEffect, useCallback } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">interface</span> UseApiState&lt;T&gt; {
+  data: T | <span class="keyword">null</span>;
+  loading: <span class="keyword">boolean</span>;
+  error: Error | <span class="keyword">null</span>;
+  refetch: () => <span class="keyword">void</span>;
+}
+
+<span class="keyword">function</span> <span class="function">useApi</span>&lt;T&gt;(
+  fetchFn: () => Promise&lt;T&gt;,
+  deps: <span class="keyword">any</span>[] = []
+): UseApiState&lt;T&gt; {
+  <span class="keyword">const</span> [data, setData] = <span class="function">useState</span>&lt;T | <span class="keyword">null</span>&gt;(<span class="keyword">null</span>);
+  <span class="keyword">const</span> [loading, setLoading] = <span class="function">useState</span>(<span class="keyword">true</span>);
+  <span class="keyword">const</span> [error, setError] = <span class="function">useState</span>&lt;Error | <span class="keyword">null</span>&gt;(<span class="keyword">null</span>);
+
+  <span class="keyword">const</span> fetchData = <span class="function">useCallback</span>(<span class="keyword">async</span> () => {
+    <span class="keyword">try</span> {
+      <span class="function">setLoading</span>(<span class="keyword">true</span>);
+      <span class="function">setError</span>(<span class="keyword">null</span>);
+      <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="function">fetchFn</span>();
+      <span class="function">setData</span>(result);
+    } <span class="keyword">catch</span> (err) {
+      <span class="function">setError</span>(err <span class="keyword">as</span> Error);
+    } <span class="keyword">finally</span> {
+      <span class="function">setLoading</span>(<span class="keyword">false</span>);
+    }
+  }, [fetchFn]);
+
+  <span class="function">useEffect</span>(() => {
+    <span class="function">fetchData</span>();
+  }, [...deps, fetchData]);
+
+  <span class="keyword">return</span> { data, loading, error, refetch: fetchData };
+}
+
+<span class="comment">// Usage</span>
+<span class="keyword">const</span> <span class="function">UserProfile</span> = ({ userId }) => {
+  <span class="keyword">const</span> { data: user, loading, error, refetch } = <span class="function">useApi</span>(
+    () => api.<span class="function">getUser</span>(userId),
+    [userId]
+  );
+
+  <span class="keyword">if</span> (loading) <span class="keyword">return</span> &lt;<span class="component">Spinner</span> /&gt;;
+  <span class="keyword">if</span> (error) <span class="keyword">return</span> &lt;<span class="component">ErrorView</span> onRetry={refetch} /&gt;;
+  
+  <span class="keyword">return</span> &lt;<span class="component">Text</span>&gt;{user?.name}&lt;/<span class="component">Text</span>&gt;;
+};
+</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question">What are the rules of hooks?</div>
+                <div class="answer">
+                    <ol>
+                        <li><strong>Only call at top level:</strong> Don't call hooks inside loops, conditions, or nested functions</li>
+                        <li><strong>Only call from React functions:</strong> Call from functional components or custom hooks</li>
+                        <li><strong>Use ESLint plugin:</strong> <code>eslint-plugin-react-hooks</code></li>
+                    </ol>
+                    <div class="code-block">
+<code><span class="comment">// ❌ Wrong - conditional hook</span>
+<span class="keyword">if</span> (condition) {
+  <span class="keyword">const</span> [state, setState] = <span class="function">useState</span>(); <span class="comment">// Error!</span>
+}
+
+<span class="comment">// ✅ Correct - hook at top level</span>
+<span class="keyword">const</span> [state, setState] = <span class="function">useState</span>();
+<span class="keyword">if</span> (condition) {
+  <span class="comment">// use state here</span>
+}
+</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Architecture -->
+        <div class="section" id="architecture">
+            <h2>🏗️ React Native New Architecture</h2>
+
+            <div class="question-card important">
+                <div class="question">Explain React Native's New Architecture (Fabric & TurboModules)</div>
+                <div class="answer">
+                    <p>The New Architecture consists of:</p>
+                    
+                    <h4>1. JSI (JavaScript Interface)</h4>
+                    <ul>
+                        <li>Replaces the bridge with direct C++ bindings</li>
+                        <li>Synchronous calls between JS and Native</li>
+                        <li>No JSON serialization overhead</li>
+                    </ul>
+
+                    <h4>2. Fabric (New Rendering System)</h4>
+                    <ul>
+                        <li>Renders UI synchronously when needed</li>
+                        <li>Better support for concurrent features</li>
+                        <li>Improved priority scheduling</li>
+                        <li>Reduced memory usage</li>
+                    </ul>
+
+                    <h4>3. TurboModules (New Native Modules)</h4>
+                    <ul>
+                        <li>Lazy loading of native modules</li>
+                        <li>Type-safe communication via CodeGen</li>
+                        <li>Direct JSI access (no bridge)</li>
+                    </ul>
+
+                    <h4>4. CodeGen</h4>
+                    <ul>
+                        <li>Generates native code from TypeScript/Flow specs</li>
+                        <li>Ensures type safety across JS/Native boundary</li>
+                    </ul>
+
+                    <table>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Old Architecture</th>
+                            <th>New Architecture</th>
+                        </tr>
+                        <tr>
+                            <td>Communication</td>
+                            <td>Bridge (JSON)</td>
+                            <td>JSI (Direct C++)</td>
+                        </tr>
+                        <tr>
+                            <td>Native Modules</td>
+                            <td>All loaded at startup</td>
+                            <td>Lazy loaded (TurboModules)</td>
+                        </tr>
+                        <tr>
+                            <td>Rendering</td>
+                            <td>Async only</td>
+                            <td>Sync + Async (Fabric)</td>
+                        </tr>
+                        <tr>
+                            <td>Type Safety</td>
+                            <td>Runtime checks</td>
+                            <td>Build-time (CodeGen)</td>
+                        </tr>
+                    </table>
+
+                    <div class="tip">
+                        <div class="tip-title">💡 Interview Must-Know</div>
+                        New Architecture is enabled by default in RN 0.74+. Always mention you're familiar with migrating existing apps.
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card important">
+                <div class="question">How does JSI improve performance over the Bridge?</div>
+                <div class="answer">
+                    <h4>Old Bridge Architecture:</h4>
+                    <div class="code-block">
+<code>JS Thread ──[serialize to JSON]──> Bridge Queue ──[deserialize]──> Native Thread
+                          ↑                                      ↓
+                          └────[serialize]────── Queue ────[deserialize]────┘
+</code>
+                    </div>
+                    <p><strong>Problems:</strong> Async only, JSON overhead, queue bottleneck</p>
+
+                    <h4>New JSI Architecture:</h4>
+                    <div class="code-block">
+<code>JS Thread ←──[direct C++ calls]──→ Native Thread
+                    (synchronous when needed)
+</code>
+                    </div>
+                    <p><strong>Benefits:</strong></p>
+                    <ul>
+                        <li><strong>Synchronous calls:</strong> No waiting for bridge queue</li>
+                        <li><strong>No serialization:</strong> Direct memory access</li>
+                        <li><strong>Shared ownership:</strong> JS can hold references to native objects</li>
+                        <li><strong>Faster startup:</strong> Lazy module loading</li>
+                    </ul>
+
+                    <div class="code-block">
+<code><span class="comment">// Old Bridge - Async with JSON serialization</span>
+NativeModules.MyModule.<span class="function">getData</span>().<span class="function">then</span>(data => ...);
+
+<span class="comment">// New JSI - Can be synchronous</span>
+<span class="keyword">const</span> data = global.myModule.<span class="function">getDataSync</span>(); <span class="comment">// Direct call!</span>
+</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question">What is Hermes and why use it?</div>
+                <div class="answer">
+                    <p><strong>Hermes</strong> is a JavaScript engine optimized for React Native:</p>
+                    <ul>
+                        <li><strong>Ahead-of-Time (AOT) Compilation:</strong> JS is compiled to bytecode at build time</li>
+                        <li><strong>Faster Startup:</strong> 40-50% faster TTI (Time to Interactive)</li>
+                        <li><strong>Lower Memory:</strong> 20-30% reduction in memory usage</li>
+                        <li><strong>Smaller APK:</strong> Bytecode is smaller than JavaScript</li>
+                        <li><strong>Optimized for Mobile:</strong> Better garbage collection for mobile constraints</li>
+                    </ul>
+                    <div class="code-block">
+<code><span class="comment">// android/app/build.gradle</span>
+project.ext.react = [
+    enableHermes: <span class="keyword">true</span>  <span class="comment">// Enable Hermes</span>
+]
+
+<span class="comment">// Check if Hermes is enabled at runtime</span>
+<span class="keyword">const</span> isHermes = () => !!global.HermesInternal;
+console.<span class="function">log</span>(<span class="string">'Using Hermes:'</span>, <span class="function">isHermes</span>());
+</code>
+                    </div>
+                    <div class="tip">
+                        <div class="tip-title">💡 Important</div>
+                        Hermes is now the default engine in React Native (0.70+). It's required for the New Architecture.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance -->
+        <div class="section" id="performance">
+            <h2>⚡ Performance Optimization</h2>
+
+            <div class="question-card important">
+                <div class="question">How do you optimize FlatList performance?</div>
+                <div class="answer">
+                    <div class="code-block">
+<code><span class="keyword">const</span> <span class="function">OptimizedList</span> = ({ data }) => {
+  <span class="comment">// 1. Memoize renderItem</span>
+  <span class="keyword">const</span> renderItem = <span class="function">useCallback</span>(({ item }) => (
+    &lt;<span class="component">ListItem</span> item={item} /&gt;
+  ), []);
+
+  <span class="comment">// 2. Extract keyExtractor</span>
+  <span class="keyword">const</span> keyExtractor = <span class="function">useCallback</span>((item) => item.id, []);
+
+  <span class="comment">// 3. Optimize getItemLayout for fixed-height items</span>
+  <span class="keyword">const</span> ITEM_HEIGHT = <span class="number">80</span>;
+  <span class="keyword">const</span> getItemLayout = <span class="function">useCallback</span>((_, index) => ({
+    length: ITEM_HEIGHT,
+    offset: ITEM_HEIGHT * index,
+    index,
+  }), []);
+
+  <span class="keyword">return</span> (
+    &lt;<span class="component">FlatList</span>
+      data={data}
+      renderItem={renderItem}
+      keyExtractor={keyExtractor}
+      getItemLayout={getItemLayout}
+      
+      <span class="comment">// 4. Windowing optimizations</span>
+      initialNumToRender={<span class="number">10</span>}
+      maxToRenderPerBatch={<span class="number">10</span>}
+      windowSize={<span class="number">5</span|}
+      removeClippedSubviews={<span class="keyword">true</span>}
+      
+      <span class="comment">// 5. Update optimization</span>
+      updateCellsBatchingPeriod={<span class="number">50</span>}
+      
+      <span class="comment">// 6. Memory optimization</span>
+      maintainVisibleContentPosition={{ minIndexForVisible: <span class="number">0</span> }}
+    /&gt;
+  );
+};
+
+<span class="comment">// 7. Memoize list items</span>
+<span class="keyword">const</span> <span class="function">ListItem</span> = <span class="function">memo</span>(({ item }) => (
+  &lt;<span class="component">View</span> style={styles.item}&gt;
+    &lt;<span class="component">Text</span>&gt;{item.title}&lt;/<span class="component">Text</span>&gt;
+  &lt;/<span class="component">View</span>&gt;
+));
+</code>
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Prop</th>
+                            <th>Purpose</th>
+                            <th>Default</th>
+                        </tr>
+                        <tr>
+                            <td>initialNumToRender</td>
+                            <td>Items rendered on first mount</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>maxToRenderPerBatch</td>
+                            <td>Items rendered per scroll batch</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>windowSize</td>
+                            <td>Viewport multiplier to render</td>
+                            <td>21</td>
+                        </tr>
+                        <tr>
+                            <td>removeClippedSubviews</td>
+                            <td>Unmount off-screen items</td>
+                            <td>false</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="question-card important">
+                <div class="question">What causes performance issues in React Native and how to debug them?</div>
+                <div class="answer">
+                    <h4>Common Performance Issues:</h4>
+                    <ol>
+                        <li><strong>JS Thread Blocking:</strong> Heavy computations, large JSON parsing</li>
+                        <li><strong>Excessive Re-renders:</strong> Missing memoization, unstable references</li>
+                        <li><strong>Bridge Congestion:</strong> Too many cross-bridge calls</li>
+                        <li><strong>Large Images:</strong> Unoptimized images, missing caching</li>
+                        <li><strong>Memory Leaks:</strong> Uncleaned listeners, retained references</li>
+                    </ol>
+
+                    <h4>Debugging Tools:</h4>
+                    <ul>
+                        <li><strong>React DevTools Profiler:</strong> Identify slow components</li>
+                        <li><strong>Flipper:</strong> Network, Layout, Performance inspection</li>
+                        <li><strong>Systrace (Android):</strong> Low-level performance traces</li>
+                        <li><strong>Xcode Instruments (iOS):</strong> CPU, Memory profiling</li>
+                        <li><strong>why-did-you-render:</strong> Detect unnecessary re-renders</li>
+                    </ul>
+
+                    <div class="code-block">
+<code><span class="comment">// Detect unnecessary re-renders</span>
+<span class="keyword">import</span> whyDidYouRender <span class="keyword">from</span> <span class="string">'@welldone-software/why-did-you-render'</span>;
+
+whyDidYouRender(React, {
+  trackAllPureComponents: <span class="keyword">true</span>,
+});
+
+<span class="comment">// Add to specific component</span>
+MyComponent.whyDidYouRender = <span class="keyword">true</span>;
+</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question">Explain Image optimization techniques in React Native</div>
+                <div class="answer">
+                    <div class="code-block">
+<code><span class="keyword">import</span> FastImage <span class="keyword">from</span> <span class="string">'react-native-fast-image'</span>;
+
+<span class="comment">// 1. Use FastImage for better caching</span>
+&lt;<span class="component">FastImage</span>
+  source={{
+    uri: <span class="string">'https://example.com/image.jpg'</span>,
+    priority: FastImage.priority.normal,
+    cache: FastImage.cacheControl.immutable,
+  }}
+  resizeMode={FastImage.resizeMode.cover}
+/&gt;
+
+<span class="comment">// 2. Use appropriate image sizes</span>
+&lt;<span class="component">Image</span>
+  source={{
+    uri: <span class="string">`https://example.com/image.jpg?w=\${width}&h=\${height}`</span>
+  }}
+/&gt;
+
+<span class="comment">// 3. Preload images</span>
+FastImage.<span class="function">preload</span>([
+  { uri: <span class="string">'https://example.com/image1.jpg'</span> },
+  { uri: <span class="string">'https://example.com/image2.jpg'</span> },
+]);
+
+<span class="comment">// 4. Use progressive loading</span>
+&lt;<span class="component">Image</span>
+  source={{ uri: imageUrl }}
+  progressiveRenderingEnabled={<span class="keyword">true</span>}
+  fadeDuration={<span class="number">300</span>}
+/&gt;
+</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="section" id="navigation">
+            <h2>🧭 Navigation</h2>
+
+            <div class="question-card important">
+                <div class="question">Explain React Navigation architecture and navigator types</div>
+                <div class="answer">
+                    <h4>Navigator Types:</h4>
+                    <table>
+                        <tr>
+                            <th>Navigator</th>
+                            <th>Use Case</th>
+                            <th>Transition</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Stack</strong></td>
+                            <td>Screen-to-screen flow</td>
+                            <td>Push/Pop</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tab</strong></td>
+                            <td>Bottom/Top tabs</td>
+                            <td>Instant switch</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Drawer</strong></td>
+                            <td>Side menu</td>
+                            <td>Slide in/out</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Native Stack</strong></td>
+                            <td>Better performance</td>
+                            <td>Native transitions</td>
+                        </tr>
+                    </table>
+
+                    <div class="code-block">
+<code><span class="keyword">import</span> { NavigationContainer } <span class="keyword">from</span> <span class="string">'@react-navigation/native'</span>;
+<span class="keyword">import</span> { createNativeStackNavigator } <span class="keyword">from</span> <span class="string">'@react-navigation/native-stack'</span>;
+<span class="keyword">import</span> { createBottomTabNavigator } <span class="keyword">from</span> <span class="string">'@react-navigation/bottom-tabs'</span>;
+
+<span class="keyword">const</span> Stack = <span class="function">createNativeStackNavigator</span>();
+<span class="keyword">const</span> Tab = <span class="function">createBottomTabNavigator</span>();
+
+<span class="comment">// Nested Navigation Pattern</span>
+<span class="keyword">const</span> <span class="function">MainTabs</span> = () => (
+  &lt;<span class="component">Tab.Navigator</span>&gt;
+    &lt;<span class="component">Tab.Screen</span> name=<span class="string">"Home"</span> component={HomeStack} /&gt;
+    &lt;<span class="component">Tab.Screen</span> name=<span class="string">"Profile"</span> component={ProfileScreen} /&gt;
+  &lt;/<span class="component">Tab.Navigator</span>&gt;
+);
+
+<span class="keyword">const</span> <span class="function">App</span> = () => (
+  &lt;<span class="component">NavigationContainer</span>&gt;
+    &lt;<span class="component">Stack.Navigator</span>&gt;
+      &lt;<span class="component">Stack.Screen</span> name=<span class="string">"Main"</span> component={MainTabs} /&gt;
+      &lt;<span class="component">Stack.Screen</span> name=<span class="string">"Details"</span> component={DetailsScreen} /&gt;
+    &lt;/<span class="component">Stack.Navigator</span>&gt;
+  &lt;/<span class="component">NavigationContainer</span>&gt;
+);
+</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question">How do you handle deep linking in React Native?</div>
+                <div class="answer">
+                    <div class="code-block">
+<code><span class="comment">// 1. Configure linking</span>
+<span class="keyword">const</span> linking = {
+  prefixes: [<span class="string">'myapp://'</span>, <span class="string">'https://myapp.com'</span>],
+  config: {
+    screens: {
+      Home: <span class="string">'home'</span>,
+      Profile: <span class="string">'user/:userId'</span>,
+      Settings: {
+        path: <span class="string">'settings'</span>,
+        screens: {
+          Notifications: <span class="string">'notifications'</span>,
+        },
+      },
+    },
+  },
+};
+
+<span class="comment">// 2. Use in NavigationContainer</span>
+&lt;<span class="component">NavigationContainer</span> linking={linking}&gt;
+  {<span class="comment">/* navigators */</span>}
+&lt;/<span class="component">NavigationContainer</span>&gt;
+
+<span class="comment">// URLs that work:</span>
+<span class="comment">// myapp://home</span>
+<span class="comment">// myapp://user/123</span>
+<span class="comment">// https://myapp.com/settings/notifications</span>
+</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JavaScript Concepts -->
+        <div class="section" id="js-concepts">
+            <h2>📜 JavaScript Deep Dive</h2>
+
+            <div class="question-card important">
+                <div class="question">Explain Closures with a practical React Native example</div>
+                <div class="answer">
+                    <p>A <strong>closure</strong> is a function that has access to variables from its outer scope, even after the outer function has returned.</p>
+                    <div class="code-block">
+<code><span class="comment">// Closure example in React Native</span>
+<span class="keyword">const</span> <span class="function">CounterButton</span> = () => {
+  <span class="keyword">const</span> [count, setCount] = <span class="function">useState</span>(<span class="number">0</span>);
+
+  <span class="comment">// This function "closes over" count variable</span>
+  <span class="keyword">const</span> handlePress = () => {
+    <span class="comment">// count is accessed from outer scope</span>
+    console.<span class="function">log</span>(<span class="string">`Current count: \${count}`</span>);
+    <span class="function">setCount</span>(count + <span class="number">1</span>);
+  };
+
+  <span class="keyword">return</span> &lt;<span class="component">Button</span> onPress={handlePress} title={<span class="string">`Count: \${count}`</span>} /&gt;;
+};
+
+<span class="comment">// ⚠️ Stale Closure Problem</span>
+<span class="keyword">const</span> <span class="function">Timer</span> = () => {
+  <span class="keyword">const</span> [count, setCount] = <span class="function">useState</span>(<span class="number">0</span>);
+
+  <span class="function">useEffect</span>(() => {
+    <span class="keyword">const</span> interval = <span class="function">setInterval</span>(() => {
+      <span class="comment">// ❌ Bug: count is always 0 (stale closure)</span>
+      <span class="function">setCount</span>(count + <span class="number">1</span>);
+    }, <span class="number">1000</span>);
+    
+    <span class="keyword">return</span> () => <span class="function">clearInterval</span>(interval);
+  }, []); <span class="comment">// Empty deps = closure captures initial count</span>
+
+  <span class="comment">// ✅ Fix: Use functional update</span>
+  <span class="function">useEffect</span>(() => {
+    <span class="keyword">const</span> interval = <span class="function">setInterval</span>(() => {
+      <span class="function">setCount</span>(prev => prev + <span class="number">1</span>); <span class="comment">// Always gets latest</span>
+    }, <span class="number">1000</span>);
+    
+    <span class="keyword">return</span> () => <span class="function">clearInterval</span>(interval);
+  }, []);
+};
+</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card important">
+                <div class="question">Explain the Event Loop and how it affects React Native</div>
+                <div class="answer">
+                    <div class="code-block">
+<code><span class="comment">// Event Loop Order:</span>
+<span class="comment">// 1. Call Stack (synchronous code)</span>
+<span class="comment">// 2. Microtask Queue (Promises, queueMicrotask)</span>
+<span class="comment">// 3. Macrotask Queue (setTimeout, setInterval, I/O)</span>
+
+console.<span class="function">log</span>(<span class="string">'1: Sync'</span>);
+
+<span class="function">setTimeout</span>(() => {
+  console.<span class="function">log</span>(<span class="string">'4: Macrotask'</span>);
+}, <span class="number">0</span>);
+
+Promise.<span class="function">resolve</span>().<span class="function">then</span>(() => {
+  console.<span class="function">log</span>(<span class="string">'3: Microtask'</span>);
+});
+
+console.<span class="function">log</span>(<span class="string">'2: Sync'</span>);
+
+<span class="comment">// Output: 1, 2, 3, 4</span>
+
+<span class="comment">// React Native Impact:</span>
+<span class="comment">// - Heavy sync code blocks JS thread</span>
+<span class="comment">// - UI updates are batched in microtasks</span>
+<span class="comment">// - Use InteractionManager for post-animation work</span>
+
+<span class="keyword">import</span> { InteractionManager } <span class="keyword">from</span> <span class="string">'react-native'</span>;
+
+<span class="function">useEffect</span>(() => {
+  <span class="comment">// Run after animations complete</span>
+  InteractionManager.<span class="function">runAfterInteractions</span>(() => {
+    <span class="function">loadHeavyData</span>();
+  });
+}, []);
+</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question">Explain Promises, async/await, and error handling</div>
+                <div class="answer">
+                    <div class="code-block">
+<code><span class="comment">// Promise states: pending → fulfilled/rejected</span>
+
+<span class="comment">// Creating a Promise</span>
+<span class="keyword">const</span> fetchUser = (id) => <span class="keyword">new</span> Promise((resolve, reject) => {
+  <span class="function">fetch</span>(<span class="string">`/api/users/\${id}`</span>)
+    .<span class="function">then</span>(res => res.<span class="function">json</span>())
+    .<span class="function">then</span>(resolve)
+    .<span class="function">catch</span>(reject);
+});
+
+<span class="comment">// async/await (syntactic sugar)</span>
+<span class="keyword">const</span> <span class="function">loadUserData</span> = <span class="keyword">async</span> () => {
+  <span class="keyword">try</span> {
+    <span class="keyword">const</span> user = <span class="keyword">await</span> <span class="function">fetchUser</span>(<span class="number">1</span>);
+    <span class="keyword">const</span> posts = <span class="keyword">await</span> <span class="function">fetchPosts</span>(user.id);
+    <span class="keyword">return</span> { user, posts };
+  } <span class="keyword">catch</span> (error) {
+    console.<span class="function">error</span>(<span class="string">'Failed:'</span>, error);
+    <span class="keyword">throw</span> error;
+  }
+};
+
+<span class="comment">// Parallel execution</span>
+<span class="keyword">const</span> <span class="function">loadAllData</span> = <span class="keyword">async</span> () => {
+  <span class="keyword">const</span> [users, products] = <span class="keyword">await</span> Promise.<span class="function">all</span>([
+    <span class="function">fetchUsers</span>(),
+    <span class="function">fetchProducts</span>(),
+  ]);
+};
+
+<span class="comment">// Promise.allSettled - waits for all, doesn't fail fast</span>
+<span class="keyword">const</span> results = <span class="keyword">await</span> Promise.<span class="function">allSettled</span>([
+  <span class="function">fetchUsers</span>(),
+  <span class="function">fetchProducts</span>(),
+]);
+<span class="comment">// results: [{ status: 'fulfilled', value: ... }, { status: 'rejected', reason: ... }]</span>
+</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TypeScript -->
+        <div class="section" id="typescript">
+            <h2>🔷 TypeScript in React Native</h2>
+
+            <div class="question-card important">
+                <div class="question">Essential TypeScript patterns for React Native</div>
+                <div class="answer">
+                    <div class="code-block">
+<code><span class="comment">// 1. Component Props Types</span>
+<span class="keyword">interface</span> ButtonProps {
+  title: <span class="keyword">string</span>;
+  onPress: () => <span class="keyword">void</span>;
+  disabled?: <span class="keyword">boolean</span>;
+  variant?: <span class="string">'primary'</span> | <span class="string">'secondary'</span>;
+}
+
+<span class="keyword">const</span> <span class="function">Button</span>: React.FC&lt;ButtonProps&gt; = ({ 
+  title, 
+  onPress, 
+  disabled = <span class="keyword">false</span>,
+  variant = <span class="string">'primary'</span>
+}) => { ... };
+
+<span class="comment">// 2. Navigation Types</span>
+<span class="keyword">type</span> RootStackParamList = {
+  Home: <span class="keyword">undefined</span>;
+  Profile: { userId: <span class="keyword">string</span> };
+  Settings: { section?: <span class="keyword">string</span> };
+};
+
+<span class="keyword">type</span> ProfileScreenProps = NativeStackScreenProps&lt;
+  RootStackParamList, 
+  <span class="string">'Profile'</span>
+&gt;;
+
+<span class="comment">// 3. API Response Types</span>
+<span class="keyword">interface</span> ApiResponse&lt;T&gt; {
+  data: T;
+  status: <span class="keyword">number</span>;
+  message?: <span class="keyword">string</span>;
+}
+
+<span class="keyword">interface</span> User {
+  id: <span class="keyword">string</span>;
+  name: <span class="keyword">string</span>;
+  email: <span class="keyword">string</span>;
+}
+
+<span class="keyword">const</span> <span class="function">fetchUser</span> = <span class="keyword">async</span> (id: <span class="keyword">string</span>): Promise&lt;ApiResponse&lt;User&gt;&gt; => {
+  <span class="keyword">const</span> response = <span class="keyword">await</span> api.<span class="function">get</span>&lt;User&gt;(<span class="string">`/users/\${id}`</span>);
+  <span class="keyword">return</span> response;
+};
+
+<span class="comment">// 4. Redux Toolkit Types</span>
+<span class="keyword">import</span> { TypedUseSelectorHook, useDispatch, useSelector } <span class="keyword">from</span> <span class="string">'react-redux'</span>;
+<span class="keyword">import</span> { RootState, AppDispatch } <span class="keyword">from</span> <span class="string">'./store'</span>;
+
+<span class="keyword">export const</span> useAppDispatch = () => <span class="function">useDispatch</span>&lt;AppDispatch&gt;();
+<span class="keyword">export const</span> useAppSelector: TypedUseSelectorHook&lt;RootState&gt; = useSelector;
+</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question">Explain Generics with practical examples</div>
+                <div class="answer">
+                    <div class="code-block">
+<code><span class="comment">// Generic function</span>
+<span class="keyword">function</span> <span class="function">getFirst</span>&lt;T&gt;(arr: T[]): T | <span class="keyword">undefined</span> {
+  <span class="keyword">return</span> arr[<span class="number">0</span>];
+}
+
+<span class="keyword">const</span> first = <span class="function">getFirst</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]); <span class="comment">// Type: number | undefined</span>
+<span class="keyword">const</span> firstStr = <span class="function">getFirst</span>([<span class="string">'a'</span>, <span class="string">'b'</span>]); <span class="comment">// Type: string | undefined</span>
+
+<span class="comment">// Generic component</span>
+<span class="keyword">interface</span> ListProps&lt;T&gt; {
+  items: T[];
+  renderItem: (item: T, index: <span class="keyword">number</span>) => React.ReactNode;
+  keyExtractor: (item: T) => <span class="keyword">string</span>;
+}
+
+<span class="keyword">function</span> <span class="function">GenericList</span>&lt;T&gt;({ items, renderItem, keyExtractor }: ListProps&lt;T&gt;) {
+  <span class="keyword">return</span> (
+    &lt;<span class="component">View</span>&gt;
+      {items.<span class="function">map</span>((item, index) => (
+        &lt;<span class="component">View</span> key={<span class="function">keyExtractor</span>(item)}&gt;
+          {<span class="function">renderItem</span>(item, index)}
+        &lt;/<span class="component">View</span>&gt;
+      ))}
+    &lt;/<span class="component">View</span>&gt;
+  );
+}
+
+<span class="comment">// Usage with type inference</span>
+&lt;<span class="component">GenericList</span>
+  items={users}
+  renderItem={(user) => &lt;<span class="component">Text</span>&gt;{user.name}&lt;/<span class="component">Text</span>&gt;}
+  keyExtractor={(user) => user.id}
+/&gt;
+</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Design -->
+        <div class="section" id="system-design">
+            <h2>🎨 Mobile App System Design</h2>
+
+            <div class="question-card important">
+                <div class="question">Design a scalable React Native app architecture</div>
+                <div class="answer">
+                    <h4>Folder Structure:</h4>
+                    <div class="code-block">
+<code>src/
+├── api/                 <span class="comment"># API layer</span>
+│   ├── client.ts        <span class="comment"># Axios/fetch instance</span>
+│   ├── endpoints/       <span class="comment"># API endpoints by feature</span>
+│   └── types/           <span class="comment"># API types</span>
+├── assets/              <span class="comment"># Images, fonts</span>
+├── components/          <span class="comment"># Shared components</span>
+│   ├── ui/              <span class="comment"># Design system (Button, Input, etc.)</span>
+│   └── common/          <span class="comment"># Business components</span>
+├── features/            <span class="comment"># Feature-based modules</span>
+│   ├── auth/
+│   │   ├── screens/
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── store/       <span class="comment"># Feature-specific state</span>
+│   │   └── types/
+│   ├── home/
+│   └── profile/
+├── hooks/               <span class="comment"># Shared custom hooks</span>
+├── navigation/          <span class="comment"># Navigation setup</span>
+├── store/               <span class="comment"># Global state (Redux/Zustand)</span>
+├── theme/               <span class="comment"># Design tokens, colors, spacing</span>
+├── utils/               <span class="comment"># Helper functions</span>
+└── App.tsx
+</code>
+                    </div>
+
+                    <h4>Key Architecture Principles:</h4>
+                    <ol>
+                        <li><strong>Feature-based organization:</strong> Group by feature, not type</li>
+                        <li><strong>Separation of concerns:</strong> UI, Business Logic, Data layers</li>
+                        <li><strong>Dependency injection:</strong> Services, API clients</li>
+                        <li><strong>Error boundaries:</strong> Graceful error handling</li>
+                        <li><strong>Offline-first:</strong> Local storage, sync queues</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="question-card important">
+                <div class="question">Design an offline-first mobile app</div>
+                <div class="answer">
+                    <h4>Key Components:</h4>
+                    <ol>
+                        <li><strong>Local Database:</strong> SQLite (via WatermelonDB) or Realm</li>
+                        <li><strong>Sync Queue:</strong> Queue mutations when offline</li>
+                        <li><strong>Conflict Resolution:</strong> Last-write-wins or merge strategies</li>
+                        <li><strong>Network Detection:</strong> NetInfo for connectivity</li>
+                    </ol>
+                    <div class="code-block">
+<code><span class="comment">// Offline-first data flow</span>
+<span class="keyword">const</span> <span class="function">useOfflineData</span> = (key) => {
+  <span class="keyword">const</span> [data, setData] = <span class="function">useState</span>(<span class="keyword">null</span>);
+  <span class="keyword">const</span> [isOnline, setIsOnline] = <span class="function">useState</span>(<span class="keyword">true</span>);
+
+  <span class="function">useEffect</span>(() => {
+    <span class="comment">// 1. Load from local storage first (instant)</span>
+    <span class="keyword">const</span> cached = <span class="keyword">await</span> AsyncStorage.<span class="function">getItem</span>(key);
+    <span class="keyword">if</span> (cached) <span class="function">setData</span>(JSON.<span class="function">parse</span>(cached));
+
+    <span class="comment">// 2. Fetch fresh data if online</span>
+    <span class="keyword">if</span> (isOnline) {
+      <span class="keyword">const</span> fresh = <span class="keyword">await</span> api.<span class="function">fetch</span>(key);
+      <span class="function">setData</span>(fresh);
+      <span class="keyword">await</span> AsyncStorage.<span class="function">setItem</span>(key, JSON.<span class="function">stringify</span>(fresh));
+    }
+  }, [key, isOnline]);
+
+  <span class="keyword">return</span> { data, isOnline };
+};
+
+<span class="comment">// Sync queue for mutations</span>
+<span class="keyword">const</span> <span class="function">queueMutation</span> = <span class="keyword">async</span> (mutation) => {
+  <span class="keyword">const</span> queue = <span class="keyword">await</span> <span class="function">getQueue</span>();
+  queue.<span class="function">push</span>({ ...mutation, timestamp: Date.<span class="function">now</span>() });
+  <span class="keyword">await</span> <span class="function">saveQueue</span>(queue);
+  
+  <span class="keyword">if</span> (isOnline) {
+    <span class="keyword">await</span> <span class="function">processSyncQueue</span>();
+  }
+};
+</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testing -->
+        <div class="section" id="testing">
+            <h2>🧪 Testing</h2>
+
+            <div class="question-card important">
+                <div class="question">Testing strategies for React Native apps</div>
+                <div class="answer">
+                    <table>
+                        <tr>
+                            <th>Type</th>
+                            <th>Tool</th>
+                            <th>What to Test</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Unit</strong></td>
+                            <td>Jest</td>
+                            <td>Functions, hooks, utils</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Component</strong></td>
+                            <td>React Testing Library</td>
+                            <td>Component rendering, interactions</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Integration</strong></td>
+                            <td>Jest + RTL</td>
+                            <td>Multiple components, API mocking</td>
+                        </tr>
+                        <tr>
+                            <td><strong>E2E</strong></td>
+                            <td>Detox / Maestro</td>
+                            <td>Full user flows</td>
+                        </tr>
+                    </table>
+
+                    <div class="code-block">
+<code><span class="comment">// Component test with RTL</span>
+<span class="keyword">import</span> { render, fireEvent, waitFor } <span class="keyword">from</span> <span class="string">'@testing-library/react-native'</span>;
+
+<span class="function">describe</span>(<span class="string">'LoginScreen'</span>, () => {
+  <span class="function">it</span>(<span class="string">'shows error on invalid credentials'</span>, <span class="keyword">async</span> () => {
+    <span class="keyword">const</span> { getByPlaceholderText, getByText, findByText } = <span class="function">render</span>(
+      &lt;<span class="component">LoginScreen</span> /&gt;
+    );
+
+    fireEvent.<span class="function">changeText</span>(
+      <span class="function">getByPlaceholderText</span>(<span class="string">'Email'</span>), 
+      <span class="string">'invalid@email.com'</span>
+    );
+    fireEvent.<span class="function">changeText</span>(
+      <span class="function">getByPlaceholderText</span>(<span class="string">'Password'</span>), 
+      <span class="string">'wrong'</span>
+    );
+    fireEvent.<span class="function">press</span>(<span class="function">getByText</span>(<span class="string">'Login'</span>));
+
+    <span class="keyword">const</span> error = <span class="keyword">await</span> <span class="function">findByText</span>(<span class="string">'Invalid credentials'</span>);
+    <span class="function">expect</span>(error).<span class="function">toBeTruthy</span>();
+  });
+});
+</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Behavioral Questions -->
+        <div class="section" id="behavioral">
+            <h2>👔 Behavioral Questions</h2>
+
+            <div class="question-card important">
+                <div class="question">Tell me about a challenging technical problem you solved</div>
+                <div class="answer">
+                    <p><strong>Use STAR Method:</strong></p>
+                    <ul>
+                        <li><strong>Situation:</strong> Set the context</li>
+                        <li><strong>Task:</strong> Describe your responsibility</li>
+                        <li><strong>Action:</strong> Explain what you did</li>
+                        <li><strong>Result:</strong> Share the outcome with metrics</li>
+                    </ul>
+                    <div class="tip">
+                        <div class="tip-title">💡 Example Answer Structure</div>
+                        "In my previous role at [Company], we faced [specific challenge with app performance]. 
+                        I was responsible for [your role]. I [specific actions: profiled the app, identified bottlenecks, 
+                        implemented FlatList optimizations, added memoization]. As a result, we reduced load time by 40% 
+                        and improved user retention by 15%."
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question">How do you handle disagreements with team members?</div>
+                <div class="answer">
+                    <ol>
+                        <li><strong>Listen first:</strong> Understand their perspective fully</li>
+                        <li><strong>Find common ground:</strong> Identify shared goals</li>
+                        <li><strong>Data-driven discussion:</strong> Use facts, not opinions</li>
+                        <li><strong>Propose experiments:</strong> "Let's try both and measure"</li>
+                        <li><strong>Escalate appropriately:</strong> If needed, involve tech lead</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question">How do you mentor junior developers?</div>
+                <div class="answer">
+                    <ul>
+                        <li><strong>Code reviews:</strong> Provide constructive, educational feedback</li>
+                        <li><strong>Pair programming:</strong> Work together on complex tasks</li>
+                        <li><strong>Documentation:</strong> Create learning resources</li>
+                        <li><strong>Gradual responsibility:</strong> Assign progressively challenging tasks</li>
+                        <li><strong>Regular 1:1s:</strong> Check progress and provide guidance</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leadership -->
+        <div class="section" id="leadership">
+            <h2>👥 Leadership Scenarios</h2>
+
+            <div class="question-card important">
+                <div class="question">How would you lead a migration to React Native's New Architecture?</div>
+                <div class="answer">
+                    <h4>Phase 1: Assessment</h4>
+                    <ul>
+                        <li>Audit current native modules and third-party libraries</li>
+                        <li>Identify incompatible dependencies</li>
+                        <li>Estimate effort and create timeline</li>
+                    </ul>
+                    
+                    <h4>Phase 2: Preparation</h4>
+                    <ul>
+                        <li>Update React Native to latest version</li>
+                        <li>Enable Hermes engine</li>
+                        <li>Update/replace incompatible libraries</li>
+                        <li>Set up feature flags for gradual rollout</li>
+                    </ul>
+
+                    <h4>Phase 3: Migration</h4>
+                    <ul>
+                        <li>Convert native modules to TurboModules</li>
+                        <li>Update custom native components for Fabric</li>
+                        <li>Run comprehensive testing</li>
+                    </ul>
+
+                    <h4>Phase 4: Rollout</h4>
+                    <ul>
+                        <li>Internal testing with feature flag</li>
+                        <li>Beta release to subset of users</li>
+                        <li>Monitor performance metrics</li>
+                        <li>Full production release</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question">How do you ensure code quality in a large team?</div>
+                <div class="answer">
+                    <ol>
+                        <li><strong>Coding standards:</strong> ESLint, Prettier, documented conventions</li>
+                        <li><strong>Code reviews:</strong> Required approvals, review guidelines</li>
+                        <li><strong>Automated testing:</strong> Unit, integration, E2E test requirements</li>
+                        <li><strong>CI/CD pipeline:</strong> Automated checks before merge</li>
+                        <li><strong>Architecture reviews:</strong> For significant changes</li>
+                        <li><strong>Tech debt tracking:</strong> Regular refactoring sprints</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+            <p>Created for <strong>Nishant Singh</strong> | React Native Tech Lead & Architect</p>
+            <p>Good luck with your interviews! 🚀</p>
+        </div>
+    </main>
+
+    <!-- Progress Tracker -->
+    <div class="progress-tracker">
+        <h4>📊 Study Progress</h4>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        <div class="progress-text" id="progressText">0 / 12 topics completed</div>
+    </div>
+
+    <script>
+        // Sidebar navigation active state
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.section');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Collapsible sections
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', () => {
+                header.parentElement.classList.toggle('open');
+            });
+        });
+
+        // Progress tracker
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('.checklist input[type="checkbox"]');
+            const checked = document.querySelectorAll('.checklist input[type="checkbox"]:checked').length;
+            const total = checkboxes.length;
+            const percentage = (checked / total) * 100;
+
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = `${checked} / ${total} topics completed`;
+
+            // Save to localStorage
+            const state = {};
+            checkboxes.forEach(cb => {
+                state[cb.id] = cb.checked;
+            });
+            localStorage.setItem('interviewProgress', JSON.stringify(state));
+        }
+
+        // Load saved progress
+        function loadProgress() {
+            const saved = localStorage.getItem('interviewProgress');
+            if (saved) {
+                const state = JSON.parse(saved);
+                Object.keys(state).forEach(id => {
+                    const checkbox = document.getElementById(id);
+                    if (checkbox) checkbox.checked = state[id];
+                });
+                updateProgress();
+            }
+        }
+
+        document.querySelectorAll('.checklist input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', updateProgress);
+        });
+
+        loadProgress();
+
+        // Search functionality
+        function searchTopics() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.question-card');
+
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(query) ? 'block' : 'none';
+            });
+        }
+
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Check viewport for mobile
+        function checkViewport() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            if (window.innerWidth <= 1024) {
+                menuToggle.style.display = 'block';
+            } else {
+                menuToggle.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('resize', checkViewport);
+        checkViewport();
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                // Close mobile sidebar
+                if (window.innerWidth <= 1024) {
+                    document.getElementById('sidebar').classList.remove('open');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
