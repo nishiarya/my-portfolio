@@ -4,6 +4,73 @@ import { useRef } from "react";
 import { aboutData } from "./About.data";
 import "./About.css";
 
+// Keywords to highlight in professional summary
+const highlightKeywords = [
+  "15+ years",
+  "9+ years",
+  "Tech Mahindra",
+  "Fortune 500",
+  "Verizon",
+  "Wolters Kluwer",
+  "Sunrise Communications",
+  "99% security vulnerability remediation",
+  "8960+ risk points",
+  "36 processes digitized",
+  "2M+ downloads",
+  "two weeks",
+  "12 members",
+  "15+ awards",
+  "50+ developers",
+  "accessible, secure, and delightful",
+  "scalable, secure, and accessible",
+  "POB, Bravo, Star Award, Standing Ovation, Digital Warrior EMEA Excellence",
+];
+
+// Function to highlight keywords in text
+const highlightText = (text: string): React.ReactNode => {
+  let result: React.ReactNode[] = [];
+  let remainingText = text;
+  let keyIndex = 0;
+
+  while (remainingText.length > 0) {
+    let earliestMatch: { keyword: string; index: number } | null = null;
+
+    for (const keyword of highlightKeywords) {
+      const index = remainingText.toLowerCase().indexOf(keyword.toLowerCase());
+      if (index !== -1 && (earliestMatch === null || index < earliestMatch.index)) {
+        earliestMatch = { keyword, index };
+      }
+    }
+
+    if (earliestMatch) {
+      // Add text before the match
+      if (earliestMatch.index > 0) {
+        result.push(remainingText.substring(0, earliestMatch.index));
+      }
+      // Add the highlighted keyword
+      const actualKeyword = remainingText.substring(
+        earliestMatch.index,
+        earliestMatch.index + earliestMatch.keyword.length
+      );
+      result.push(
+        <span key={keyIndex++} className="highlight">
+          {actualKeyword}
+        </span>
+      );
+      // Continue with remaining text
+      remainingText = remainingText.substring(
+        earliestMatch.index + earliestMatch.keyword.length
+      );
+    } else {
+      // No more matches, add remaining text
+      result.push(remainingText);
+      break;
+    }
+  }
+
+  return result;
+};
+
 const About = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -32,40 +99,9 @@ const About = () => {
           >
             <div className="about-card">
               <h3>{aboutData.professionalSummary.title}</h3>
-              {aboutData.professionalSummary.paragraphs.map(
-                (_paragraph, index) => (
-                  <p key={index}>
-                    {index === 0 ? (
-                      <>
-                        I'm a <span className="highlight">Tech Lead</span>{" "}
-                        specializing in{" "}
-                        <span className="highlight">
-                          React Native & ReactJS
-                        </span>{" "}
-                        with a proven track record of leading digital
-                        transformation projects for Fortune 500 clients. My
-                        expertise spans the complete mobile app lifecycle - from
-                        solution design and architecture to deployment and team
-                        leadership.
-                      </>
-                    ) : (
-                      <>
-                        I believe in building applications that are not just
-                        functional, but{" "}
-                        <span className="highlight">
-                          accessible, secure, and delightful
-                        </span>{" "}
-                        to use. My approach combines technical excellence with
-                        strong leadership values - fostering collaboration,
-                        mentoring teams, and delivering business value through
-                        innovation. Having served global clients in telecom,
-                        real estate, productivity, and e-Commerce domains, I
-                        bring a wealth of cross-industry experience.
-                      </>
-                    )}
-                  </p>
-                )
-              )}
+              {aboutData.professionalSummary.paragraphs.map((paragraph, index) => (
+                <p key={index}>{highlightText(paragraph)}</p>
+              ))}
               <p className="core-values">
                 <strong>Core Values:</strong>{" "}
                 {aboutData.professionalSummary.coreValues.join(" | ")}

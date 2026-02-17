@@ -90,14 +90,21 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            An engineer driven by{" "}
-            <span className="highlight">{heroData.highlights[0]}</span>. With{" "}
-            <span className="highlight">{heroData.highlights[1]}</span> of
-            experience, I architect and deliver scalable, secure, and
-            performance-optimized mobile applications for global enterprise
-            clients across telecom, real estate, and digital transformation
-            domains.
+            {heroData.description}
           </motion.p>
+
+          <motion.div
+            className="hero-highlights"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45 }}
+          >
+            {heroData.highlights.map((highlight, index) => (
+              <span key={index} className="hero-highlight-tag">
+                {highlight}
+              </span>
+            ))}
+          </motion.div>
 
           <motion.div
             className="hero-info"

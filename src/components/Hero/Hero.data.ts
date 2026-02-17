@@ -18,11 +18,8 @@ export const heroData: HeroData = {
   title: "Tech Lead | React-Native | Mobile App Solution Design & Architect",
   subtitle: "Mobile Solution Architect & Tech Lead",
   description:
-    "An engineer driven by commitment, reliability, integrity, and kindness. With 15.6+ years of experience, I architect and deliver scalable, secure, and performance-optimized mobile applications for global enterprise clients across telecom, real estate, and digital transformation domains.",
-  highlights: [
-    "commitment, reliability, integrity, and kindness",
-    "15.6+ years",
-  ],
+    "With 15.6+ years of experience, I architect and deliver scalable, secure, and performance-optimized enterprise applications for global enterprise clients across telecom, real estate, and digital transformation domains.\n Architecting enterprise mobile solutions for Fortune 500 clients. 15+ awards. 2M+ app downloads in just two weeks (#1 on App Store). 99% security remediation and much more",
+  highlights: ["Fortune 500 Clients", "15+ Awards", "2M+ Downloads"],
   location: "Noida, India",
   phone: "+91-9958101777",
   email: "nishant.bitindia@gmail.com",

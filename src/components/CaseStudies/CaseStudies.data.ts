@@ -1,5 +1,5 @@
 import type { IconType } from "react-icons";
-import { FiShield, FiSmartphone, FiGlobe } from "react-icons/fi";
+import { FiShield, FiSmartphone, FiGlobe, FiUsers } from "react-icons/fi";
 
 export interface CaseStudy {
   id: string;
@@ -36,11 +36,18 @@ export const caseStudies: CaseStudy[] = [
       "Established security review process for future releases",
       "Trained team on secure coding practices",
     ],
-    technologies: ["React", "Security Tools", "SAST/DAST", "Fortify", "Black Duck", "ZAP"],
+    technologies: [
+      "AEM-ReactJS",
+      "Security Tools",
+      "SAST/DAST",
+      "Fortify",
+      "SCA-Black Duck",
+      "ZAP",
+    ],
     metrics: [
       { label: "Vulnerabilities Fixed", value: "99%" },
-      { label: "Apps Secured", value: "15+" },
-      { label: "Time to Remediate", value: "3 months" },
+      { label: "Apps Secured", value: "4+" },
+      { label: "Time to Remediate", value: "6m" },
       { label: "Critical Issues", value: "0" },
     ],
     color: "#6366f1",
@@ -59,8 +66,19 @@ export const caseStudies: CaseStudy[] = [
       "Significantly reduced onboarding time",
       "Achieved exceptional customer satisfaction",
       "Won multiple industry awards",
+      "Huge product improvement support for TP PXL Vision",
     ],
-    technologies: ["React Native", "ID Scanning", "Face Recognition", "Digital Signature", "OCR"],
+    technologies: [
+      "iOS",
+      "Objective-C",
+      "ID Scanning",
+      "Document Scanning",
+      "Face Recognition",
+      "Document Signature",
+      "OCR Technology",
+      "Adobe Analytics",
+      "Logging & Monitoring",
+    ],
     metrics: [
       { label: "Processes Digitized", value: "36" },
       { label: "Cost Reduction", value: "60%" },
@@ -84,7 +102,16 @@ export const caseStudies: CaseStudy[] = [
       "Improved billing accuracy and transparency",
       "Enhanced customer retention rates",
     ],
-    technologies: ["React Native", "Redux", "Adobe Analytics", "Bugsnag", "REST APIs"],
+    technologies: [
+      "React Native",
+      "Redux",
+      "TypeScript",
+      "Storybook",
+      "Adobe Analytics",
+      "GraphQL",
+      "REST APIs",
+      "Logging & Monitoring",
+    ],
     metrics: [
       { label: "Support Calls Reduced", value: "40%" },
       { label: "User Engagement", value: "+65%" },
@@ -92,5 +119,40 @@ export const caseStudies: CaseStudy[] = [
       { label: "Active Users", value: "500K+" },
     ],
     color: "#a855f7",
+  },
+  {
+    id: "accessibility-framework",
+    title: "Enterprise Accessibility Framework",
+    client: "Tech Mahindra - Internal Initiative",
+    icon: FiUsers,
+    challenge:
+      "Building accessible applications at enterprise scale is challenging. Every organization needs consistent branding while meeting legal compliance (ADA, WCAG 2.1/2.2, Section 508). How do we create a reusable, accessibility-compliant component ecosystem that works across ALL client applications?",
+    solution:
+      "Designed and implemented a comprehensive Accessibility Framework using Component-Driven Development (CDD) with Storybook and Atomic Design pattern. Built reusable UI components with native accessibility APIs (VoiceOver for iOS, TalkBack for Android) baked in from Day One.",
+    impact: [
+      "Created reusable component library with 10+ accessible components",
+      "Achieved WCAG 2.1/2.2, ADA, Section 508 compliance",
+      "Enabled 15%+ additional user reach (1B+ people with disabilities globally)",
+      "Established accessibility standards as part of Definition of Done",
+      "Built living documentation with interactive Storybook catalog",
+      "Presented framework to IBU Head - ASCEND Leadership Program",
+    ],
+    technologies: [
+      "React Native",
+      "TypeScript",
+      "Storybook",
+      "Atomic Design",
+      "VoiceOver (iOS)",
+      "TalkBack (Android)",
+      "ARIA",
+      "WCAG 2.1",
+    ],
+    metrics: [
+      { label: "Components Built", value: "10+" },
+      { label: "Platform Support", value: "3" },
+      { label: "User Reach Increase", value: "15%" },
+      { label: "Compliance Standards", value: "3" },
+    ],
+    color: "#10b981",
   },
 ];

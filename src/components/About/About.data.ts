@@ -28,8 +28,9 @@ export const aboutData: AboutData = {
   professionalSummary: {
     title: "Professional Summary",
     paragraphs: [
-      "I'm a Tech Lead specializing in React Native & ReactJS with a proven track record of leading digital transformation projects for Fortune 500 clients. My expertise spans the complete mobile app lifecycle - from solution design and architecture to deployment and team leadership.",
-      "I believe in building applications that are not just functional, but accessible, secure, and delightful to use. My approach combines technical excellence with strong leadership values - fostering collaboration, mentoring teams, and delivering business value through innovation. Having served global clients in telecom, real estate, productivity, and e-Commerce domains, I bring a wealth of cross-industry experience.",
+      "I architect and deliver enterprise mobile applications that drive real business impact. With 15+ years in IT and 9+ years at Tech Mahindra, I've led end-to-end delivery for Fortune 500 clients including Verizon, Wolters Kluwer, and Sunrise Communications — specializing in transforming complex business requirements into scalable, secure, and accessible mobile solutions.",
+      "My track record speaks through results: 99% security vulnerability remediation at Verizon (8960+ risk points eliminated), award-winning digital onboarding solution for Sunrise (36 processes digitized), and a viral utility app with 2M+ downloads in two weeks. I lead teams up to 12 members with full project ownership, having earned 15+ awards including POB, Bravo, Star Award, Standing Ovation, Digital Warrior EMEA Excellence and more.",
+      "I believe in building applications that are not just functional, but accessible, secure, and delightful to use. My approach combines technical excellence with strong leadership — fostering collaboration, mentoring 50+ developers, and delivering measurable business value through innovation across telecom, enterprise, real estate, and e-Commerce domains.",
     ],
     coreValues: [
       "Commitment",

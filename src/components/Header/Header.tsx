@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu, FiX, FiSmartphone, FiCode } from "react-icons/fi";
 import { navLinks, brandInfo } from "./Header.data";
@@ -7,14 +7,29 @@ import "./Header.css";
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
+
+  const handleScroll = useCallback(() => {
+    setIsScrolled(window.scrollY > 50);
+
+    // Find the currently visible section
+    const sections = navLinks.map((link) => link.href.replace("#", ""));
+    const scrollPosition = window.scrollY + 150; // Offset for header height
+
+    for (let i = sections.length - 1; i >= 0; i--) {
+      const section = document.getElementById(sections[i]);
+      if (section && section.offsetTop <= scrollPosition) {
+        setActiveSection(sections[i]);
+        break;
+      }
+    }
+  }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
     window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Check initial position
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [handleScroll]);
 
   return (
     <motion.header
@@ -40,7 +55,7 @@ const Header = () => {
             <motion.a
               key={link.href}
               href={link.href}
-              className="nav-link"
+              className={`nav-link ${activeSection === link.href.replace("#", "") ? "active" : ""}`}
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
@@ -72,7 +87,7 @@ const Header = () => {
               <motion.a
                 key={link.href}
                 href={link.href}
-                className="nav-link-mobile"
+                className={`nav-link-mobile ${activeSection === link.href.replace("#", "") ? "active" : ""}`}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}

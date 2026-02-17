@@ -34,7 +34,7 @@ export const skillCategories: SkillCategory[] = [
     icon: FiLayers,
     color: "#8b5cf6",
     skills: [
-      { name: "iOS (Swift/Obj-C)", level: 85 },
+      { name: "React Native (Cross-Platform) & iOS (Swift/Obj-C)", level: 85 },
       { name: "Apple Developer Account Management", level: 95 },
       { name: "Redux & RTK", level: 90 },
       { name: "State Management", level: 92 },
