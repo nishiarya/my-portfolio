@@ -1,6 +1,7 @@
 export interface Experience {
   title: string;
   company: string;
+  companyUrl: string;
   location: string;
   period: string;
   duration: string;
@@ -20,6 +21,7 @@ export const experiences: Experience[] = [
   {
     title: "Tech Lead",
     company: "Tech Mahindra Ltd.",
+    companyUrl: "https://www.techmahindra.com/",
     location: "Noida, India",
     period: "Dec 2016 - Present",
     duration: "9+ years",
@@ -38,6 +40,7 @@ export const experiences: Experience[] = [
   {
     title: "Team Lead iOS",
     company: "Wildnet Technologies Pvt. Ltd.",
+    companyUrl: "https://www.wildnettechnologies.com/",
     location: "Noida, India",
     period: "Nov 2013 - Nov 2016",
     duration: "3 years",
@@ -56,6 +59,7 @@ export const experiences: Experience[] = [
   {
     title: "Software Engineer",
     company: "HyTech Professionals India Pvt. Ltd.",
+    companyUrl: "https://hytechpro.com/",
     location: "Noida, India",
     period: "Apr 2010 - Nov 2013",
     duration: "3.5 years",

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { FiBriefcase, FiCalendar, FiMapPin, FiUsers } from "react-icons/fi";
+import { FiBriefcase, FiCalendar, FiMapPin, FiUsers, FiExternalLink } from "react-icons/fi";
 import { experiences, experienceSummary } from "./Experience.data";
 import "./Experience.css";
 
@@ -41,7 +41,15 @@ const Experience = () => {
                 <div className="exp-header">
                   <div className="exp-title-section">
                     <h3 className="exp-title">{exp.title}</h3>
-                    <h4 className="exp-company">{exp.company}</h4>
+                    <a
+                      href={exp.companyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="exp-company"
+                    >
+                      {exp.company}
+                      <FiExternalLink className="company-link-icon" />
+                    </a>
                   </div>
                   <div className="exp-meta">
                     <span className="exp-duration-badge">{exp.duration}</span>

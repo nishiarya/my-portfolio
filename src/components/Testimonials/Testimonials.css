@@ -47,18 +47,60 @@
   margin-top: 0.25rem;
 }
 
-/* Testimonials Grid */
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+/* Testimonials Marquee */
+.testimonials-marquee-wrapper {
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 3rem;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 5%,
+    black 95%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 5%,
+    black 95%,
+    transparent
+  );
+}
+
+.testimonials-marquee {
+  display: flex;
+  width: fit-content;
+  animation: scroll-marquee 30s linear infinite;
+}
+
+.testimonials-marquee.paused {
+  animation-play-state: paused;
+}
+
+.marquee-content {
+  display: flex;
+  gap: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@keyframes scroll-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .testimonial-card {
-  padding: 2rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
+  min-width: 380px;
+  max-width: 380px;
+  flex-shrink: 0;
 }
 
 .testimonial-header {
@@ -162,14 +204,20 @@
   border-top: 1px solid var(--border-color);
 }
 
-/* CTA Card */
+/* CTA Section */
+.testimonial-cta-section {
+  display: flex;
+  justify-content: center;
+}
+
 .testimonial-cta {
-  padding: 2rem;
+  padding: 2rem 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, var(--bg-card), var(--bg-tertiary));
   border-style: dashed;
+  max-width: 500px;
 }
 
 .cta-content {
@@ -224,8 +272,9 @@
 }
 
 @media (max-width: 768px) {
-  .testimonials-grid {
-    grid-template-columns: 1fr;
+  .testimonial-card {
+    min-width: 320px;
+    max-width: 320px;
   }
 
   .testimonial-stats {
@@ -241,6 +290,10 @@
     width: 48px;
     height: 48px;
     font-size: 1.25rem;
+  }
+
+  .testimonials-marquee {
+    animation-duration: 25s;
   }
 }
 
@@ -263,6 +316,8 @@
 
   .testimonial-card {
     padding: 1.25rem;
+    min-width: 280px;
+    max-width: 280px;
   }
 
   .testimonial-header {
@@ -271,5 +326,13 @@
 
   .linkedin-link {
     margin-left: auto;
+  }
+
+  .testimonials-marquee {
+    animation-duration: 20s;
+  }
+
+  .testimonial-cta {
+    padding: 1.5rem;
   }
 }

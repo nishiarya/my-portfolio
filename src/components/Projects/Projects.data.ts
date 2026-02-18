@@ -173,7 +173,7 @@ export const projects: Project[] = [
   {
     icon: FiHome,
     title: "iField App & Buniyad Realtors",
-    client: "In-House Projects",
+    client: "Enterprise In-House Distributed Apps",
     description:
       "Built Salesforce SOQL communication over restful web services becoming the app backbone to interact with Salesforce seamlessly. iField App Inventory Management and Buniyad Realtors Field Agent Tracking app.",
     achievements: [
@@ -193,7 +193,7 @@ export const projects: Project[] = [
   {
     icon: FiBluetooth,
     title: "BlueMe (v1.0 – v5.0)",
-    client: "Personal Project - App Store",
+    client: "HyTech Professionals India Pvt. Ltd. - App Store",
     description:
       "Conceptualized & built viral utility app for Bluetooth file sharing. Text/voice chat, documents, photos, videos, audio notes sharing without internet. 'Shake' to auto-connect with nearby iOS devices.",
     achievements: [

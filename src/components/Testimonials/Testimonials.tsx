@@ -1,13 +1,55 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { FiMessageSquare, FiLinkedin, FiUsers, FiAward, FiCode, FiBriefcase } from "react-icons/fi";
 import { testimonials, testimonialStats } from "./Testimonials.data";
 import "./Testimonials.css";
 
+const TestimonialCard = ({ testimonial }: { testimonial: typeof testimonials[0] }) => (
+  <div className="testimonial-card card">
+    <div className="testimonial-header">
+      <div className="testimonial-avatar">
+        {testimonial.image ? (
+          <img src={testimonial.image} alt={testimonial.name} />
+        ) : (
+          <div className="avatar-placeholder">
+            {testimonial.name.charAt(0)}
+          </div>
+        )}
+      </div>
+      <div className="testimonial-author">
+        <h4 className="author-name">{testimonial.name}</h4>
+        <p className="author-role">{testimonial.role}</p>
+        <p className="author-company">{testimonial.company}</p>
+      </div>
+      {testimonial.linkedinUrl && (
+        <a
+          href={testimonial.linkedinUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="linkedin-link"
+          aria-label={`View ${testimonial.name}'s LinkedIn`}
+        >
+          <FiLinkedin />
+        </a>
+      )}
+    </div>
+
+    <div className="testimonial-content">
+      <FiMessageSquare className="quote-icon" />
+      <p>{testimonial.content}</p>
+    </div>
+
+    <div className="testimonial-relationship">
+      {testimonial.relationship}
+    </div>
+  </div>
+);
+
 const Testimonials = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [isPaused, setIsPaused] = useState(false);
 
   const stats = [
     { icon: FiBriefcase, value: testimonialStats.yearsExperience, label: "Years Experience" },
@@ -55,62 +97,37 @@ const Testimonials = () => {
           ))}
         </motion.div>
 
-        {/* Testimonials Grid */}
-        <div className="testimonials-grid">
-          {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={testimonial.id}
-              className="testimonial-card card"
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
-            >
-              <div className="testimonial-header">
-                <div className="testimonial-avatar">
-                  {testimonial.image ? (
-                    <img src={testimonial.image} alt={testimonial.name} />
-                  ) : (
-                    <div className="avatar-placeholder">
-                      {testimonial.name.charAt(0)}
-                    </div>
-                  )}
-                </div>
-                <div className="testimonial-author">
-                  <h4 className="author-name">{testimonial.name}</h4>
-                  <p className="author-role">{testimonial.role}</p>
-                  <p className="author-company">{testimonial.company}</p>
-                </div>
-                {testimonial.linkedinUrl && (
-                  <a
-                    href={testimonial.linkedinUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="linkedin-link"
-                    aria-label={`View ${testimonial.name}'s LinkedIn`}
-                  >
-                    <FiLinkedin />
-                  </a>
-                )}
-              </div>
+        {/* Auto-scrolling Testimonials Marquee */}
+        <motion.div
+          className="testimonials-marquee-wrapper"
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          <div className={`testimonials-marquee ${isPaused ? "paused" : ""}`}>
+            <div className="marquee-content">
+              {testimonials.map((testimonial, index) => (
+                <TestimonialCard key={`original-${index}`} testimonial={testimonial} />
+              ))}
+            </div>
+            <div className="marquee-content" aria-hidden="true">
+              {testimonials.map((testimonial, index) => (
+                <TestimonialCard key={`duplicate-${index}`} testimonial={testimonial} />
+              ))}
+            </div>
+          </div>
+        </motion.div>
 
-              <div className="testimonial-content">
-                <FiMessageSquare className="quote-icon" />
-                <p>{testimonial.content}</p>
-              </div>
-
-              <div className="testimonial-relationship">
-                {testimonial.relationship}
-              </div>
-            </motion.div>
-          ))}
-
-          {/* Call for More Testimonials */}
-          <motion.div
-            className="testimonial-cta card"
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
+        {/* Call for More Testimonials */}
+        <motion.div
+          className="testimonial-cta-section"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.6 }}
+        >
+          <div className="testimonial-cta card">
             <div className="cta-content">
               <FiMessageSquare className="cta-icon" />
               <h4>Worked Together?</h4>
@@ -128,8 +145,8 @@ const Testimonials = () => {
                 Leave a Recommendation
               </a>
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
