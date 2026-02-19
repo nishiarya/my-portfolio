@@ -1,6 +1,7 @@
 .expertise {
   background: var(--bg-secondary);
   padding-top: 50px;
+  overflow-x: hidden;
 }
 
 .expertise-showcase {

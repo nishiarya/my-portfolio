@@ -1,26 +1,49 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { FiMessageSquare, FiLinkedin, FiUsers, FiAward, FiCode, FiBriefcase } from "react-icons/fi";
+import {
+  FiMessageSquare,
+  FiLinkedin,
+  FiUsers,
+  FiAward,
+  FiCode,
+  FiBriefcase,
+  FiX,
+} from "react-icons/fi";
 import { testimonials, testimonialStats } from "./Testimonials.data";
+import type { Testimonial } from "./Testimonials.data";
 import "./Testimonials.css";
 
-const TestimonialCard = ({ testimonial }: { testimonial: typeof testimonials[0] }) => (
+interface TestimonialCardProps {
+  testimonial: Testimonial;
+  onViewMore: () => void;
+}
+
+const TestimonialCard = ({ testimonial, onViewMore }: TestimonialCardProps) => (
   <div className="testimonial-card card">
     <div className="testimonial-header">
       <div className="testimonial-avatar">
         {testimonial.image ? (
           <img src={testimonial.image} alt={testimonial.name} />
         ) : (
-          <div className="avatar-placeholder">
-            {testimonial.name.charAt(0)}
-          </div>
+          <div className="avatar-placeholder">{testimonial.name.charAt(0)}</div>
         )}
       </div>
       <div className="testimonial-author">
         <h4 className="author-name">{testimonial.name}</h4>
         <p className="author-role">{testimonial.role}</p>
-        <p className="author-company">{testimonial.company}</p>
+        {testimonial.companyUrl ? (
+          <a
+            href={testimonial.companyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="author-company-link"
+          >
+            {testimonial.company}
+          </a>
+        ) : (
+          <p className="author-company">{testimonial.company}</p>
+        )}
       </div>
       {testimonial.linkedinUrl && (
         <a
@@ -38,24 +61,146 @@ const TestimonialCard = ({ testimonial }: { testimonial: typeof testimonials[0] 
     <div className="testimonial-content">
       <FiMessageSquare className="quote-icon" />
       <p>{testimonial.content}</p>
+      <button className="view-more-btn" onClick={onViewMore}>
+        View more...
+      </button>
     </div>
 
     <div className="testimonial-relationship">
-      {testimonial.relationship}
+      {testimonial.relationshipUrl ? (
+        <a
+          href={testimonial.relationshipUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="relationship-link"
+        >
+          {testimonial.relationship}
+        </a>
+      ) : (
+        testimonial.relationship
+      )}
     </div>
   </div>
 );
+
+interface TestimonialModalProps {
+  testimonial: Testimonial | null;
+  onClose: () => void;
+}
+
+const TestimonialModal = ({ testimonial, onClose }: TestimonialModalProps) => {
+  if (!testimonial) return null;
+
+  return (
+    <motion.div
+      className="testimonial-modal-overlay"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+    >
+      <motion.div
+        className="testimonial-modal"
+        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.9, y: 20 }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button className="modal-close-btn" onClick={onClose}>
+          <FiX />
+        </button>
+
+        <div className="modal-header">
+          <div className="testimonial-avatar modal-avatar">
+            {testimonial.image ? (
+              <img src={testimonial.image} alt={testimonial.name} />
+            ) : (
+              <div className="avatar-placeholder">
+                {testimonial.name.charAt(0)}
+              </div>
+            )}
+          </div>
+          <div className="testimonial-author">
+            <h4 className="author-name">{testimonial.name}</h4>
+            <p className="author-role-full">{testimonial.role}</p>
+            {testimonial.companyUrl ? (
+              <a
+                href={testimonial.companyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="author-company-link"
+              >
+                {testimonial.company}
+              </a>
+            ) : (
+              <p className="author-company">{testimonial.company}</p>
+            )}
+          </div>
+          {testimonial.linkedinUrl && (
+            <a
+              href={testimonial.linkedinUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="linkedin-link"
+              aria-label={`View ${testimonial.name}'s LinkedIn`}
+            >
+              <FiLinkedin />
+            </a>
+          )}
+        </div>
+
+        <div className="testimonial-modal-body">
+          <FiMessageSquare className="quote-icon" />
+          <p>{testimonial.content}</p>
+        </div>
+
+        <div className="modal-relationship">
+          {testimonial.relationshipUrl ? (
+            <a
+              href={testimonial.relationshipUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relationship-link"
+            >
+              {testimonial.relationship}
+            </a>
+          ) : (
+            testimonial.relationship
+          )}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
 
 const Testimonials = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [isPaused, setIsPaused] = useState(false);
+  const [selectedTestimonial, setSelectedTestimonial] =
+    useState<Testimonial | null>(null);
 
   const stats = [
-    { icon: FiBriefcase, value: testimonialStats.yearsExperience, label: "Years Experience" },
-    { icon: FiCode, value: testimonialStats.projectsDelivered, label: "Projects Delivered" },
-    { icon: FiUsers, value: testimonialStats.teamMembersLed, label: "Team Members Led" },
-    { icon: FiAward, value: testimonialStats.developersMonitored, label: "Developers Mentored" },
+    {
+      icon: FiBriefcase,
+      value: testimonialStats.yearsExperience,
+      label: "Years Experience",
+    },
+    {
+      icon: FiCode,
+      value: testimonialStats.projectsDelivered,
+      label: "Projects Delivered",
+    },
+    {
+      icon: FiUsers,
+      value: testimonialStats.teamMembersLed,
+      label: "Team Members Led",
+    },
+    {
+      icon: FiAward,
+      value: testimonialStats.developersMonitored,
+      label: "Developers Mentored",
+    },
   ];
 
   return (
@@ -109,16 +254,34 @@ const Testimonials = () => {
           <div className={`testimonials-marquee ${isPaused ? "paused" : ""}`}>
             <div className="marquee-content">
               {testimonials.map((testimonial, index) => (
-                <TestimonialCard key={`original-${index}`} testimonial={testimonial} />
+                <TestimonialCard
+                  key={`original-${index}`}
+                  testimonial={testimonial}
+                  onViewMore={() => setSelectedTestimonial(testimonial)}
+                />
               ))}
             </div>
             <div className="marquee-content" aria-hidden="true">
               {testimonials.map((testimonial, index) => (
-                <TestimonialCard key={`duplicate-${index}`} testimonial={testimonial} />
+                <TestimonialCard
+                  key={`duplicate-${index}`}
+                  testimonial={testimonial}
+                  onViewMore={() => setSelectedTestimonial(testimonial)}
+                />
               ))}
             </div>
           </div>
         </motion.div>
+
+        {/* Testimonial Modal */}
+        <AnimatePresence>
+          {selectedTestimonial && (
+            <TestimonialModal
+              testimonial={selectedTestimonial}
+              onClose={() => setSelectedTestimonial(null)}
+            />
+          )}
+        </AnimatePresence>
 
         {/* Call for More Testimonials */}
         <motion.div
