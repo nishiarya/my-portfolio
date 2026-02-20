@@ -64,6 +64,22 @@
             content: "⚛️";
         }
 
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+
         .nav-section {
             margin-bottom: 10px;
         }
@@ -538,6 +554,8 @@
         <div class="sidebar-header">
             <h2>RN Interview Guide</h2>
         </div>
+        
+        <a href="progress-tracker.html" class="back-link">← Back to Progress Tracker</a>
 
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="🔍 Search topics..." onkeyup="searchTopics()">

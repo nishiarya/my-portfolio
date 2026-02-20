@@ -1,0 +1,1926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Deep Dive Interview Guide | Nishant Singh</title>
+    <style>
+        :root {
+            --primary: #f7df1e;
+            --primary-dark: #c4b000;
+            --bg-dark: #0a0a1a;
+            --bg-card: #12122a;
+            --bg-code: #1a1a2e;
+            --text: #e0e0e0;
+            --text-muted: #888;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --danger: #f87171;
+            --purple: #a78bfa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-card);
+            border-right: 1px solid #333;
+            overflow-y: auto;
+            padding: 20px 0;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #333;
+            margin-bottom: 15px;
+        }
+
+        .sidebar-header h2 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-header h2::before {
+            content: "🟨";
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-section {
+            margin-bottom: 10px;
+        }
+
+        .nav-section-title {
+            padding: 10px 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 8px 20px 8px 30px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: rgba(247, 223, 30, 0.1);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .nav-link.active {
+            background: rgba(247, 223, 30, 0.15);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 30px 50px;
+            max-width: 1200px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--bg-card) 0%, #2a2a1e 100%);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #333;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 25px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .section {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #333;
+        }
+
+        .section h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            color: var(--text);
+            font-size: 1.2rem;
+            margin: 25px 0 15px;
+        }
+
+        .section h4 {
+            color: var(--purple);
+            font-size: 1rem;
+            margin: 20px 0 10px;
+        }
+
+        .section p {
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        .section ul, .section ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        .section li {
+            margin-bottom: 8px;
+        }
+
+        pre {
+            background: var(--bg-code);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 1px solid #333;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #e0e0e0;
+        }
+
+        .inline-code {
+            background: var(--bg-code);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .keyword { color: #c792ea; }
+        .function { color: #82aaff; }
+        .string { color: #c3e88d; }
+        .comment { color: #546e7a; }
+        .number { color: #f78c6c; }
+        .operator { color: #89ddff; }
+
+        .concept-card {
+            background: var(--bg-code);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .concept-card h4 {
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .warning-box {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid var(--warning);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .warning-box::before {
+            content: "⚠️ ";
+        }
+
+        .tip-box {
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid var(--success);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .tip-box::before {
+            content: "💡 ";
+        }
+
+        .interview-q {
+            background: linear-gradient(135deg, rgba(167, 139, 250, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+            border: 1px solid var(--purple);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .interview-q h4 {
+            color: var(--purple);
+            margin-top: 0;
+            font-size: 1rem;
+        }
+
+        .interview-q h4::before {
+            content: "🎯 Interview Question: ";
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .difficulty.easy { background: var(--success); color: #000; }
+        .difficulty.medium { background: var(--warning); color: #000; }
+        .difficulty.hard { background: var(--danger); color: #fff; }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #333;
+        }
+
+        .comparison-table th {
+            background: var(--bg-code);
+            color: var(--primary);
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            .menu-toggle {
+                display: block;
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                z-index: 1001;
+                background: var(--bg-card);
+                border: 1px solid #333;
+                color: var(--text);
+                padding: 10px 15px;
+                border-radius: 8px;
+                cursor: pointer;
+            }
+        }
+
+        .menu-toggle {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰ Menu</button>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>JavaScript Deep Dive</h2>
+        </div>
+        
+        <a href="progress-tracker.html" class="back-link">← Back to Progress Tracker</a>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Fundamentals</div>
+            <a href="#execution-context" class="nav-link">Execution Context</a>
+            <a href="#hoisting" class="nav-link">Hoisting</a>
+            <a href="#scope-chain" class="nav-link">Scope & Scope Chain</a>
+            <a href="#closures" class="nav-link">Closures</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">This Keyword</div>
+            <a href="#this-binding" class="nav-link">This Binding Rules</a>
+            <a href="#call-apply-bind" class="nav-link">Call, Apply, Bind</a>
+            <a href="#arrow-functions" class="nav-link">Arrow Functions</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Async JavaScript</div>
+            <a href="#event-loop" class="nav-link">Event Loop</a>
+            <a href="#callbacks" class="nav-link">Callbacks</a>
+            <a href="#promises" class="nav-link">Promises</a>
+            <a href="#async-await" class="nav-link">Async/Await</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Prototypes & Classes</div>
+            <a href="#prototypes" class="nav-link">Prototypes</a>
+            <a href="#inheritance" class="nav-link">Prototypal Inheritance</a>
+            <a href="#es6-classes" class="nav-link">ES6 Classes</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Advanced Concepts</div>
+            <a href="#memory" class="nav-link">Memory Management</a>
+            <a href="#modules" class="nav-link">Modules</a>
+            <a href="#iterators" class="nav-link">Iterators & Generators</a>
+            <a href="#proxy-reflect" class="nav-link">Proxy & Reflect</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Interview Patterns</div>
+            <a href="#debounce-throttle" class="nav-link">Debounce & Throttle</a>
+            <a href="#currying" class="nav-link">Currying</a>
+            <a href="#polyfills" class="nav-link">Common Polyfills</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="hero">
+            <h1>JavaScript Deep Dive</h1>
+            <p>Master the core concepts of JavaScript that power React Native and modern web development. Essential knowledge for senior developer interviews.</p>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">18</div>
+                    <div class="stat-label">Topics</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">50+</div>
+                    <div class="stat-label">Code Examples</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">25+</div>
+                    <div class="stat-label">Interview Questions</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Execution Context -->
+        <section id="execution-context" class="section">
+            <h2>📦 Execution Context</h2>
+            
+            <p>An execution context is the environment in which JavaScript code is evaluated and executed. Understanding this is fundamental to understanding how JavaScript works.</p>
+
+            <h3>Types of Execution Context</h3>
+            <ol>
+                <li><strong>Global Execution Context (GEC)</strong> - Created when the script first runs</li>
+                <li><strong>Function Execution Context (FEC)</strong> - Created when a function is invoked</li>
+                <li><strong>Eval Execution Context</strong> - Created inside an eval function (rarely used)</li>
+            </ol>
+
+            <h3>Execution Context Phases</h3>
+            
+            <div class="concept-card">
+                <h4>1. Creation Phase</h4>
+                <ul>
+                    <li>Creates the Variable Object (VO) / Lexical Environment</li>
+                    <li>Creates the Scope Chain</li>
+                    <li>Determines the value of <code class="inline-code">this</code></li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <h4>2. Execution Phase</h4>
+                <ul>
+                    <li>Assigns values to variables</li>
+                    <li>Executes the code line by line</li>
+                    <li>Function calls create new execution contexts</li>
+                </ul>
+            </div>
+
+            <pre><code><span class="comment">// Global Execution Context</span>
+<span class="keyword">var</span> globalVar = <span class="string">'I am global'</span>;
+
+<span class="keyword">function</span> <span class="function">outer</span>() {
+    <span class="comment">// Function Execution Context for outer()</span>
+    <span class="keyword">var</span> outerVar = <span class="string">'I am outer'</span>;
+    
+    <span class="keyword">function</span> <span class="function">inner</span>() {
+        <span class="comment">// Function Execution Context for inner()</span>
+        <span class="keyword">var</span> innerVar = <span class="string">'I am inner'</span>;
+        console.<span class="function">log</span>(globalVar, outerVar, innerVar);
+    }
+    
+    <span class="function">inner</span>();
+}
+
+<span class="function">outer</span>();
+
+<span class="comment">// Call Stack visualization:
+// 3. inner() EC  ← Top (currently executing)
+// 2. outer() EC
+// 1. Global EC   ← Bottom</span></code></pre>
+
+            <div class="interview-q">
+                <h4>What is the Call Stack?</h4>
+                <p>The Call Stack is a data structure that keeps track of execution contexts. It follows LIFO (Last In, First Out) principle. When a function is called, its execution context is pushed onto the stack. When the function returns, it's popped off.</p>
+            </div>
+        </section>
+
+        <!-- Hoisting -->
+        <section id="hoisting" class="section">
+            <h2>🏗️ Hoisting</h2>
+            
+            <p>Hoisting is JavaScript's default behavior of moving declarations to the top of their scope during the creation phase. However, only declarations are hoisted, not initializations.</p>
+
+            <h3>Variable Hoisting</h3>
+
+            <pre><code><span class="comment">// What you write:</span>
+console.<span class="function">log</span>(x); <span class="comment">// undefined (not ReferenceError!)</span>
+<span class="keyword">var</span> x = <span class="number">5</span>;
+console.<span class="function">log</span>(x); <span class="comment">// 5</span>
+
+<span class="comment">// How JS interprets it:</span>
+<span class="keyword">var</span> x;          <span class="comment">// Declaration hoisted</span>
+console.<span class="function">log</span>(x); <span class="comment">// undefined</span>
+x = <span class="number">5</span>;          <span class="comment">// Initialization stays</span>
+console.<span class="function">log</span>(x); <span class="comment">// 5</span></code></pre>
+
+            <h3>let and const - Temporal Dead Zone (TDZ)</h3>
+
+            <pre><code><span class="comment">// let and const are hoisted but NOT initialized</span>
+console.<span class="function">log</span>(y); <span class="comment">// ReferenceError: Cannot access 'y' before initialization</span>
+<span class="keyword">let</span> y = <span class="number">10</span>;
+
+<span class="comment">// The TDZ exists from the start of the block until the declaration</span>
+{
+    <span class="comment">// TDZ starts</span>
+    console.<span class="function">log</span>(z); <span class="comment">// ReferenceError</span>
+    <span class="keyword">let</span> z = <span class="number">20</span>;     <span class="comment">// TDZ ends</span>
+}</code></pre>
+
+            <h3>Function Hoisting</h3>
+
+            <pre><code><span class="comment">// Function declarations are fully hoisted</span>
+<span class="function">sayHello</span>(); <span class="comment">// "Hello!" - Works!</span>
+
+<span class="keyword">function</span> <span class="function">sayHello</span>() {
+    console.<span class="function">log</span>(<span class="string">"Hello!"</span>);
+}
+
+<span class="comment">// Function expressions are NOT hoisted</span>
+<span class="function">sayBye</span>(); <span class="comment">// TypeError: sayBye is not a function</span>
+
+<span class="keyword">var</span> sayBye = <span class="keyword">function</span>() {
+    console.<span class="function">log</span>(<span class="string">"Bye!"</span>);
+};</code></pre>
+
+            <div class="interview-q">
+                <h4>What's the difference between var, let, and const?</h4>
+                <span class="difficulty medium">Medium</span>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Feature</th>
+                        <th>var</th>
+                        <th>let</th>
+                        <th>const</th>
+                    </tr>
+                    <tr>
+                        <td>Scope</td>
+                        <td>Function</td>
+                        <td>Block</td>
+                        <td>Block</td>
+                    </tr>
+                    <tr>
+                        <td>Hoisted</td>
+                        <td>Yes (undefined)</td>
+                        <td>Yes (TDZ)</td>
+                        <td>Yes (TDZ)</td>
+                    </tr>
+                    <tr>
+                        <td>Re-declaration</td>
+                        <td>Allowed</td>
+                        <td>Not allowed</td>
+                        <td>Not allowed</td>
+                    </tr>
+                    <tr>
+                        <td>Re-assignment</td>
+                        <td>Allowed</td>
+                        <td>Allowed</td>
+                        <td>Not allowed</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- Scope & Scope Chain -->
+        <section id="scope-chain" class="section">
+            <h2>🔗 Scope & Scope Chain</h2>
+            
+            <p>Scope determines the accessibility of variables. JavaScript has lexical (static) scoping, meaning scope is determined at write-time, not run-time.</p>
+
+            <h3>Types of Scope</h3>
+            
+            <div class="concept-card">
+                <h4>1. Global Scope</h4>
+                <p>Variables declared outside any function or block. Accessible everywhere.</p>
+            </div>
+
+            <div class="concept-card">
+                <h4>2. Function Scope</h4>
+                <p>Variables declared inside a function. Only accessible within that function.</p>
+            </div>
+
+            <div class="concept-card">
+                <h4>3. Block Scope</h4>
+                <p>Variables declared with let/const inside {}. Only accessible within that block.</p>
+            </div>
+
+            <pre><code><span class="keyword">var</span> globalVar = <span class="string">'global'</span>;
+
+<span class="keyword">function</span> <span class="function">outer</span>() {
+    <span class="keyword">var</span> outerVar = <span class="string">'outer'</span>;
+    
+    <span class="keyword">function</span> <span class="function">inner</span>() {
+        <span class="keyword">var</span> innerVar = <span class="string">'inner'</span>;
+        
+        <span class="comment">// Scope chain: inner → outer → global</span>
+        console.<span class="function">log</span>(innerVar);  <span class="comment">// 'inner' (found in current scope)</span>
+        console.<span class="function">log</span>(outerVar);  <span class="comment">// 'outer' (found in outer scope)</span>
+        console.<span class="function">log</span>(globalVar); <span class="comment">// 'global' (found in global scope)</span>
+    }
+    
+    <span class="function">inner</span>();
+    console.<span class="function">log</span>(innerVar); <span class="comment">// ReferenceError: innerVar is not defined</span>
+}
+
+<span class="function">outer</span>();</code></pre>
+
+            <h3>Lexical Environment</h3>
+            <p>Each execution context has a Lexical Environment that contains:</p>
+            <ul>
+                <li><strong>Environment Record</strong> - Stores variable and function declarations</li>
+                <li><strong>Outer Reference</strong> - Reference to the parent lexical environment</li>
+            </ul>
+
+            <div class="interview-q">
+                <h4>What is lexical scoping?</h4>
+                <p>Lexical scoping means that the scope of a variable is determined by its position in the source code. Inner functions have access to variables in their outer scope because the scope chain is determined when the function is defined, not when it's called.</p>
+            </div>
+        </section>
+
+        <!-- Closures -->
+        <section id="closures" class="section">
+            <h2>🔒 Closures</h2>
+            
+            <p>A closure is a function that has access to variables from its outer (enclosing) scope, even after the outer function has returned. This is possible because the inner function maintains a reference to its lexical environment.</p>
+
+            <pre><code><span class="keyword">function</span> <span class="function">createCounter</span>() {
+    <span class="keyword">let</span> count = <span class="number">0</span>; <span class="comment">// Private variable</span>
+    
+    <span class="keyword">return</span> {
+        <span class="function">increment</span>() {
+            count++;
+            <span class="keyword">return</span> count;
+        },
+        <span class="function">decrement</span>() {
+            count--;
+            <span class="keyword">return</span> count;
+        },
+        <span class="function">getCount</span>() {
+            <span class="keyword">return</span> count;
+        }
+    };
+}
+
+<span class="keyword">const</span> counter = <span class="function">createCounter</span>();
+console.<span class="function">log</span>(counter.<span class="function">increment</span>()); <span class="comment">// 1</span>
+console.<span class="function">log</span>(counter.<span class="function">increment</span>()); <span class="comment">// 2</span>
+console.<span class="function">log</span>(counter.<span class="function">getCount</span>());  <span class="comment">// 2</span>
+console.<span class="function">log</span>(counter.count);       <span class="comment">// undefined (private!)</span></code></pre>
+
+            <h3>Classic Closure Problem</h3>
+
+            <pre><code><span class="comment">// Problem: All callbacks log 3</span>
+<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++) {
+    <span class="function">setTimeout</span>(<span class="keyword">function</span>() {
+        console.<span class="function">log</span>(i); <span class="comment">// 3, 3, 3</span>
+    }, <span class="number">1000</span>);
+}
+
+<span class="comment">// Solution 1: Use let (block scope)</span>
+<span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++) {
+    <span class="function">setTimeout</span>(<span class="keyword">function</span>() {
+        console.<span class="function">log</span>(i); <span class="comment">// 0, 1, 2</span>
+    }, <span class="number">1000</span>);
+}
+
+<span class="comment">// Solution 2: IIFE (creates new scope)</span>
+<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++) {
+    (<span class="keyword">function</span>(j) {
+        <span class="function">setTimeout</span>(<span class="keyword">function</span>() {
+            console.<span class="function">log</span>(j); <span class="comment">// 0, 1, 2</span>
+        }, <span class="number">1000</span>);
+    })(i);
+}</code></pre>
+
+            <h3>Practical Use Cases</h3>
+            <ul>
+                <li><strong>Data Privacy</strong> - Creating private variables</li>
+                <li><strong>Function Factories</strong> - Creating specialized functions</li>
+                <li><strong>Memoization</strong> - Caching function results</li>
+                <li><strong>Event Handlers</strong> - Maintaining state in callbacks</li>
+                <li><strong>Partial Application</strong> - Pre-filling function arguments</li>
+            </ul>
+
+            <div class="interview-q">
+                <h4>Implement a memoize function using closures</h4>
+                <span class="difficulty hard">Hard</span>
+                <pre><code><span class="keyword">function</span> <span class="function">memoize</span>(fn) {
+    <span class="keyword">const</span> cache = {};
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        <span class="keyword">const</span> key = JSON.<span class="function">stringify</span>(args);
+        
+        <span class="keyword">if</span> (cache[key] !== <span class="keyword">undefined</span>) {
+            console.<span class="function">log</span>(<span class="string">'From cache'</span>);
+            <span class="keyword">return</span> cache[key];
+        }
+        
+        console.<span class="function">log</span>(<span class="string">'Computing...'</span>);
+        <span class="keyword">const</span> result = fn.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+        cache[key] = result;
+        <span class="keyword">return</span> result;
+    };
+}
+
+<span class="keyword">const</span> expensiveOperation = <span class="function">memoize</span>((n) => {
+    <span class="comment">// Simulate expensive calculation</span>
+    <span class="keyword">return</span> n * n;
+});
+
+console.<span class="function">log</span>(<span class="function">expensiveOperation</span>(<span class="number">5</span>)); <span class="comment">// Computing... 25</span>
+console.<span class="function">log</span>(<span class="function">expensiveOperation</span>(<span class="number">5</span>)); <span class="comment">// From cache 25</span></code></pre>
+            </div>
+        </section>
+
+        <!-- This Binding -->
+        <section id="this-binding" class="section">
+            <h2>👆 This Binding Rules</h2>
+            
+            <p>The value of <code class="inline-code">this</code> depends on HOW a function is called, not where it's defined. There are four binding rules, evaluated in order of precedence.</p>
+
+            <h3>1. Default Binding</h3>
+            <pre><code><span class="keyword">function</span> <span class="function">showThis</span>() {
+    console.<span class="function">log</span>(<span class="keyword">this</span>);
+}
+
+<span class="function">showThis</span>(); <span class="comment">// window (non-strict) or undefined (strict mode)</span></code></pre>
+
+            <h3>2. Implicit Binding</h3>
+            <pre><code><span class="keyword">const</span> obj = {
+    name: <span class="string">'Nishant'</span>,
+    <span class="function">greet</span>() {
+        console.<span class="function">log</span>(<span class="string">`Hello, ${<span class="keyword">this</span>.name}`</span>);
+    }
+};
+
+obj.<span class="function">greet</span>(); <span class="comment">// Hello, Nishant (this = obj)</span>
+
+<span class="comment">// Lost binding!</span>
+<span class="keyword">const</span> greetFn = obj.greet;
+<span class="function">greetFn</span>(); <span class="comment">// Hello, undefined (this = window/undefined)</span></code></pre>
+
+            <h3>3. Explicit Binding (call, apply, bind)</h3>
+            <pre><code><span class="keyword">function</span> <span class="function">introduce</span>(greeting, punctuation) {
+    console.<span class="function">log</span>(<span class="string">`${greeting}, I'm ${<span class="keyword">this</span>.name}${punctuation}`</span>);
+}
+
+<span class="keyword">const</span> person = { name: <span class="string">'Nishant'</span> };
+
+<span class="comment">// call - arguments passed individually</span>
+introduce.<span class="function">call</span>(person, <span class="string">'Hello'</span>, <span class="string">'!'</span>); <span class="comment">// Hello, I'm Nishant!</span>
+
+<span class="comment">// apply - arguments passed as array</span>
+introduce.<span class="function">apply</span>(person, [<span class="string">'Hi'</span>, <span class="string">'.'</span>]); <span class="comment">// Hi, I'm Nishant.</span>
+
+<span class="comment">// bind - returns new function with bound this</span>
+<span class="keyword">const</span> boundIntroduce = introduce.<span class="function">bind</span>(person, <span class="string">'Hey'</span>);
+<span class="function">boundIntroduce</span>(<span class="string">'!!'</span>); <span class="comment">// Hey, I'm Nishant!!</span></code></pre>
+
+            <h3>4. New Binding</h3>
+            <pre><code><span class="keyword">function</span> <span class="function">Person</span>(name) {
+    <span class="keyword">this</span>.name = name;
+}
+
+<span class="keyword">const</span> nishant = <span class="keyword">new</span> <span class="function">Person</span>(<span class="string">'Nishant'</span>);
+console.<span class="function">log</span>(nishant.name); <span class="comment">// Nishant</span>
+
+<span class="comment">// new keyword:
+// 1. Creates a new object
+// 2. Links it to the prototype
+// 3. Binds 'this' to the new object
+// 4. Returns the object</span></code></pre>
+
+            <div class="tip-box">
+                <strong>Precedence Order:</strong> new binding > explicit binding > implicit binding > default binding
+            </div>
+        </section>
+
+        <!-- Call, Apply, Bind -->
+        <section id="call-apply-bind" class="section">
+            <h2>📞 Call, Apply, Bind</h2>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>Method</th>
+                    <th>Invokes Immediately</th>
+                    <th>Arguments</th>
+                    <th>Returns</th>
+                </tr>
+                <tr>
+                    <td>call()</td>
+                    <td>Yes</td>
+                    <td>Individual (a, b, c)</td>
+                    <td>Function result</td>
+                </tr>
+                <tr>
+                    <td>apply()</td>
+                    <td>Yes</td>
+                    <td>Array [a, b, c]</td>
+                    <td>Function result</td>
+                </tr>
+                <tr>
+                    <td>bind()</td>
+                    <td>No</td>
+                    <td>Individual (partial)</td>
+                    <td>New function</td>
+                </tr>
+            </table>
+
+            <div class="interview-q">
+                <h4>Implement your own bind function</h4>
+                <span class="difficulty hard">Hard</span>
+                <pre><code>Function.prototype.<span class="function">myBind</span> = <span class="keyword">function</span>(context, ...args) {
+    <span class="keyword">const</span> fn = <span class="keyword">this</span>;
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(...innerArgs) {
+        <span class="keyword">return</span> fn.<span class="function">apply</span>(context, [...args, ...innerArgs]);
+    };
+};
+
+<span class="comment">// Usage</span>
+<span class="keyword">function</span> <span class="function">greet</span>(greeting, name) {
+    <span class="keyword">return</span> <span class="string">`${greeting}, ${name}! I'm ${<span class="keyword">this</span>.role}`</span>;
+}
+
+<span class="keyword">const</span> context = { role: <span class="string">'Tech Lead'</span> };
+<span class="keyword">const</span> boundGreet = greet.<span class="function">myBind</span>(context, <span class="string">'Hello'</span>);
+console.<span class="function">log</span>(<span class="function">boundGreet</span>(<span class="string">'World'</span>)); <span class="comment">// Hello, World! I'm Tech Lead</span></code></pre>
+            </div>
+        </section>
+
+        <!-- Arrow Functions -->
+        <section id="arrow-functions" class="section">
+            <h2>➡️ Arrow Functions & This</h2>
+            
+            <p>Arrow functions don't have their own <code class="inline-code">this</code>. They inherit <code class="inline-code">this</code> from the enclosing lexical scope.</p>
+
+            <pre><code><span class="keyword">const</span> obj = {
+    name: <span class="string">'Nishant'</span>,
+    
+    <span class="comment">// Regular function - has its own this</span>
+    <span class="function">regularMethod</span>() {
+        console.<span class="function">log</span>(<span class="keyword">this</span>.name); <span class="comment">// 'Nishant'</span>
+        
+        <span class="comment">// Problem: setTimeout callback loses this</span>
+        <span class="function">setTimeout</span>(<span class="keyword">function</span>() {
+            console.<span class="function">log</span>(<span class="keyword">this</span>.name); <span class="comment">// undefined</span>
+        }, <span class="number">100</span>);
+    },
+    
+    <span class="comment">// Arrow function solution</span>
+    <span class="function">arrowMethod</span>() {
+        console.<span class="function">log</span>(<span class="keyword">this</span>.name); <span class="comment">// 'Nishant'</span>
+        
+        <span class="comment">// Arrow function inherits this from arrowMethod</span>
+        <span class="function">setTimeout</span>(() => {
+            console.<span class="function">log</span>(<span class="keyword">this</span>.name); <span class="comment">// 'Nishant' ✓</span>
+        }, <span class="number">100</span>);
+    }
+};</code></pre>
+
+            <div class="warning-box">
+                <strong>Arrow functions cannot be used as:</strong>
+                <ul>
+                    <li>Constructors (no <code class="inline-code">new</code> keyword)</li>
+                    <li>Methods that need their own <code class="inline-code">this</code></li>
+                    <li>Functions that need <code class="inline-code">arguments</code> object</li>
+                </ul>
+            </div>
+
+            <h3>React Native Context</h3>
+            <pre><code><span class="comment">// Class component - arrow functions for event handlers</span>
+<span class="keyword">class</span> <span class="function">MyComponent</span> <span class="keyword">extends</span> React.Component {
+    state = { count: <span class="number">0</span> };
+    
+    <span class="comment">// Arrow function auto-binds this</span>
+    handlePress = () => {
+        <span class="keyword">this</span>.<span class="function">setState</span>({ count: <span class="keyword">this</span>.state.count + <span class="number">1</span> });
+    };
+    
+    <span class="function">render</span>() {
+        <span class="keyword">return</span> (
+            <span class="operator">&lt;</span>Button onPress={<span class="keyword">this</span>.handlePress} title=<span class="string">"Press"</span> <span class="operator">/&gt;</span>
+        );
+    }
+}</code></pre>
+        </section>
+
+        <!-- Event Loop -->
+        <section id="event-loop" class="section">
+            <h2>🔄 Event Loop</h2>
+            
+            <p>JavaScript is single-threaded but can handle asynchronous operations through the Event Loop mechanism.</p>
+
+            <div class="concept-card">
+                <h4>Components</h4>
+                <ul>
+                    <li><strong>Call Stack</strong> - Executes synchronous code</li>
+                    <li><strong>Web APIs</strong> - Handle async operations (setTimeout, fetch, DOM events)</li>
+                    <li><strong>Callback Queue (Task Queue)</strong> - Holds callbacks from setTimeout, setInterval</li>
+                    <li><strong>Microtask Queue</strong> - Holds Promise callbacks, queueMicrotask</li>
+                    <li><strong>Event Loop</strong> - Moves callbacks from queues to call stack when empty</li>
+                </ul>
+            </div>
+
+            <pre><code>console.<span class="function">log</span>(<span class="string">'1'</span>); <span class="comment">// Sync - Call Stack</span>
+
+<span class="function">setTimeout</span>(() => {
+    console.<span class="function">log</span>(<span class="string">'2'</span>); <span class="comment">// Macro task - Callback Queue</span>
+}, <span class="number">0</span>);
+
+Promise.<span class="function">resolve</span>().<span class="function">then</span>(() => {
+    console.<span class="function">log</span>(<span class="string">'3'</span>); <span class="comment">// Micro task - Microtask Queue</span>
+});
+
+console.<span class="function">log</span>(<span class="string">'4'</span>); <span class="comment">// Sync - Call Stack</span>
+
+<span class="comment">// Output: 1, 4, 3, 2
+// Execution order:
+// 1. Sync code first (1, 4)
+// 2. Microtasks next (3)
+// 3. Macro tasks last (2)</span></code></pre>
+
+            <div class="interview-q">
+                <h4>What's the output?</h4>
+                <span class="difficulty hard">Hard</span>
+                <pre><code>console.<span class="function">log</span>(<span class="string">'start'</span>);
+
+<span class="function">setTimeout</span>(() => console.<span class="function">log</span>(<span class="string">'timeout 1'</span>), <span class="number">0</span>);
+
+Promise.<span class="function">resolve</span>()
+    .<span class="function">then</span>(() => console.<span class="function">log</span>(<span class="string">'promise 1'</span>))
+    .<span class="function">then</span>(() => console.<span class="function">log</span>(<span class="string">'promise 2'</span>));
+
+<span class="function">setTimeout</span>(() => console.<span class="function">log</span>(<span class="string">'timeout 2'</span>), <span class="number">0</span>);
+
+console.<span class="function">log</span>(<span class="string">'end'</span>);
+
+<span class="comment">// Output:
+// start
+// end
+// promise 1
+// promise 2
+// timeout 1
+// timeout 2</span></code></pre>
+            </div>
+
+            <div class="tip-box">
+                <strong>Priority:</strong> Call Stack → Microtask Queue → Callback Queue (Macro tasks)
+            </div>
+        </section>
+
+        <!-- Callbacks -->
+        <section id="callbacks" class="section">
+            <h2>📞 Callbacks</h2>
+            
+            <p>A callback is a function passed as an argument to another function, to be executed later. This is the foundation of asynchronous JavaScript.</p>
+
+            <h3>Basic Callback Pattern</h3>
+            <pre><code><span class="keyword">function</span> <span class="function">fetchData</span>(callback) {
+    <span class="comment">// Simulate async operation</span>
+    <span class="function">setTimeout</span>(() => {
+        <span class="keyword">const</span> data = { id: <span class="number">1</span>, name: <span class="string">'Nishant'</span> };
+        <span class="function">callback</span>(data);
+    }, <span class="number">1000</span>);
+}
+
+<span class="function">fetchData</span>((result) => {
+    console.<span class="function">log</span>(result); <span class="comment">// { id: 1, name: 'Nishant' }</span>
+});</code></pre>
+
+            <h3>Error-First Callbacks (Node.js Pattern)</h3>
+            <pre><code><span class="keyword">function</span> <span class="function">readFile</span>(path, callback) {
+    <span class="function">setTimeout</span>(() => {
+        <span class="keyword">if</span> (path === <span class="string">'/invalid'</span>) {
+            <span class="function">callback</span>(<span class="keyword">new</span> <span class="function">Error</span>(<span class="string">'File not found'</span>), <span class="keyword">null</span>);
+        } <span class="keyword">else</span> {
+            <span class="function">callback</span>(<span class="keyword">null</span>, <span class="string">'File contents here'</span>);
+        }
+    }, <span class="number">1000</span>);
+}
+
+<span class="comment">// Usage: Error is always the first argument</span>
+<span class="function">readFile</span>(<span class="string">'/valid/path'</span>, (error, data) => {
+    <span class="keyword">if</span> (error) {
+        console.<span class="function">error</span>(<span class="string">'Error:'</span>, error.message);
+        <span class="keyword">return</span>;
+    }
+    console.<span class="function">log</span>(<span class="string">'Data:'</span>, data);
+});</code></pre>
+
+            <h3>Callback Hell (Pyramid of Doom)</h3>
+            <p>The main problem with callbacks is nested async operations become hard to read and maintain:</p>
+
+            <pre><code><span class="comment">// Callback Hell Example</span>
+<span class="function">getUser</span>(userId, (error, user) => {
+    <span class="keyword">if</span> (error) <span class="keyword">return</span> <span class="function">handleError</span>(error);
+    
+    <span class="function">getOrders</span>(user.id, (error, orders) => {
+        <span class="keyword">if</span> (error) <span class="keyword">return</span> <span class="function">handleError</span>(error);
+        
+        <span class="function">getOrderDetails</span>(orders[<span class="number">0</span>].id, (error, details) => {
+            <span class="keyword">if</span> (error) <span class="keyword">return</span> <span class="function">handleError</span>(error);
+            
+            <span class="function">getShippingInfo</span>(details.shippingId, (error, shipping) => {
+                <span class="keyword">if</span> (error) <span class="keyword">return</span> <span class="function">handleError</span>(error);
+                
+                console.<span class="function">log</span>(<span class="string">'Shipping:'</span>, shipping);
+                <span class="comment">// And it keeps going...</span>
+            });
+        });
+    });
+});</code></pre>
+
+            <div class="warning-box">
+                <strong>Problems with Callback Hell:</strong>
+                <ul>
+                    <li>Hard to read and maintain</li>
+                    <li>Error handling at each level</li>
+                    <li>Difficult to handle parallel operations</li>
+                    <li>Inversion of control - you give control to another function</li>
+                </ul>
+            </div>
+
+            <h3>Solutions to Callback Hell</h3>
+            <ol>
+                <li><strong>Named Functions:</strong> Extract callbacks into named functions</li>
+                <li><strong>Promises:</strong> Chain operations with .then()</li>
+                <li><strong>Async/Await:</strong> Write async code that looks synchronous</li>
+            </ol>
+
+            <pre><code><span class="comment">// Solution 1: Named Functions</span>
+<span class="keyword">function</span> <span class="function">handleUser</span>(error, user) {
+    <span class="keyword">if</span> (error) <span class="keyword">return</span> <span class="function">handleError</span>(error);
+    <span class="function">getOrders</span>(user.id, handleOrders);
+}
+
+<span class="keyword">function</span> <span class="function">handleOrders</span>(error, orders) {
+    <span class="keyword">if</span> (error) <span class="keyword">return</span> <span class="function">handleError</span>(error);
+    <span class="function">getOrderDetails</span>(orders[<span class="number">0</span>].id, handleDetails);
+}
+
+<span class="function">getUser</span>(userId, handleUser);</code></pre>
+
+            <div class="interview-q">
+                <h4>Why did Promises replace callbacks for async operations?</h4>
+                <p><strong>Key points:</strong></p>
+                <ul>
+                    <li>Promises provide better error handling (single .catch())</li>
+                    <li>Chaining is more readable than nesting</li>
+                    <li>Promise.all() handles parallel operations easily</li>
+                    <li>Promises are guaranteed to be async (callbacks can be sync or async)</li>
+                    <li>Async/await makes promise code look synchronous</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Promises -->
+        <section id="promises" class="section">
+            <h2>🤝 Promises</h2>
+            
+            <p>A Promise represents an eventual completion (or failure) of an asynchronous operation and its resulting value.</p>
+
+            <h3>Promise States</h3>
+            <ul>
+                <li><strong>Pending</strong> - Initial state, not fulfilled or rejected</li>
+                <li><strong>Fulfilled</strong> - Operation completed successfully</li>
+                <li><strong>Rejected</strong> - Operation failed</li>
+            </ul>
+
+            <pre><code><span class="keyword">const</span> promise = <span class="keyword">new</span> <span class="function">Promise</span>((resolve, reject) => {
+    <span class="comment">// Async operation</span>
+    <span class="keyword">const</span> success = <span class="keyword">true</span>;
+    
+    <span class="keyword">if</span> (success) {
+        <span class="function">resolve</span>(<span class="string">'Operation successful!'</span>);
+    } <span class="keyword">else</span> {
+        <span class="function">reject</span>(<span class="keyword">new</span> <span class="function">Error</span>(<span class="string">'Operation failed'</span>));
+    }
+});
+
+promise
+    .<span class="function">then</span>(result => console.<span class="function">log</span>(result))
+    .<span class="function">catch</span>(error => console.<span class="function">error</span>(error))
+    .<span class="function">finally</span>(() => console.<span class="function">log</span>(<span class="string">'Cleanup'</span>));</code></pre>
+
+            <h3>Promise Static Methods</h3>
+
+            <pre><code><span class="comment">// Promise.all - All must succeed</span>
+<span class="keyword">const</span> results = <span class="keyword">await</span> Promise.<span class="function">all</span>([
+    <span class="function">fetchUser</span>(),
+    <span class="function">fetchPosts</span>(),
+    <span class="function">fetchComments</span>()
+]);
+<span class="comment">// If ANY fails, entire Promise.all rejects</span>
+
+<span class="comment">// Promise.allSettled - Wait for all, regardless of outcome</span>
+<span class="keyword">const</span> settled = <span class="keyword">await</span> Promise.<span class="function">allSettled</span>([promise1, promise2]);
+<span class="comment">// Returns [{status: 'fulfilled', value}, {status: 'rejected', reason}]</span>
+
+<span class="comment">// Promise.race - First to settle (resolve OR reject)</span>
+<span class="keyword">const</span> first = <span class="keyword">await</span> Promise.<span class="function">race</span>([promise1, promise2]);
+
+<span class="comment">// Promise.any - First to resolve (ignores rejections)</span>
+<span class="keyword">const</span> firstSuccess = <span class="keyword">await</span> Promise.<span class="function">any</span>([promise1, promise2]);</code></pre>
+
+            <div class="interview-q">
+                <h4>Implement Promise.all</h4>
+                <span class="difficulty hard">Hard</span>
+                <pre><code><span class="keyword">function</span> <span class="function">promiseAll</span>(promises) {
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Promise</span>((resolve, reject) => {
+        <span class="keyword">const</span> results = [];
+        <span class="keyword">let</span> completed = <span class="number">0</span>;
+        
+        <span class="keyword">if</span> (promises.length === <span class="number">0</span>) {
+            <span class="function">resolve</span>(results);
+            <span class="keyword">return</span>;
+        }
+        
+        promises.<span class="function">forEach</span>((promise, index) => {
+            Promise.<span class="function">resolve</span>(promise)
+                .<span class="function">then</span>(value => {
+                    results[index] = value;
+                    completed++;
+                    
+                    <span class="keyword">if</span> (completed === promises.length) {
+                        <span class="function">resolve</span>(results);
+                    }
+                })
+                .<span class="function">catch</span>(reject);
+        });
+    });
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- Async/Await -->
+        <section id="async-await" class="section">
+            <h2>⏳ Async/Await</h2>
+            
+            <p>Async/await is syntactic sugar over Promises, making asynchronous code look and behave more like synchronous code.</p>
+
+            <pre><code><span class="comment">// Promise chain</span>
+<span class="keyword">function</span> <span class="function">fetchDataPromise</span>() {
+    <span class="keyword">return</span> <span class="function">fetch</span>(<span class="string">'/api/users'</span>)
+        .<span class="function">then</span>(response => response.<span class="function">json</span>())
+        .<span class="function">then</span>(users => users.<span class="function">filter</span>(u => u.active))
+        .<span class="function">catch</span>(error => console.<span class="function">error</span>(error));
+}
+
+<span class="comment">// Async/await equivalent</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">fetchDataAsync</span>() {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/users'</span>);
+        <span class="keyword">const</span> users = <span class="keyword">await</span> response.<span class="function">json</span>();
+        <span class="keyword">return</span> users.<span class="function">filter</span>(u => u.active);
+    } <span class="keyword">catch</span> (error) {
+        console.<span class="function">error</span>(error);
+    }
+}</code></pre>
+
+            <h3>Parallel vs Sequential</h3>
+
+            <pre><code><span class="comment">// Sequential - SLOW (one after another)</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">sequential</span>() {
+    <span class="keyword">const</span> user = <span class="keyword">await</span> <span class="function">fetchUser</span>();     <span class="comment">// 1 second</span>
+    <span class="keyword">const</span> posts = <span class="keyword">await</span> <span class="function">fetchPosts</span>();   <span class="comment">// 1 second</span>
+    <span class="keyword">const</span> comments = <span class="keyword">await</span> <span class="function">fetchComments</span>(); <span class="comment">// 1 second</span>
+    <span class="comment">// Total: 3 seconds</span>
+}
+
+<span class="comment">// Parallel - FAST (all at once)</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">parallel</span>() {
+    <span class="keyword">const</span> [user, posts, comments] = <span class="keyword">await</span> Promise.<span class="function">all</span>([
+        <span class="function">fetchUser</span>(),
+        <span class="function">fetchPosts</span>(),
+        <span class="function">fetchComments</span>()
+    ]);
+    <span class="comment">// Total: 1 second (max of all)</span>
+}</code></pre>
+
+            <h3>Error Handling Patterns</h3>
+
+            <pre><code><span class="comment">// Pattern 1: try/catch</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">withTryCatch</span>() {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> data = <span class="keyword">await</span> <span class="function">fetchData</span>();
+        <span class="keyword">return</span> data;
+    } <span class="keyword">catch</span> (error) {
+        console.<span class="function">error</span>(<span class="string">'Error:'</span>, error);
+        <span class="keyword">throw</span> error; <span class="comment">// Re-throw if needed</span>
+    }
+}
+
+<span class="comment">// Pattern 2: Wrapper function</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">safeAsync</span>(asyncFn) {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> data = <span class="keyword">await</span> <span class="function">asyncFn</span>();
+        <span class="keyword">return</span> [data, <span class="keyword">null</span>];
+    } <span class="keyword">catch</span> (error) {
+        <span class="keyword">return</span> [<span class="keyword">null</span>, error];
+    }
+}
+
+<span class="keyword">const</span> [data, error] = <span class="keyword">await</span> <span class="function">safeAsync</span>(fetchData);
+<span class="keyword">if</span> (error) {
+    <span class="comment">// Handle error</span>
+}</code></pre>
+
+            <div class="interview-q">
+                <h4>What happens if you forget await?</h4>
+                <pre><code><span class="keyword">async</span> <span class="keyword">function</span> <span class="function">example</span>() {
+    <span class="keyword">const</span> promise = <span class="function">fetchData</span>(); <span class="comment">// No await!</span>
+    console.<span class="function">log</span>(promise); <span class="comment">// Promise {&lt;pending&gt;}</span>
+    
+    <span class="keyword">const</span> data = <span class="keyword">await</span> <span class="function">fetchData</span>(); <span class="comment">// With await</span>
+    console.<span class="function">log</span>(data); <span class="comment">// Actual data</span>
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- Prototypes -->
+        <section id="prototypes" class="section">
+            <h2>🧬 Prototypes</h2>
+            
+            <p>Every JavaScript object has a hidden [[Prototype]] property that references another object. This forms the prototype chain used for property lookup.</p>
+
+            <pre><code><span class="keyword">const</span> animal = {
+    eats: <span class="keyword">true</span>,
+    <span class="function">walk</span>() {
+        console.<span class="function">log</span>(<span class="string">'Animal walks'</span>);
+    }
+};
+
+<span class="keyword">const</span> rabbit = {
+    jumps: <span class="keyword">true</span>,
+    __proto__: animal <span class="comment">// Set prototype</span>
+};
+
+console.<span class="function">log</span>(rabbit.jumps); <span class="comment">// true (own property)</span>
+console.<span class="function">log</span>(rabbit.eats);  <span class="comment">// true (inherited)</span>
+rabbit.<span class="function">walk</span>();            <span class="comment">// "Animal walks" (inherited method)</span>
+
+<span class="comment">// Better way: Object.create()</span>
+<span class="keyword">const</span> cat = Object.<span class="function">create</span>(animal);
+cat.meows = <span class="keyword">true</span>;</code></pre>
+
+            <h3>Constructor Functions & prototype</h3>
+
+            <pre><code><span class="keyword">function</span> <span class="function">Person</span>(name) {
+    <span class="keyword">this</span>.name = name;
+}
+
+<span class="comment">// Adding method to prototype (shared by all instances)</span>
+Person.prototype.<span class="function">greet</span> = <span class="keyword">function</span>() {
+    console.<span class="function">log</span>(<span class="string">`Hello, I'm ${<span class="keyword">this</span>.name}`</span>);
+};
+
+<span class="keyword">const</span> nishant = <span class="keyword">new</span> <span class="function">Person</span>(<span class="string">'Nishant'</span>);
+<span class="keyword">const</span> john = <span class="keyword">new</span> <span class="function">Person</span>(<span class="string">'John'</span>);
+
+nishant.<span class="function">greet</span>(); <span class="comment">// Hello, I'm Nishant</span>
+john.<span class="function">greet</span>();    <span class="comment">// Hello, I'm John</span>
+
+<span class="comment">// Both share the same greet function</span>
+console.<span class="function">log</span>(nishant.greet === john.greet); <span class="comment">// true</span></code></pre>
+
+            <div class="concept-card">
+                <h4>Prototype Chain Lookup</h4>
+                <pre><code>nishant.greet()
+    ↓
+nishant (own properties: name)
+    ↓ [[Prototype]]
+Person.prototype (greet method found!)
+    ↓ [[Prototype]]
+Object.prototype (toString, hasOwnProperty, etc.)
+    ↓ [[Prototype]]
+null (end of chain)</code></pre>
+            </div>
+        </section>
+
+        <!-- Prototypal Inheritance -->
+        <section id="inheritance" class="section">
+            <h2>🏛️ Prototypal Inheritance</h2>
+
+            <pre><code><span class="keyword">function</span> <span class="function">Animal</span>(name) {
+    <span class="keyword">this</span>.name = name;
+}
+
+Animal.prototype.<span class="function">speak</span> = <span class="keyword">function</span>() {
+    console.<span class="function">log</span>(<span class="string">`${<span class="keyword">this</span>.name} makes a sound`</span>);
+};
+
+<span class="keyword">function</span> <span class="function">Dog</span>(name, breed) {
+    Animal.<span class="function">call</span>(<span class="keyword">this</span>, name); <span class="comment">// Call parent constructor</span>
+    <span class="keyword">this</span>.breed = breed;
+}
+
+<span class="comment">// Set up inheritance</span>
+Dog.prototype = Object.<span class="function">create</span>(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+<span class="comment">// Override method</span>
+Dog.prototype.<span class="function">speak</span> = <span class="keyword">function</span>() {
+    console.<span class="function">log</span>(<span class="string">`${<span class="keyword">this</span>.name} barks`</span>);
+};
+
+<span class="keyword">const</span> dog = <span class="keyword">new</span> <span class="function">Dog</span>(<span class="string">'Rex'</span>, <span class="string">'German Shepherd'</span>);
+dog.<span class="function">speak</span>(); <span class="comment">// Rex barks</span>
+
+console.<span class="function">log</span>(dog <span class="keyword">instanceof</span> Dog);    <span class="comment">// true</span>
+console.<span class="function">log</span>(dog <span class="keyword">instanceof</span> Animal); <span class="comment">// true</span></code></pre>
+
+            <div class="interview-q">
+                <h4>Difference between __proto__ and prototype?</h4>
+                <ul>
+                    <li><code class="inline-code">__proto__</code> - Property of an object instance pointing to its prototype</li>
+                    <li><code class="inline-code">prototype</code> - Property of a constructor function, becomes __proto__ of instances</li>
+                </ul>
+                <pre><code><span class="keyword">function</span> <span class="function">Foo</span>() {}
+<span class="keyword">const</span> foo = <span class="keyword">new</span> <span class="function">Foo</span>();
+
+console.<span class="function">log</span>(foo.__proto__ === Foo.prototype); <span class="comment">// true</span>
+console.<span class="function">log</span>(Foo.prototype.constructor === Foo); <span class="comment">// true</span></code></pre>
+            </div>
+        </section>
+
+        <!-- ES6 Classes -->
+        <section id="es6-classes" class="section">
+            <h2>🎓 ES6 Classes</h2>
+            
+            <p>ES6 classes are syntactic sugar over prototypal inheritance, providing a cleaner syntax.</p>
+
+            <pre><code><span class="keyword">class</span> <span class="function">Animal</span> {
+    <span class="comment">// Constructor</span>
+    <span class="function">constructor</span>(name) {
+        <span class="keyword">this</span>.name = name;
+    }
+    
+    <span class="comment">// Instance method</span>
+    <span class="function">speak</span>() {
+        console.<span class="function">log</span>(<span class="string">`${<span class="keyword">this</span>.name} makes a sound`</span>);
+    }
+    
+    <span class="comment">// Static method</span>
+    <span class="keyword">static</span> <span class="function">kingdom</span>() {
+        <span class="keyword">return</span> <span class="string">'Animalia'</span>;
+    }
+    
+    <span class="comment">// Getter</span>
+    <span class="keyword">get</span> <span class="function">info</span>() {
+        <span class="keyword">return</span> <span class="string">`Animal: ${<span class="keyword">this</span>.name}`</span>;
+    }
+    
+    <span class="comment">// Setter</span>
+    <span class="keyword">set</span> <span class="function">nickname</span>(value) {
+        <span class="keyword">this</span>._nickname = value;
+    }
+}
+
+<span class="keyword">class</span> <span class="function">Dog</span> <span class="keyword">extends</span> Animal {
+    <span class="function">constructor</span>(name, breed) {
+        <span class="keyword">super</span>(name); <span class="comment">// Call parent constructor</span>
+        <span class="keyword">this</span>.breed = breed;
+    }
+    
+    <span class="comment">// Override parent method</span>
+    <span class="function">speak</span>() {
+        <span class="keyword">super</span>.<span class="function">speak</span>(); <span class="comment">// Call parent method</span>
+        console.<span class="function">log</span>(<span class="string">`${<span class="keyword">this</span>.name} barks`</span>);
+    }
+}
+
+<span class="keyword">const</span> dog = <span class="keyword">new</span> <span class="function">Dog</span>(<span class="string">'Rex'</span>, <span class="string">'Labrador'</span>);
+dog.<span class="function">speak</span>();
+<span class="comment">// Rex makes a sound</span>
+<span class="comment">// Rex barks</span>
+
+console.<span class="function">log</span>(Animal.<span class="function">kingdom</span>()); <span class="comment">// Animalia</span>
+console.<span class="function">log</span>(dog.info);           <span class="comment">// Animal: Rex</span></code></pre>
+
+            <h3>Private Fields (ES2022)</h3>
+            <pre><code><span class="keyword">class</span> <span class="function">BankAccount</span> {
+    #balance = <span class="number">0</span>; <span class="comment">// Private field</span>
+    
+    <span class="function">deposit</span>(amount) {
+        <span class="keyword">this</span>.#balance += amount;
+    }
+    
+    <span class="function">getBalance</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.#balance;
+    }
+}
+
+<span class="keyword">const</span> account = <span class="keyword">new</span> <span class="function">BankAccount</span>();
+account.<span class="function">deposit</span>(<span class="number">100</span>);
+console.<span class="function">log</span>(account.<span class="function">getBalance</span>()); <span class="comment">// 100</span>
+console.<span class="function">log</span>(account.#balance);      <span class="comment">// SyntaxError: Private field</span></code></pre>
+        </section>
+
+        <!-- Debounce & Throttle -->
+        <section id="debounce-throttle" class="section">
+            <h2>⏱️ Debounce & Throttle</h2>
+            
+            <p>Both are techniques to control how many times a function is executed over time.</p>
+
+            <h3>Debounce</h3>
+            <p>Delays execution until after a period of inactivity. Useful for search inputs.</p>
+
+            <pre><code><span class="keyword">function</span> <span class="function">debounce</span>(fn, delay) {
+    <span class="keyword">let</span> timeoutId;
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        <span class="function">clearTimeout</span>(timeoutId);
+        
+        timeoutId = <span class="function">setTimeout</span>(() => {
+            fn.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+        }, delay);
+    };
+}
+
+<span class="comment">// Usage</span>
+<span class="keyword">const</span> handleSearch = <span class="function">debounce</span>((query) => {
+    console.<span class="function">log</span>(<span class="string">'Searching for:'</span>, query);
+    <span class="comment">// API call here</span>
+}, <span class="number">300</span>);
+
+<span class="comment">// In React Native</span>
+&lt;TextInput onChangeText={handleSearch} /&gt;</code></pre>
+
+            <h3>Throttle</h3>
+            <p>Limits execution to once per time period. Useful for scroll/resize events.</p>
+
+            <pre><code><span class="keyword">function</span> <span class="function">throttle</span>(fn, limit) {
+    <span class="keyword">let</span> inThrottle = <span class="keyword">false</span>;
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        <span class="keyword">if</span> (!inThrottle) {
+            fn.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+            inThrottle = <span class="keyword">true</span>;
+            
+            <span class="function">setTimeout</span>(() => {
+                inThrottle = <span class="keyword">false</span>;
+            }, limit);
+        }
+    };
+}
+
+<span class="comment">// Usage</span>
+<span class="keyword">const</span> handleScroll = <span class="function">throttle</span>((event) => {
+    console.<span class="function">log</span>(<span class="string">'Scroll position:'</span>, event.nativeEvent.contentOffset.y);
+}, <span class="number">100</span>);
+
+<span class="comment">// In React Native</span>
+&lt;ScrollView onScroll={handleScroll} /&gt;</code></pre>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>Debounce</th>
+                    <th>Throttle</th>
+                </tr>
+                <tr>
+                    <td>Waits for pause in events</td>
+                    <td>Executes at regular intervals</td>
+                </tr>
+                <tr>
+                    <td>Search input, form validation</td>
+                    <td>Scroll events, resize, game loops</td>
+                </tr>
+                <tr>
+                    <td>Fires at end of event burst</td>
+                    <td>Fires throughout event burst</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Currying -->
+        <section id="currying" class="section">
+            <h2>🍛 Currying</h2>
+            
+            <p>Currying transforms a function with multiple arguments into a sequence of functions, each taking a single argument.</p>
+
+            <pre><code><span class="comment">// Regular function</span>
+<span class="keyword">function</span> <span class="function">add</span>(a, b, c) {
+    <span class="keyword">return</span> a + b + c;
+}
+<span class="function">add</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>); <span class="comment">// 6</span>
+
+<span class="comment">// Curried version</span>
+<span class="keyword">function</span> <span class="function">curriedAdd</span>(a) {
+    <span class="keyword">return</span> <span class="keyword">function</span>(b) {
+        <span class="keyword">return</span> <span class="keyword">function</span>(c) {
+            <span class="keyword">return</span> a + b + c;
+        };
+    };
+}
+<span class="function">curriedAdd</span>(<span class="number">1</span>)(<span class="number">2</span>)(<span class="number">3</span>); <span class="comment">// 6</span>
+
+<span class="comment">// Arrow function version</span>
+<span class="keyword">const</span> curriedAddArrow = a => b => c => a + b + c;</code></pre>
+
+            <h3>Generic Curry Function</h3>
+
+            <pre><code><span class="keyword">function</span> <span class="function">curry</span>(fn) {
+    <span class="keyword">return</span> <span class="keyword">function</span> <span class="function">curried</span>(...args) {
+        <span class="keyword">if</span> (args.length >= fn.length) {
+            <span class="keyword">return</span> fn.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+        }
+        <span class="keyword">return</span> <span class="keyword">function</span>(...nextArgs) {
+            <span class="keyword">return</span> <span class="function">curried</span>.<span class="function">apply</span>(<span class="keyword">this</span>, [...args, ...nextArgs]);
+        };
+    };
+}
+
+<span class="keyword">const</span> <span class="function">multiply</span> = (a, b, c) => a * b * c;
+<span class="keyword">const</span> curriedMultiply = <span class="function">curry</span>(multiply);
+
+console.<span class="function">log</span>(<span class="function">curriedMultiply</span>(<span class="number">2</span>)(<span class="number">3</span>)(<span class="number">4</span>));    <span class="comment">// 24</span>
+console.<span class="function">log</span>(<span class="function">curriedMultiply</span>(<span class="number">2</span>, <span class="number">3</span>)(<span class="number">4</span>));   <span class="comment">// 24</span>
+console.<span class="function">log</span>(<span class="function">curriedMultiply</span>(<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>));  <span class="comment">// 24</span></code></pre>
+
+            <h3>Practical Use Cases</h3>
+            <pre><code><span class="comment">// Logger with preset level</span>
+<span class="keyword">const</span> log = level => message => console.<span class="function">log</span>(<span class="string">`[${level}] ${message}`</span>);
+
+<span class="keyword">const</span> info = <span class="function">log</span>(<span class="string">'INFO'</span>);
+<span class="keyword">const</span> error = <span class="function">log</span>(<span class="string">'ERROR'</span>);
+
+<span class="function">info</span>(<span class="string">'App started'</span>);    <span class="comment">// [INFO] App started</span>
+<span class="function">error</span>(<span class="string">'Network error'</span>); <span class="comment">// [ERROR] Network error</span>
+
+<span class="comment">// Event handler factory</span>
+<span class="keyword">const</span> handleEvent = eventType => elementId => callback => {
+    document.<span class="function">getElementById</span>(elementId)
+        .<span class="function">addEventListener</span>(eventType, callback);
+};
+
+<span class="keyword">const</span> onClick = <span class="function">handleEvent</span>(<span class="string">'click'</span>);
+<span class="keyword">const</span> onButtonClick = <span class="function">onClick</span>(<span class="string">'myButton'</span>);
+<span class="function">onButtonClick</span>(() => console.<span class="function">log</span>(<span class="string">'Clicked!'</span>));</code></pre>
+        </section>
+
+        <!-- Common Polyfills -->
+        <section id="polyfills" class="section">
+            <h2>🔧 Common Polyfills</h2>
+            
+            <p>Polyfills are code implementations that provide functionality not natively supported. Writing them demonstrates deep understanding.</p>
+
+            <h3>Array.map()</h3>
+            <pre><code>Array.prototype.<span class="function">myMap</span> = <span class="keyword">function</span>(callback) {
+    <span class="keyword">const</span> result = [];
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < <span class="keyword">this</span>.length; i++) {
+        result.<span class="function">push</span>(<span class="function">callback</span>(<span class="keyword">this</span>[i], i, <span class="keyword">this</span>));
+    }
+    <span class="keyword">return</span> result;
+};
+
+[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].<span class="function">myMap</span>(x => x * <span class="number">2</span>); <span class="comment">// [2, 4, 6]</span></code></pre>
+
+            <h3>Array.filter()</h3>
+            <pre><code>Array.prototype.<span class="function">myFilter</span> = <span class="keyword">function</span>(callback) {
+    <span class="keyword">const</span> result = [];
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < <span class="keyword">this</span>.length; i++) {
+        <span class="keyword">if</span> (<span class="function">callback</span>(<span class="keyword">this</span>[i], i, <span class="keyword">this</span>)) {
+            result.<span class="function">push</span>(<span class="keyword">this</span>[i]);
+        }
+    }
+    <span class="keyword">return</span> result;
+};
+
+[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>].<span class="function">myFilter</span>(x => x % <span class="number">2</span> === <span class="number">0</span>); <span class="comment">// [2, 4]</span></code></pre>
+
+            <h3>Array.reduce()</h3>
+            <pre><code>Array.prototype.<span class="function">myReduce</span> = <span class="keyword">function</span>(callback, initialValue) {
+    <span class="keyword">let</span> accumulator = initialValue;
+    <span class="keyword">let</span> startIndex = <span class="number">0</span>;
+    
+    <span class="keyword">if</span> (initialValue === <span class="keyword">undefined</span>) {
+        accumulator = <span class="keyword">this</span>[<span class="number">0</span>];
+        startIndex = <span class="number">1</span>;
+    }
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = startIndex; i < <span class="keyword">this</span>.length; i++) {
+        accumulator = <span class="function">callback</span>(accumulator, <span class="keyword">this</span>[i], i, <span class="keyword">this</span>);
+    }
+    
+    <span class="keyword">return</span> accumulator;
+};
+
+[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].<span class="function">myReduce</span>((acc, cur) => acc + cur, <span class="number">0</span>); <span class="comment">// 6</span></code></pre>
+
+            <h3>Function.bind()</h3>
+            <pre><code>Function.prototype.<span class="function">myBind</span> = <span class="keyword">function</span>(context, ...boundArgs) {
+    <span class="keyword">const</span> fn = <span class="keyword">this</span>;
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        <span class="keyword">return</span> fn.<span class="function">apply</span>(context, [...boundArgs, ...args]);
+    };
+};</code></pre>
+
+            <h3>Object.create()</h3>
+            <pre><code>Object.<span class="function">myCreate</span> = <span class="keyword">function</span>(proto) {
+    <span class="keyword">function</span> <span class="function">F</span>() {}
+    F.prototype = proto;
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">F</span>();
+};</code></pre>
+
+            <h3>Array.flat()</h3>
+            <pre><code>Array.prototype.<span class="function">myFlat</span> = <span class="keyword">function</span>(depth = <span class="number">1</span>) {
+    <span class="keyword">const</span> result = [];
+    
+    <span class="keyword">const</span> <span class="function">flatten</span> = (arr, d) => {
+        <span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> arr) {
+            <span class="keyword">if</span> (Array.<span class="function">isArray</span>(item) && d > <span class="number">0</span>) {
+                <span class="function">flatten</span>(item, d - <span class="number">1</span>);
+            } <span class="keyword">else</span> {
+                result.<span class="function">push</span>(item);
+            }
+        }
+    };
+    
+    <span class="function">flatten</span>(<span class="keyword">this</span>, depth);
+    <span class="keyword">return</span> result;
+};
+
+[<span class="number">1</span>, [<span class="number">2</span>, [<span class="number">3</span>, [<span class="number">4</span>]]]].<span class="function">myFlat</span>(<span class="number">2</span>); <span class="comment">// [1, 2, 3, [4]]</span></code></pre>
+        </section>
+
+        <!-- Memory Management -->
+        <section id="memory" class="section">
+            <h2>🧠 Memory Management</h2>
+            
+            <p>JavaScript automatically manages memory through garbage collection, but understanding it helps avoid memory leaks.</p>
+
+            <h3>Memory Lifecycle</h3>
+            <ol>
+                <li><strong>Allocation</strong> - Memory is allocated when variables are declared</li>
+                <li><strong>Usage</strong> - Reading/writing to allocated memory</li>
+                <li><strong>Release</strong> - Garbage collector frees unused memory</li>
+            </ol>
+
+            <h3>Common Memory Leaks</h3>
+
+            <div class="concept-card">
+                <h4>1. Accidental Global Variables</h4>
+                <pre><code><span class="keyword">function</span> <span class="function">leak</span>() {
+    leaked = <span class="string">'I am global!'</span>; <span class="comment">// Missing var/let/const</span>
+}
+<span class="comment">// Fix: Use strict mode and always declare variables</span></code></pre>
+            </div>
+
+            <div class="concept-card">
+                <h4>2. Forgotten Timers</h4>
+                <pre><code><span class="comment">// Leak: interval never cleared</span>
+<span class="function">setInterval</span>(() => {
+    <span class="keyword">const</span> data = <span class="function">fetchData</span>();
+    <span class="function">processData</span>(data);
+}, <span class="number">1000</span>);
+
+<span class="comment">// Fix: Clear when done</span>
+<span class="keyword">const</span> intervalId = <span class="function">setInterval</span>(...);
+<span class="function">clearInterval</span>(intervalId);</code></pre>
+            </div>
+
+            <div class="concept-card">
+                <h4>3. Closures Holding References</h4>
+                <pre><code><span class="keyword">function</span> <span class="function">outer</span>() {
+    <span class="keyword">const</span> hugeData = <span class="keyword">new</span> <span class="function">Array</span>(<span class="number">1000000</span>);
+    
+    <span class="keyword">return</span> <span class="keyword">function</span> <span class="function">inner</span>() {
+        <span class="comment">// hugeData is kept in memory even if not used</span>
+        <span class="keyword">return</span> hugeData.length;
+    };
+}
+<span class="comment">// Fix: Set to null when not needed</span></code></pre>
+            </div>
+
+            <div class="concept-card">
+                <h4>4. React Native: Event Listeners</h4>
+                <pre><code><span class="function">useEffect</span>(() => {
+    <span class="keyword">const</span> subscription = AppState.<span class="function">addEventListener</span>(
+        <span class="string">'change'</span>,
+        handleAppStateChange
+    );
+    
+    <span class="comment">// Fix: Always cleanup!</span>
+    <span class="keyword">return</span> () => subscription.<span class="function">remove</span>();
+}, []);</code></pre>
+            </div>
+
+            <div class="warning-box">
+                <strong>React Native Memory Tips:</strong>
+                <ul>
+                    <li>Always remove event listeners in cleanup</li>
+                    <li>Cancel async operations on unmount</li>
+                    <li>Use FlatList for long lists (not ScrollView)</li>
+                    <li>Clear cached images when not needed</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Modules -->
+        <section id="modules" class="section">
+            <h2>📦 Modules</h2>
+            
+            <h3>ES6 Modules (ESM)</h3>
+            <pre><code><span class="comment">// utils.js - Named exports</span>
+<span class="keyword">export</span> <span class="keyword">const</span> PI = <span class="number">3.14159</span>;
+<span class="keyword">export</span> <span class="keyword">function</span> <span class="function">add</span>(a, b) { <span class="keyword">return</span> a + b; }
+<span class="keyword">export</span> <span class="keyword">class</span> <span class="function">Calculator</span> { }
+
+<span class="comment">// Default export</span>
+<span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="function">main</span>() { }
+
+<span class="comment">// app.js - Imports</span>
+<span class="keyword">import</span> main, { PI, add, Calculator } <span class="keyword">from</span> <span class="string">'./utils'</span>;
+<span class="keyword">import</span> * <span class="keyword">as</span> utils <span class="keyword">from</span> <span class="string">'./utils'</span>; <span class="comment">// Import all</span>
+<span class="keyword">import</span> { add <span class="keyword">as</span> sum } <span class="keyword">from</span> <span class="string">'./utils'</span>; <span class="comment">// Rename</span></code></pre>
+
+            <h3>CommonJS (Node.js)</h3>
+            <pre><code><span class="comment">// utils.js</span>
+module.exports = {
+    PI: <span class="number">3.14159</span>,
+    <span class="function">add</span>(a, b) { <span class="keyword">return</span> a + b; }
+};
+
+<span class="comment">// app.js</span>
+<span class="keyword">const</span> { PI, add } = <span class="function">require</span>(<span class="string">'./utils'</span>);</code></pre>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>ES Modules</th>
+                    <th>CommonJS</th>
+                </tr>
+                <tr>
+                    <td>Static (compile time)</td>
+                    <td>Dynamic (runtime)</td>
+                </tr>
+                <tr>
+                    <td>Async loading</td>
+                    <td>Sync loading</td>
+                </tr>
+                <tr>
+                    <td>Tree-shaking possible</td>
+                    <td>No tree-shaking</td>
+                </tr>
+                <tr>
+                    <td>Browser + Node</td>
+                    <td>Node.js primarily</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Iterators & Generators -->
+        <section id="iterators" class="section">
+            <h2>🔁 Iterators & Generators</h2>
+            
+            <h3>Iterators</h3>
+            <pre><code><span class="keyword">const</span> myIterator = {
+    data: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],
+    index: <span class="number">0</span>,
+    
+    [Symbol.iterator]() {
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    },
+    
+    <span class="function">next</span>() {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.index < <span class="keyword">this</span>.data.length) {
+            <span class="keyword">return</span> { value: <span class="keyword">this</span>.data[<span class="keyword">this</span>.index++], done: <span class="keyword">false</span> };
+        }
+        <span class="keyword">return</span> { value: <span class="keyword">undefined</span>, done: <span class="keyword">true</span> };
+    }
+};
+
+<span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> myIterator) {
+    console.<span class="function">log</span>(item); <span class="comment">// 1, 2, 3</span>
+}</code></pre>
+
+            <h3>Generators</h3>
+            <pre><code><span class="keyword">function</span>* <span class="function">numberGenerator</span>() {
+    <span class="keyword">yield</span> <span class="number">1</span>;
+    <span class="keyword">yield</span> <span class="number">2</span>;
+    <span class="keyword">yield</span> <span class="number">3</span>;
+}
+
+<span class="keyword">const</span> gen = <span class="function">numberGenerator</span>();
+console.<span class="function">log</span>(gen.<span class="function">next</span>()); <span class="comment">// { value: 1, done: false }</span>
+console.<span class="function">log</span>(gen.<span class="function">next</span>()); <span class="comment">// { value: 2, done: false }</span>
+console.<span class="function">log</span>(gen.<span class="function">next</span>()); <span class="comment">// { value: 3, done: false }</span>
+console.<span class="function">log</span>(gen.<span class="function">next</span>()); <span class="comment">// { value: undefined, done: true }</span>
+
+<span class="comment">// Infinite sequence</span>
+<span class="keyword">function</span>* <span class="function">idGenerator</span>() {
+    <span class="keyword">let</span> id = <span class="number">1</span>;
+    <span class="keyword">while</span> (<span class="keyword">true</span>) {
+        <span class="keyword">yield</span> id++;
+    }
+}
+
+<span class="keyword">const</span> ids = <span class="function">idGenerator</span>();
+console.<span class="function">log</span>(ids.<span class="function">next</span>().value); <span class="comment">// 1</span>
+console.<span class="function">log</span>(ids.<span class="function">next</span>().value); <span class="comment">// 2</span></code></pre>
+
+            <h3>Async Generators</h3>
+            <pre><code><span class="keyword">async</span> <span class="keyword">function</span>* <span class="function">fetchPages</span>(urls) {
+    <span class="keyword">for</span> (<span class="keyword">const</span> url <span class="keyword">of</span> urls) {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(url);
+        <span class="keyword">yield</span> <span class="keyword">await</span> response.<span class="function">json</span>();
+    }
+}
+
+<span class="comment">// Usage</span>
+<span class="keyword">for</span> <span class="keyword">await</span> (<span class="keyword">const</span> page <span class="keyword">of</span> <span class="function">fetchPages</span>(urls)) {
+    console.<span class="function">log</span>(page);
+}</code></pre>
+        </section>
+
+        <!-- Proxy & Reflect -->
+        <section id="proxy-reflect" class="section">
+            <h2>🪞 Proxy & Reflect</h2>
+            
+            <p>Proxy allows you to intercept and customize operations on objects.</p>
+
+            <pre><code><span class="keyword">const</span> user = {
+    name: <span class="string">'Nishant'</span>,
+    age: <span class="number">30</span>
+};
+
+<span class="keyword">const</span> userProxy = <span class="keyword">new</span> <span class="function">Proxy</span>(user, {
+    <span class="comment">// Intercept property access</span>
+    <span class="function">get</span>(target, property) {
+        console.<span class="function">log</span>(<span class="string">`Getting ${property}`</span>);
+        <span class="keyword">return</span> target[property];
+    },
+    
+    <span class="comment">// Intercept property assignment</span>
+    <span class="function">set</span>(target, property, value) {
+        console.<span class="function">log</span>(<span class="string">`Setting ${property} to ${value}`</span>);
+        <span class="keyword">if</span> (property === <span class="string">'age'</span> && <span class="keyword">typeof</span> value !== <span class="string">'number'</span>) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="function">TypeError</span>(<span class="string">'Age must be a number'</span>);
+        }
+        target[property] = value;
+        <span class="keyword">return</span> <span class="keyword">true</span>;
+    }
+});
+
+console.<span class="function">log</span>(userProxy.name); <span class="comment">// Getting name → Nishant</span>
+userProxy.age = <span class="number">31</span>;          <span class="comment">// Setting age to 31</span>
+userProxy.age = <span class="string">'thirty'</span>;   <span class="comment">// TypeError!</span></code></pre>
+
+            <h3>Use Cases</h3>
+            <ul>
+                <li><strong>Validation</strong> - Validate data before setting</li>
+                <li><strong>Logging</strong> - Track property access</li>
+                <li><strong>Default values</strong> - Return defaults for undefined properties</li>
+                <li><strong>Reactive systems</strong> - Trigger updates on changes (Vue.js uses this)</li>
+            </ul>
+
+            <pre><code><span class="comment">// Reactive-like system</span>
+<span class="keyword">function</span> <span class="function">reactive</span>(obj, onChange) {
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Proxy</span>(obj, {
+        <span class="function">set</span>(target, property, value) {
+            <span class="keyword">const</span> oldValue = target[property];
+            target[property] = value;
+            <span class="function">onChange</span>(property, oldValue, value);
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        }
+    });
+}
+
+<span class="keyword">const</span> state = <span class="function">reactive</span>({ count: <span class="number">0</span> }, (prop, oldVal, newVal) => {
+    console.<span class="function">log</span>(<span class="string">`${prop} changed from ${oldVal} to ${newVal}`</span>);
+    <span class="comment">// Re-render UI here</span>
+});
+
+state.count++; <span class="comment">// count changed from 0 to 1</span></code></pre>
+        </section>
+
+        <div class="tip-box" style="margin-top: 40px;">
+            <h3>📚 Continue Learning</h3>
+            <p>Return to <a href="progress-tracker.html" style="color: var(--primary);">Progress Tracker</a> to track your study progress and access more resources.</p>
+        </div>
+    </main>
+
+    <script>
+        // Highlight active nav link on scroll
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

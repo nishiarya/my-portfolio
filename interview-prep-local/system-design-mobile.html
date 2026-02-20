@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Design for Mobile Apps | Nishant Singh</title>
+    <style>
+        :root {
+            --primary: #06b6d4;
+            --primary-dark: #0891b2;
+            --bg-dark: #0a0a1a;
+            --bg-card: #12122a;
+            --bg-code: #1a1a2e;
+            --text: #e0e0e0;
+            --text-muted: #888;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --danger: #f87171;
+            --purple: #a78bfa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-card);
+            border-right: 1px solid #333;
+            overflow-y: auto;
+            padding: 20px 0;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #333;
+            margin-bottom: 15px;
+        }
+
+        .sidebar-header h2 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-header h2::before {
+            content: "🏗️";
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            margin-bottom: 10px;
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-section {
+            margin-bottom: 10px;
+        }
+
+        .nav-section-title {
+            padding: 10px 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 8px 20px 8px 30px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .nav-link.active {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 30px 50px;
+            max-width: 1200px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--bg-card) 0%, #1a2a3e 100%);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #333;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 25px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .section {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #333;
+        }
+
+        .section h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            color: var(--text);
+            font-size: 1.2rem;
+            margin: 25px 0 15px;
+        }
+
+        .section h4 {
+            color: var(--purple);
+            font-size: 1rem;
+            margin: 20px 0 10px;
+        }
+
+        .section p {
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        .section ul, .section ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        .section li {
+            margin-bottom: 8px;
+        }
+
+        pre {
+            background: var(--bg-code);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 1px solid #333;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #e0e0e0;
+        }
+
+        .inline-code {
+            background: var(--bg-code);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .keyword { color: #c792ea; }
+        .function { color: #82aaff; }
+        .string { color: #c3e88d; }
+        .comment { color: #546e7a; }
+        .number { color: #f78c6c; }
+
+        .concept-card {
+            background: var(--bg-code);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .concept-card h4 {
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .warning-box {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid var(--warning);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .warning-box::before {
+            content: "⚠️ ";
+        }
+
+        .tip-box {
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid var(--success);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .tip-box::before {
+            content: "💡 ";
+        }
+
+        .interview-q {
+            background: linear-gradient(135deg, rgba(167, 139, 250, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+            border: 1px solid var(--purple);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .interview-q h4 {
+            color: var(--purple);
+            margin-top: 0;
+            font-size: 1rem;
+        }
+
+        .interview-q h4::before {
+            content: "🎯 Interview Question: ";
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .difficulty.easy { background: var(--success); color: #000; }
+        .difficulty.medium { background: var(--warning); color: #000; }
+        .difficulty.hard { background: var(--danger); color: #fff; }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #333;
+        }
+
+        .comparison-table th {
+            background: var(--bg-code);
+            color: var(--primary);
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .diagram-box {
+            background: var(--bg-code);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        .diagram-box pre {
+            background: transparent;
+            border: none;
+            padding: 0;
+            text-align: left;
+            display: inline-block;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            .menu-toggle {
+                display: block;
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                z-index: 1001;
+                background: var(--bg-card);
+                border: 1px solid #333;
+                color: var(--text);
+                padding: 10px 15px;
+                border-radius: 8px;
+                cursor: pointer;
+            }
+        }
+
+        .menu-toggle {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰ Menu</button>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>System Design Mobile</h2>
+        </div>
+        
+        <a href="progress-tracker.html" class="back-link">← Back to Progress Tracker</a>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Fundamentals</div>
+            <a href="#approach" class="nav-link">Design Approach</a>
+            <a href="#requirements" class="nav-link">Gathering Requirements</a>
+            <a href="#estimation" class="nav-link">Capacity Estimation</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Architecture Patterns</div>
+            <a href="#mvc-mvvm" class="nav-link">MVC vs MVVM</a>
+            <a href="#clean-architecture" class="nav-link">Clean Architecture</a>
+            <a href="#modular" class="nav-link">Modular Architecture</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Data Layer</div>
+            <a href="#offline-first" class="nav-link">Offline-First Design</a>
+            <a href="#caching" class="nav-link">Caching Strategies</a>
+            <a href="#sync" class="nav-link">Data Synchronization</a>
+            <a href="#local-storage" class="nav-link">Local Storage Options</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Networking</div>
+            <a href="#api-design" class="nav-link">API Design for Mobile</a>
+            <a href="#graphql-rest" class="nav-link">GraphQL vs REST</a>
+            <a href="#realtime" class="nav-link">Real-time Communication</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Scalability</div>
+            <a href="#performance" class="nav-link">Performance Optimization</a>
+            <a href="#image-handling" class="nav-link">Image Handling</a>
+            <a href="#pagination" class="nav-link">Pagination Patterns</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Case Studies</div>
+            <a href="#design-feed" class="nav-link">Design: News Feed</a>
+            <a href="#design-chat" class="nav-link">Design: Chat App</a>
+            <a href="#design-ecommerce" class="nav-link">Design: E-commerce</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="hero">
+            <h1>System Design for Mobile</h1>
+            <p>Learn how to design scalable, maintainable, and performant mobile applications. Essential knowledge for senior/lead mobile developer interviews.</p>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">15</div>
+                    <div class="stat-label">Topics</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Case Studies</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">20+</div>
+                    <div class="stat-label">Design Patterns</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Design Approach -->
+        <section id="approach" class="section">
+            <h2>🎯 System Design Approach</h2>
+            
+            <p>A structured approach to mobile system design interviews will help you cover all aspects systematically.</p>
+
+            <h3>The RADIO Framework</h3>
+            <div class="concept-card">
+                <h4>R - Requirements Clarification</h4>
+                <ul>
+                    <li>Functional requirements (what the app should do)</li>
+                    <li>Non-functional requirements (performance, security, offline)</li>
+                    <li>Platform considerations (iOS, Android, cross-platform)</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <h4>A - Architecture Design</h4>
+                <ul>
+                    <li>High-level architecture diagram</li>
+                    <li>Component breakdown</li>
+                    <li>Technology stack decisions</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <h4>D - Data Model</h4>
+                <ul>
+                    <li>Entity relationships</li>
+                    <li>Local vs remote data</li>
+                    <li>Caching strategy</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <h4>I - Interface Design</h4>
+                <ul>
+                    <li>API contracts</li>
+                    <li>Screen flows</li>
+                    <li>Component hierarchy</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <h4>O - Optimization</h4>
+                <ul>
+                    <li>Performance considerations</li>
+                    <li>Edge cases and error handling</li>
+                    <li>Scalability discussion</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <strong>Interview Tip:</strong> Always start by asking clarifying questions. Don't assume requirements!
+            </div>
+        </section>
+
+        <!-- Requirements -->
+        <section id="requirements" class="section">
+            <h2>📋 Gathering Requirements</h2>
+            
+            <h3>Questions to Ask</h3>
+            
+            <h4>Functional Requirements</h4>
+            <ul>
+                <li>What are the core features? (MVP vs full product)</li>
+                <li>Who are the target users?</li>
+                <li>What user flows are most critical?</li>
+                <li>Are there any admin/backend requirements?</li>
+            </ul>
+
+            <h4>Non-Functional Requirements</h4>
+            <ul>
+                <li><strong>Offline Support:</strong> Should the app work offline? Which features?</li>
+                <li><strong>Performance:</strong> Expected load times? Animation FPS?</li>
+                <li><strong>Scale:</strong> Expected number of users? Data volume?</li>
+                <li><strong>Security:</strong> Authentication method? Sensitive data handling?</li>
+                <li><strong>Accessibility:</strong> WCAG compliance level?</li>
+            </ul>
+
+            <h4>Platform & Technical</h4>
+            <ul>
+                <li>iOS only, Android only, or both?</li>
+                <li>Minimum OS versions to support?</li>
+                <li>Any existing backend/APIs to integrate?</li>
+                <li>Third-party service requirements (analytics, crash reporting)?</li>
+            </ul>
+
+            <div class="interview-q">
+                <h4>"Design a mobile banking app"</h4>
+                <p><strong>Good clarifying questions:</strong></p>
+                <ul>
+                    <li>What core features? (Balance, transfers, bill pay, loans?)</li>
+                    <li>What security requirements? (Biometric, 2FA?)</li>
+                    <li>Offline functionality needed?</li>
+                    <li>Real-time notifications for transactions?</li>
+                    <li>Integration with existing banking systems?</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Capacity Estimation -->
+        <section id="estimation" class="section">
+            <h2>📊 Capacity Estimation</h2>
+            
+            <p>Understanding scale helps make informed architectural decisions.</p>
+
+            <h3>Key Metrics to Consider</h3>
+            <table class="comparison-table">
+                <tr>
+                    <th>Metric</th>
+                    <th>Example Calculation</th>
+                </tr>
+                <tr>
+                    <td>Daily Active Users (DAU)</td>
+                    <td>1M users × 30% daily = 300K DAU</td>
+                </tr>
+                <tr>
+                    <td>Requests per Second</td>
+                    <td>300K × 10 actions × 8 hours = ~100 RPS</td>
+                </tr>
+                <tr>
+                    <td>Storage per User</td>
+                    <td>Profile: 1KB, Photos: 5MB, Cache: 50MB</td>
+                </tr>
+                <tr>
+                    <td>Bandwidth</td>
+                    <td>100 RPS × 10KB avg = 1 MB/s</td>
+                </tr>
+            </table>
+
+            <h3>Mobile-Specific Considerations</h3>
+            <ul>
+                <li><strong>Battery Impact:</strong> Background sync frequency, location updates</li>
+                <li><strong>Network Variability:</strong> 2G/3G/4G/5G/WiFi scenarios</li>
+                <li><strong>Device Storage:</strong> App size limits, cache management</li>
+                <li><strong>Memory Constraints:</strong> Especially on older devices</li>
+            </ul>
+
+            <pre><code><span class="comment">// Example: Chat App Estimation</span>
+<span class="comment">// Users: 10M total, 1M DAU</span>
+<span class="comment">// Messages per user per day: 50</span>
+<span class="comment">// Average message size: 500 bytes</span>
+
+<span class="comment">// Daily Messages = 1M × 50 = 50M messages</span>
+<span class="comment">// Daily Storage = 50M × 500B = 25GB/day</span>
+<span class="comment">// Peak RPS = (50M / 86400) × 3 = ~1700 RPS</span></code></pre>
+        </section>
+
+        <!-- MVC vs MVVM -->
+        <section id="mvc-mvvm" class="section">
+            <h2>🏛️ MVC vs MVVM vs MVP</h2>
+
+            <div class="diagram-box">
+                <pre>
+┌─────────────────────────────────────────────────────────────────┐
+│                           MVC                                    │
+│  ┌──────────┐     ┌──────────┐     ┌──────────┐                │
+│  │   View   │ ←── │Controller│ ←── │  Model   │                │
+│  │          │ ──→ │          │ ──→ │          │                │
+│  └──────────┘     └──────────┘     └──────────┘                │
+│       User interacts with View, Controller updates Model         │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│                          MVVM                                    │
+│  ┌──────────┐     ┌──────────┐     ┌──────────┐                │
+│  │   View   │ ←─→ │ViewModel │ ←─→ │  Model   │                │
+│  │          │     │          │     │          │                │
+│  └──────────┘     └──────────┘     └──────────┘                │
+│       Data binding between View and ViewModel                    │
+└─────────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>Pattern</th>
+                    <th>Best For</th>
+                    <th>Pros</th>
+                    <th>Cons</th>
+                </tr>
+                <tr>
+                    <td>MVC</td>
+                    <td>Simple apps, iOS UIKit</td>
+                    <td>Simple, familiar</td>
+                    <td>Massive View Controller</td>
+                </tr>
+                <tr>
+                    <td>MVVM</td>
+                    <td>React Native, SwiftUI</td>
+                    <td>Testable, separation</td>
+                    <td>Boilerplate, learning curve</td>
+                </tr>
+                <tr>
+                    <td>MVP</td>
+                    <td>Android (legacy)</td>
+                    <td>Testable presenter</td>
+                    <td>Interface heavy</td>
+                </tr>
+            </table>
+
+            <h3>MVVM in React Native</h3>
+            <pre><code><span class="comment">// Model - Data and business logic</span>
+<span class="keyword">interface</span> User {
+    id: <span class="keyword">string</span>;
+    name: <span class="keyword">string</span>;
+    email: <span class="keyword">string</span>;
+}
+
+<span class="comment">// ViewModel - Custom hook</span>
+<span class="keyword">function</span> <span class="function">useUserViewModel</span>() {
+    <span class="keyword">const</span> [user, setUser] = <span class="function">useState</span>&lt;User | <span class="keyword">null</span>&gt;(<span class="keyword">null</span>);
+    <span class="keyword">const</span> [loading, setLoading] = <span class="function">useState</span>(<span class="keyword">false</span>);
+    <span class="keyword">const</span> [error, setError] = <span class="function">useState</span>&lt;<span class="keyword">string</span> | <span class="keyword">null</span>&gt;(<span class="keyword">null</span>);
+
+    <span class="keyword">const</span> <span class="function">fetchUser</span> = <span class="keyword">async</span> (id: <span class="keyword">string</span>) => {
+        <span class="function">setLoading</span>(<span class="keyword">true</span>);
+        <span class="keyword">try</span> {
+            <span class="keyword">const</span> data = <span class="keyword">await</span> userService.<span class="function">getUser</span>(id);
+            <span class="function">setUser</span>(data);
+        } <span class="keyword">catch</span> (e) {
+            <span class="function">setError</span>(e.message);
+        } <span class="keyword">finally</span> {
+            <span class="function">setLoading</span>(<span class="keyword">false</span>);
+        }
+    };
+
+    <span class="keyword">return</span> { user, loading, error, fetchUser };
+}
+
+<span class="comment">// View - React Component</span>
+<span class="keyword">function</span> <span class="function">UserProfile</span>({ userId }) {
+    <span class="keyword">const</span> { user, loading, error, fetchUser } = <span class="function">useUserViewModel</span>();
+
+    <span class="function">useEffect</span>(() => {
+        <span class="function">fetchUser</span>(userId);
+    }, [userId]);
+
+    <span class="keyword">if</span> (loading) <span class="keyword">return</span> &lt;LoadingSpinner /&gt;;
+    <span class="keyword">if</span> (error) <span class="keyword">return</span> &lt;ErrorMessage message={error} /&gt;;
+
+    <span class="keyword">return</span> (
+        &lt;View&gt;
+            &lt;Text&gt;{user?.name}&lt;/Text&gt;
+            &lt;Text&gt;{user?.email}&lt;/Text&gt;
+        &lt;/View&gt;
+    );
+}</code></pre>
+        </section>
+
+        <!-- Clean Architecture -->
+        <section id="clean-architecture" class="section">
+            <h2>🧅 Clean Architecture</h2>
+            
+            <p>Clean Architecture separates concerns into layers with dependencies pointing inward.</p>
+
+            <div class="diagram-box">
+                <pre>
+┌─────────────────────────────────────────────────────────────┐
+│                    Presentation Layer                        │
+│              (UI Components, ViewModels)                     │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │                   Domain Layer                       │   │
+│  │         (Use Cases, Entities, Interfaces)           │   │
+│  │  ┌─────────────────────────────────────────────┐   │   │
+│  │  │              Data Layer                      │   │   │
+│  │  │    (Repositories, Data Sources, APIs)       │   │   │
+│  │  └─────────────────────────────────────────────┘   │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+            Dependencies point INWARD →
+                </pre>
+            </div>
+
+            <h3>Layer Responsibilities</h3>
+
+            <div class="concept-card">
+                <h4>Presentation Layer</h4>
+                <ul>
+                    <li>UI Components (Screens, Widgets)</li>
+                    <li>ViewModels / State Management</li>
+                    <li>Navigation</li>
+                    <li>UI formatting and validation</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <h4>Domain Layer</h4>
+                <ul>
+                    <li>Use Cases (Business logic)</li>
+                    <li>Entities (Core business objects)</li>
+                    <li>Repository Interfaces</li>
+                    <li>NO framework dependencies</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <h4>Data Layer</h4>
+                <ul>
+                    <li>Repository Implementations</li>
+                    <li>Remote Data Sources (APIs)</li>
+                    <li>Local Data Sources (DB, Cache)</li>
+                    <li>Data Transfer Objects (DTOs)</li>
+                </ul>
+            </div>
+
+            <pre><code><span class="comment">// Folder Structure</span>
+src/
+├── presentation/
+│   ├── screens/
+│   ├── components/
+│   └── hooks/
+├── domain/
+│   ├── entities/
+│   ├── usecases/
+│   └── repositories/  <span class="comment">// Interfaces only</span>
+└── data/
+    ├── repositories/  <span class="comment">// Implementations</span>
+    ├── datasources/
+    │   ├── remote/
+    │   └── local/
+    └── models/        <span class="comment">// DTOs</span></code></pre>
+
+            <div class="interview-q">
+                <h4>Why use Clean Architecture?</h4>
+                <ul>
+                    <li><strong>Testability:</strong> Business logic isolated, easy to unit test</li>
+                    <li><strong>Flexibility:</strong> Swap implementations without affecting other layers</li>
+                    <li><strong>Maintainability:</strong> Clear boundaries, easier onboarding</li>
+                    <li><strong>Platform Independence:</strong> Domain layer can be shared</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Modular Architecture -->
+        <section id="modular" class="section">
+            <h2>📦 Modular Architecture</h2>
+            
+            <p>Breaking the app into feature modules for better scalability and team collaboration.</p>
+
+            <pre><code><span class="comment">// Modular Structure</span>
+packages/
+├── core/                <span class="comment">// Shared utilities, base classes</span>
+│   ├── network/
+│   ├── storage/
+│   └── analytics/
+├── design-system/       <span class="comment">// UI components library</span>
+│   ├── atoms/
+│   ├── molecules/
+│   └── organisms/
+├── features/
+│   ├── auth/           <span class="comment">// Authentication module</span>
+│   │   ├── screens/
+│   │   ├── hooks/
+│   │   └── services/
+│   ├── home/           <span class="comment">// Home module</span>
+│   ├── profile/        <span class="comment">// Profile module</span>
+│   └── settings/       <span class="comment">// Settings module</span>
+└── app/                <span class="comment">// Main app shell</span>
+    ├── navigation/
+    └── App.tsx</code></pre>
+
+            <h3>Benefits of Modular Architecture</h3>
+            <ul>
+                <li><strong>Parallel Development:</strong> Teams work on different modules</li>
+                <li><strong>Faster Builds:</strong> Only rebuild changed modules</li>
+                <li><strong>Code Ownership:</strong> Clear module ownership</li>
+                <li><strong>Reusability:</strong> Share modules across apps</li>
+                <li><strong>Testing:</strong> Test modules in isolation</li>
+            </ul>
+
+            <div class="tip-box">
+                <strong>React Native Tip:</strong> Use Yarn Workspaces or npm workspaces for monorepo module management.
+            </div>
+        </section>
+
+        <!-- Offline-First -->
+        <section id="offline-first" class="section">
+            <h2>📴 Offline-First Design</h2>
+            
+            <p>Design apps that work offline as the default, with online as an enhancement.</p>
+
+            <h3>Offline-First Principles</h3>
+            <ol>
+                <li>Store data locally first, sync when possible</li>
+                <li>Queue actions when offline, execute when online</li>
+                <li>Handle conflicts gracefully</li>
+                <li>Provide clear offline indicators to users</li>
+            </ol>
+
+            <div class="diagram-box">
+                <pre>
+User Action → Local Storage → UI Update (Optimistic)
+                   ↓
+              Network Available?
+                /        \
+              Yes         No
+              ↓           ↓
+         Sync to       Queue Action
+         Server            ↓
+              ↓       Wait for Network
+         Confirm           ↓
+         or Rollback    Sync Later
+                </pre>
+            </div>
+
+            <pre><code><span class="comment">// Offline-First with Action Queue</span>
+<span class="keyword">class</span> <span class="function">OfflineManager</span> {
+    <span class="keyword">private</span> actionQueue: Action[] = [];
+    
+    <span class="keyword">async</span> <span class="function">execute</span>(action: Action) {
+        <span class="comment">// Optimistic update</span>
+        <span class="keyword">await</span> <span class="keyword">this</span>.localStore.<span class="function">apply</span>(action);
+        
+        <span class="keyword">if</span> (<span class="keyword">await</span> <span class="keyword">this</span>.<span class="function">isOnline</span>()) {
+            <span class="keyword">try</span> {
+                <span class="keyword">await</span> <span class="keyword">this</span>.api.<span class="function">sync</span>(action);
+            } <span class="keyword">catch</span> (error) {
+                <span class="keyword">this</span>.actionQueue.<span class="function">push</span>(action);
+            }
+        } <span class="keyword">else</span> {
+            <span class="keyword">this</span>.actionQueue.<span class="function">push</span>(action);
+        }
+    }
+    
+    <span class="keyword">async</span> <span class="function">syncPendingActions</span>() {
+        <span class="keyword">while</span> (<span class="keyword">this</span>.actionQueue.length > <span class="number">0</span>) {
+            <span class="keyword">const</span> action = <span class="keyword">this</span>.actionQueue[<span class="number">0</span>];
+            <span class="keyword">try</span> {
+                <span class="keyword">await</span> <span class="keyword">this</span>.api.<span class="function">sync</span>(action);
+                <span class="keyword">this</span>.actionQueue.<span class="function">shift</span>();
+            } <span class="keyword">catch</span> (error) {
+                <span class="keyword">break</span>; <span class="comment">// Stop on first failure</span>
+            }
+        }
+    }
+}</code></pre>
+
+            <h3>Conflict Resolution Strategies</h3>
+            <table class="comparison-table">
+                <tr>
+                    <th>Strategy</th>
+                    <th>Description</th>
+                    <th>Use Case</th>
+                </tr>
+                <tr>
+                    <td>Last Write Wins</td>
+                    <td>Most recent timestamp wins</td>
+                    <td>Simple data, single user</td>
+                </tr>
+                <tr>
+                    <td>Server Wins</td>
+                    <td>Server data always preferred</td>
+                    <td>Authoritative server data</td>
+                </tr>
+                <tr>
+                    <td>Client Wins</td>
+                    <td>Client data always preferred</td>
+                    <td>Offline-heavy apps</td>
+                </tr>
+                <tr>
+                    <td>Merge</td>
+                    <td>Combine changes field by field</td>
+                    <td>Collaborative editing</td>
+                </tr>
+                <tr>
+                    <td>User Resolution</td>
+                    <td>Ask user to choose</td>
+                    <td>Critical data conflicts</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Caching Strategies -->
+        <section id="caching" class="section">
+            <h2>💾 Caching Strategies</h2>
+            
+            <h3>Cache Patterns</h3>
+
+            <div class="concept-card">
+                <h4>Cache-First (Stale-While-Revalidate)</h4>
+                <p>Return cached data immediately, fetch fresh data in background.</p>
+                <pre><code><span class="keyword">async</span> <span class="keyword">function</span> <span class="function">getData</span>(key) {
+    <span class="comment">// Return cached immediately</span>
+    <span class="keyword">const</span> cached = <span class="keyword">await</span> cache.<span class="function">get</span>(key);
+    <span class="keyword">if</span> (cached) {
+        <span class="comment">// Revalidate in background</span>
+        <span class="function">fetchAndCache</span>(key);
+        <span class="keyword">return</span> cached;
+    }
+    <span class="keyword">return</span> <span class="keyword">await</span> <span class="function">fetchAndCache</span>(key);
+}</code></pre>
+            </div>
+
+            <div class="concept-card">
+                <h4>Network-First</h4>
+                <p>Try network first, fall back to cache if offline.</p>
+                <pre><code><span class="keyword">async</span> <span class="keyword">function</span> <span class="function">getData</span>(key) {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> fresh = <span class="keyword">await</span> api.<span class="function">fetch</span>(key);
+        <span class="keyword">await</span> cache.<span class="function">set</span>(key, fresh);
+        <span class="keyword">return</span> fresh;
+    } <span class="keyword">catch</span> (error) {
+        <span class="keyword">return</span> <span class="keyword">await</span> cache.<span class="function">get</span>(key);
+    }
+}</code></pre>
+            </div>
+
+            <div class="concept-card">
+                <h4>Cache-Only</h4>
+                <p>Only use cache, sync separately.</p>
+            </div>
+
+            <h3>Cache Invalidation</h3>
+            <ul>
+                <li><strong>Time-based (TTL):</strong> Expire after X seconds</li>
+                <li><strong>Event-based:</strong> Invalidate on specific actions</li>
+                <li><strong>Version-based:</strong> Invalidate when version changes</li>
+                <li><strong>Manual:</strong> User pull-to-refresh</li>
+            </ul>
+
+            <pre><code><span class="comment">// React Query example with caching</span>
+<span class="keyword">const</span> { data, isLoading } = <span class="function">useQuery</span>({
+    queryKey: [<span class="string">'users'</span>, userId],
+    queryFn: () => <span class="function">fetchUser</span>(userId),
+    staleTime: <span class="number">5</span> * <span class="number">60</span> * <span class="number">1000</span>,      <span class="comment">// 5 minutes</span>
+    cacheTime: <span class="number">30</span> * <span class="number">60</span> * <span class="number">1000</span>,     <span class="comment">// 30 minutes</span>
+    refetchOnWindowFocus: <span class="keyword">true</span>,
+    refetchOnReconnect: <span class="keyword">true</span>,
+});</code></pre>
+        </section>
+
+        <!-- Data Synchronization -->
+        <section id="sync" class="section">
+            <h2>🔄 Data Synchronization</h2>
+            
+            <h3>Sync Strategies</h3>
+
+            <div class="concept-card">
+                <h4>Full Sync</h4>
+                <p>Download all data on first sync, then incremental updates.</p>
+                <ul>
+                    <li>Simple to implement</li>
+                    <li>Bandwidth heavy on first sync</li>
+                    <li>Good for small datasets</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <h4>Delta Sync</h4>
+                <p>Only sync changes since last sync using timestamps or version numbers.</p>
+                <pre><code><span class="comment">// Delta sync request</span>
+GET /api/items?since=2024-01-15T10:30:00Z
+
+<span class="comment">// Response includes only changed items</span>
+{
+    <span class="string">"items"</span>: [...],
+    <span class="string">"deleted_ids"</span>: [...],
+    <span class="string">"sync_token"</span>: <span class="string">"abc123"</span>
+}</code></pre>
+            </div>
+
+            <div class="concept-card">
+                <h4>Event Sourcing</h4>
+                <p>Sync events/actions instead of state. Replay events to build state.</p>
+            </div>
+
+            <h3>Sync Implementation</h3>
+            <pre><code><span class="keyword">class</span> <span class="function">SyncManager</span> {
+    <span class="keyword">private</span> lastSyncToken: <span class="keyword">string</span> | <span class="keyword">null</span> = <span class="keyword">null</span>;
+    
+    <span class="keyword">async</span> <span class="function">sync</span>() {
+        <span class="comment">// 1. Push local changes</span>
+        <span class="keyword">const</span> localChanges = <span class="keyword">await</span> <span class="keyword">this</span>.localDb.<span class="function">getUnsynced</span>();
+        <span class="keyword">const</span> pushResult = <span class="keyword">await</span> <span class="keyword">this</span>.api.<span class="function">push</span>(localChanges);
+        
+        <span class="comment">// 2. Handle conflicts</span>
+        <span class="keyword">for</span> (<span class="keyword">const</span> conflict <span class="keyword">of</span> pushResult.conflicts) {
+            <span class="keyword">await</span> <span class="keyword">this</span>.<span class="function">resolveConflict</span>(conflict);
+        }
+        
+        <span class="comment">// 3. Pull remote changes</span>
+        <span class="keyword">const</span> remoteChanges = <span class="keyword">await</span> <span class="keyword">this</span>.api.<span class="function">pull</span>({
+            since: <span class="keyword">this</span>.lastSyncToken
+        });
+        
+        <span class="comment">// 4. Apply remote changes locally</span>
+        <span class="keyword">await</span> <span class="keyword">this</span>.localDb.<span class="function">applyChanges</span>(remoteChanges.items);
+        
+        <span class="comment">// 5. Update sync token</span>
+        <span class="keyword">this</span>.lastSyncToken = remoteChanges.sync_token;
+    }
+}</code></pre>
+        </section>
+
+        <!-- Local Storage -->
+        <section id="local-storage" class="section">
+            <h2>🗄️ Local Storage Options</h2>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>Storage</th>
+                    <th>Best For</th>
+                    <th>React Native Library</th>
+                </tr>
+                <tr>
+                    <td>AsyncStorage</td>
+                    <td>Key-value, small data</td>
+                    <td>@react-native-async-storage/async-storage</td>
+                </tr>
+                <tr>
+                    <td>MMKV</td>
+                    <td>Fast key-value, encryption</td>
+                    <td>react-native-mmkv</td>
+                </tr>
+                <tr>
+                    <td>SQLite</td>
+                    <td>Relational data, queries</td>
+                    <td>react-native-sqlite-storage</td>
+                </tr>
+                <tr>
+                    <td>Realm</td>
+                    <td>Object DB, sync built-in</td>
+                    <td>realm</td>
+                </tr>
+                <tr>
+                    <td>WatermelonDB</td>
+                    <td>Large datasets, lazy loading</td>
+                    <td>@nozbe/watermelondb</td>
+                </tr>
+            </table>
+
+            <h3>Choosing the Right Storage</h3>
+            <ul>
+                <li><strong>Simple preferences:</strong> MMKV or AsyncStorage</li>
+                <li><strong>Structured data with queries:</strong> SQLite or WatermelonDB</li>
+                <li><strong>Complex objects with relationships:</strong> Realm</li>
+                <li><strong>Need encryption:</strong> MMKV or SQLCipher</li>
+                <li><strong>Massive datasets:</strong> WatermelonDB (lazy loading)</li>
+            </ul>
+
+            <pre><code><span class="comment">// WatermelonDB Example - Lazy Loading</span>
+<span class="keyword">import</span> { Database } <span class="keyword">from</span> <span class="string">'@nozbe/watermelondb'</span>;
+
+<span class="comment">// Define model</span>
+<span class="keyword">class</span> <span class="function">Post</span> <span class="keyword">extends</span> Model {
+    <span class="keyword">static</span> table = <span class="string">'posts'</span>;
+    
+    @text(<span class="string">'title'</span>) title;
+    @text(<span class="string">'body'</span>) body;
+    @relation(<span class="string">'users'</span>, <span class="string">'author_id'</span>) author;
+}
+
+<span class="comment">// Query - Only loads what's needed</span>
+<span class="keyword">const</span> posts = <span class="keyword">await</span> database
+    .<span class="function">get</span>(<span class="string">'posts'</span>)
+    .<span class="function">query</span>(Q.<span class="function">where</span>(<span class="string">'is_published'</span>, <span class="keyword">true</span>))
+    .<span class="function">fetch</span>();</code></pre>
+        </section>
+
+        <!-- API Design -->
+        <section id="api-design" class="section">
+            <h2>🔌 API Design for Mobile</h2>
+            
+            <h3>Mobile-Friendly API Principles</h3>
+            <ul>
+                <li><strong>Minimize Round Trips:</strong> Batch requests, aggregate data</li>
+                <li><strong>Optimize Payload Size:</strong> Only send needed fields</li>
+                <li><strong>Support Partial Updates:</strong> PATCH for partial updates</li>
+                <li><strong>Pagination:</strong> Never return unbounded lists</li>
+                <li><strong>Versioning:</strong> Handle API evolution gracefully</li>
+            </ul>
+
+            <h3>BFF Pattern (Backend For Frontend)</h3>
+            <div class="diagram-box">
+                <pre>
+┌─────────────┐     ┌─────────────┐     ┌─────────────────┐
+│  Mobile App │ ──→ │  Mobile BFF │ ──→ │  Microservices  │
+└─────────────┘     └─────────────┘     │  - User Service │
+                                        │  - Order Service│
+┌─────────────┐     ┌─────────────┐     │  - Product Svc  │
+│   Web App   │ ──→ │   Web BFF   │ ──→ └─────────────────┘
+└─────────────┘     └─────────────┘
+
+Benefits:
+- Tailored responses for each platform
+- Aggregates multiple services
+- Handles platform-specific logic
+                </pre>
+            </div>
+
+            <pre><code><span class="comment">// Mobile-optimized API response</span>
+{
+    <span class="string">"user"</span>: {
+        <span class="string">"id"</span>: <span class="string">"123"</span>,
+        <span class="string">"name"</span>: <span class="string">"Nishant"</span>,
+        <span class="string">"avatar_url"</span>: <span class="string">"https://..."</span>,  <span class="comment">// Pre-sized for mobile</span>
+        <span class="string">"avatar_url_2x"</span>: <span class="string">"https://..."</span> <span class="comment">// Retina version</span>
+    },
+    <span class="string">"feed"</span>: [...],  <span class="comment">// Paginated</span>
+    <span class="string">"unread_count"</span>: <span class="number">5</span>,  <span class="comment">// Pre-computed</span>
+    <span class="string">"next_cursor"</span>: <span class="string">"abc123"</span>  <span class="comment">// Cursor pagination</span>
+}</code></pre>
+        </section>
+
+        <!-- GraphQL vs REST -->
+        <section id="graphql-rest" class="section">
+            <h2>⚡ GraphQL vs REST</h2>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>Aspect</th>
+                    <th>REST</th>
+                    <th>GraphQL</th>
+                </tr>
+                <tr>
+                    <td>Data Fetching</td>
+                    <td>Multiple endpoints</td>
+                    <td>Single endpoint, flexible queries</td>
+                </tr>
+                <tr>
+                    <td>Over-fetching</td>
+                    <td>Common problem</td>
+                    <td>Client specifies exact fields</td>
+                </tr>
+                <tr>
+                    <td>Under-fetching</td>
+                    <td>Multiple requests needed</td>
+                    <td>Nested queries in one request</td>
+                </tr>
+                <tr>
+                    <td>Caching</td>
+                    <td>HTTP caching built-in</td>
+                    <td>Requires client-side caching</td>
+                </tr>
+                <tr>
+                    <td>Versioning</td>
+                    <td>URL or header versioning</td>
+                    <td>Evolve schema, deprecate fields</td>
+                </tr>
+                <tr>
+                    <td>Learning Curve</td>
+                    <td>Lower</td>
+                    <td>Higher</td>
+                </tr>
+            </table>
+
+            <pre><code><span class="comment">// GraphQL Query - Get exactly what you need</span>
+query GetUserProfile($id: ID!) {
+    user(id: $id) {
+        name
+        avatar
+        posts(first: 10) {
+            title
+            likesCount
+        }
+        followers {
+            totalCount
+        }
+    }
+}
+
+<span class="comment">// One request replaces multiple REST calls:
+// GET /users/123
+// GET /users/123/posts?limit=10
+// GET /users/123/followers/count</span></code></pre>
+
+            <div class="tip-box">
+                <strong>When to use GraphQL:</strong>
+                <ul>
+                    <li>Complex data requirements with nested relationships</li>
+                    <li>Multiple client platforms (mobile, web, TV)</li>
+                    <li>Rapid iteration on client requirements</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Real-time Communication -->
+        <section id="realtime" class="section">
+            <h2>📡 Real-time Communication</h2>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>Technology</th>
+                    <th>Use Case</th>
+                    <th>Pros</th>
+                    <th>Cons</th>
+                </tr>
+                <tr>
+                    <td>WebSocket</td>
+                    <td>Bi-directional, real-time</td>
+                    <td>Low latency, full duplex</td>
+                    <td>Connection management</td>
+                </tr>
+                <tr>
+                    <td>Server-Sent Events</td>
+                    <td>Server → Client only</td>
+                    <td>Simple, auto-reconnect</td>
+                    <td>One-way only</td>
+                </tr>
+                <tr>
+                    <td>Long Polling</td>
+                    <td>Fallback option</td>
+                    <td>Works everywhere</td>
+                    <td>Higher latency</td>
+                </tr>
+                <tr>
+                    <td>Push Notifications</td>
+                    <td>Background updates</td>
+                    <td>Works when app closed</td>
+                    <td>Not instant, rate limited</td>
+                </tr>
+            </table>
+
+            <pre><code><span class="comment">// WebSocket with reconnection</span>
+<span class="keyword">class</span> <span class="function">WebSocketManager</span> {
+    <span class="keyword">private</span> ws: WebSocket | <span class="keyword">null</span> = <span class="keyword">null</span>;
+    <span class="keyword">private</span> reconnectAttempts = <span class="number">0</span>;
+    <span class="keyword">private</span> maxReconnectAttempts = <span class="number">5</span>;
+    
+    <span class="function">connect</span>(url: <span class="keyword">string</span>) {
+        <span class="keyword">this</span>.ws = <span class="keyword">new</span> <span class="function">WebSocket</span>(url);
+        
+        <span class="keyword">this</span>.ws.onopen = () => {
+            <span class="keyword">this</span>.reconnectAttempts = <span class="number">0</span>;
+            <span class="keyword">this</span>.<span class="function">onConnected</span>();
+        };
+        
+        <span class="keyword">this</span>.ws.onclose = () => {
+            <span class="keyword">this</span>.<span class="function">handleReconnect</span>();
+        };
+        
+        <span class="keyword">this</span>.ws.onmessage = (event) => {
+            <span class="keyword">this</span>.<span class="function">handleMessage</span>(JSON.<span class="function">parse</span>(event.data));
+        };
+    }
+    
+    <span class="keyword">private</span> <span class="function">handleReconnect</span>() {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.reconnectAttempts < <span class="keyword">this</span>.maxReconnectAttempts) {
+            <span class="keyword">const</span> delay = Math.<span class="function">pow</span>(<span class="number">2</span>, <span class="keyword">this</span>.reconnectAttempts) * <span class="number">1000</span>;
+            <span class="function">setTimeout</span>(() => {
+                <span class="keyword">this</span>.reconnectAttempts++;
+                <span class="keyword">this</span>.<span class="function">connect</span>(<span class="keyword">this</span>.url);
+            }, delay);
+        }
+    }
+}</code></pre>
+        </section>
+
+        <!-- Performance -->
+        <section id="performance" class="section">
+            <h2>🚀 Performance Optimization</h2>
+            
+            <h3>Key Performance Metrics</h3>
+            <ul>
+                <li><strong>App Launch Time:</strong> Target &lt; 2 seconds cold start</li>
+                <li><strong>Frame Rate:</strong> 60 FPS for smooth animations</li>
+                <li><strong>Memory Usage:</strong> Stay within device limits</li>
+                <li><strong>Battery Impact:</strong> Minimize background activity</li>
+                <li><strong>Network Usage:</strong> Reduce data transfer</li>
+            </ul>
+
+            <h3>React Native Optimizations</h3>
+
+            <div class="concept-card">
+                <h4>List Optimization</h4>
+                <pre><code>&lt;FlatList
+    data={items}
+    renderItem={renderItem}
+    keyExtractor={item => item.id}
+    <span class="comment">// Performance props</span>
+    removeClippedSubviews={<span class="keyword">true</span>}
+    maxToRenderPerBatch={<span class="number">10</span>}
+    windowSize={<span class="number">5</span|}
+    initialNumToRender={<span class="number">10</span>}
+    getItemLayout={(data, index) => ({
+        length: ITEM_HEIGHT,
+        offset: ITEM_HEIGHT * index,
+        index,
+    })}
+/&gt;</code></pre>
+            </div>
+
+            <div class="concept-card">
+                <h4>Memoization</h4>
+                <pre><code><span class="comment">// Memoize components</span>
+<span class="keyword">const</span> MemoizedItem = React.<span class="function">memo</span>(ItemComponent);
+
+<span class="comment">// Memoize callbacks</span>
+<span class="keyword">const</span> handlePress = <span class="function">useCallback</span>(() => {
+    <span class="comment">// handler logic</span>
+}, [dependencies]);
+
+<span class="comment">// Memoize computed values</span>
+<span class="keyword">const</span> sortedData = <span class="function">useMemo</span>(() => {
+    <span class="keyword">return</span> data.<span class="function">sort</span>((a, b) => a.name.<span class="function">localeCompare</span>(b.name));
+}, [data]);</code></pre>
+            </div>
+
+            <div class="concept-card">
+                <h4>Image Optimization</h4>
+                <pre><code><span class="keyword">import</span> FastImage <span class="keyword">from</span> <span class="string">'react-native-fast-image'</span>;
+
+&lt;FastImage
+    source={{
+        uri: imageUrl,
+        priority: FastImage.priority.normal,
+        cache: FastImage.cacheControl.immutable,
+    }}
+    resizeMode={FastImage.resizeMode.cover}
+/&gt;</code></pre>
+            </div>
+
+            <div class="warning-box">
+                <strong>Common Performance Killers:</strong>
+                <ul>
+                    <li>Inline functions in render (create on every render)</li>
+                    <li>Anonymous objects as props (new reference each time)</li>
+                    <li>Heavy computations in render</li>
+                    <li>Over-fetching data</li>
+                    <li>Not using FlatList for long lists</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Image Handling -->
+        <section id="image-handling" class="section">
+            <h2>🖼️ Image Handling</h2>
+            
+            <h3>Image Loading Strategy</h3>
+            <ol>
+                <li>Show placeholder immediately</li>
+                <li>Load low-res thumbnail first (LQIP)</li>
+                <li>Load full resolution in background</li>
+                <li>Cache aggressively</li>
+            </ol>
+
+            <pre><code><span class="comment">// Progressive image loading</span>
+<span class="keyword">function</span> <span class="function">ProgressiveImage</span>({ thumbnailUrl, fullUrl, style }) {
+    <span class="keyword">const</span> [loaded, setLoaded] = <span class="function">useState</span>(<span class="keyword">false</span>);
+    
+    <span class="keyword">return</span> (
+        &lt;View style={style}&gt;
+            <span class="comment">{/* Thumbnail with blur */}</span>
+            &lt;FastImage
+                source={{ uri: thumbnailUrl }}
+                style={[StyleSheet.absoluteFill, { opacity: loaded ? <span class="number">0</span> : <span class="number">1</span> }]}
+                blurRadius={<span class="number">10</span>}
+            /&gt;
+            
+            <span class="comment">{/* Full image */}</span>
+            &lt;FastImage
+                source={{ uri: fullUrl }}
+                style={StyleSheet.absoluteFill}
+                onLoad={() => <span class="function">setLoaded</span>(<span class="keyword">true</span>)}
+            /&gt;
+        &lt;/View&gt;
+    );
+}</code></pre>
+
+            <h3>Image CDN Best Practices</h3>
+            <ul>
+                <li>Request images at the exact size needed</li>
+                <li>Use WebP format when supported</li>
+                <li>Implement responsive images for different densities</li>
+                <li>Set appropriate cache headers</li>
+            </ul>
+
+            <pre><code><span class="comment">// Dynamic image URL with size</span>
+<span class="keyword">const</span> <span class="function">getImageUrl</span> = (baseUrl, width, height) => {
+    <span class="keyword">const</span> density = PixelRatio.<span class="function">get</span>();
+    <span class="keyword">const</span> actualWidth = Math.<span class="function">round</span>(width * density);
+    <span class="keyword">const</span> actualHeight = Math.<span class="function">round</span>(height * density);
+    
+    <span class="keyword">return</span> <span class="string">`${baseUrl}?w=${actualWidth}&h=${actualHeight}&format=webp`</span>;
+};</code></pre>
+        </section>
+
+        <!-- Pagination -->
+        <section id="pagination" class="section">
+            <h2>📄 Pagination Patterns</h2>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>Pattern</th>
+                    <th>Pros</th>
+                    <th>Cons</th>
+                    <th>Best For</th>
+                </tr>
+                <tr>
+                    <td>Offset-based</td>
+                    <td>Simple, page numbers</td>
+                    <td>Inconsistent with real-time data</td>
+                    <td>Static content</td>
+                </tr>
+                <tr>
+                    <td>Cursor-based</td>
+                    <td>Consistent, performant</td>
+                    <td>No page jumping</td>
+                    <td>Feeds, real-time</td>
+                </tr>
+                <tr>
+                    <td>Keyset</td>
+                    <td>Fast, consistent</td>
+                    <td>Complex queries</td>
+                    <td>Large datasets</td>
+                </tr>
+            </table>
+
+            <pre><code><span class="comment">// Cursor-based pagination with React Query</span>
+<span class="keyword">const</span> {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+} = <span class="function">useInfiniteQuery</span>({
+    queryKey: [<span class="string">'posts'</span>],
+    queryFn: ({ pageParam }) => <span class="function">fetchPosts</span>({ cursor: pageParam }),
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+});
+
+<span class="comment">// FlatList integration</span>
+&lt;FlatList
+    data={data.pages.<span class="function">flatMap</span>(page => page.items)}
+    onEndReached={() => {
+        <span class="keyword">if</span> (hasNextPage && !isFetchingNextPage) {
+            <span class="function">fetchNextPage</span>();
+        }
+    }}
+    onEndReachedThreshold={<span class="number">0.5</span>}
+    ListFooterComponent={isFetchingNextPage ? &lt;LoadingMore /&gt; : <span class="keyword">null</span>}
+/&gt;</code></pre>
+        </section>
+
+        <!-- Design: News Feed -->
+        <section id="design-feed" class="section">
+            <h2>📱 Design: News Feed App</h2>
+            
+            <div class="interview-q">
+                <h4>Design a social media news feed like Twitter/Instagram</h4>
+                <span class="difficulty hard">Hard</span>
+            </div>
+
+            <h3>Requirements</h3>
+            <ul>
+                <li>Display posts from followed users</li>
+                <li>Support text, images, videos</li>
+                <li>Like, comment, share functionality</li>
+                <li>Real-time updates for new posts</li>
+                <li>Offline support for viewed content</li>
+            </ul>
+
+            <h3>High-Level Architecture</h3>
+            <div class="diagram-box">
+                <pre>
+┌─────────────────────────────────────────────────────────────┐
+│                        Mobile App                            │
+├─────────────────────────────────────────────────────────────┤
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │
+│  │    Feed     │  │   Create    │  │    Notifications    │ │
+│  │   Screen    │  │    Post     │  │       Screen        │ │
+│  └─────────────┘  └─────────────┘  └─────────────────────┘ │
+├─────────────────────────────────────────────────────────────┤
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │              State Management (Redux/Zustand)        │   │
+│  └─────────────────────────────────────────────────────┘   │
+├─────────────────────────────────────────────────────────────┤
+│  ┌──────────────┐  ┌──────────────┐  ┌────────────────┐   │
+│  │  Feed Cache  │  │   Media      │  │   WebSocket    │   │
+│  │  (SQLite)    │  │   Cache      │  │   Connection   │   │
+│  └──────────────┘  └──────────────┘  └────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                      API Gateway / BFF                       │
+└─────────────────────────────────────────────────────────────┘
+                              │
+        ┌─────────────────────┼─────────────────────┐
+        ▼                     ▼                     ▼
+┌───────────────┐    ┌───────────────┐    ┌───────────────┐
+│  Feed Service │    │ Media Service │    │ Notif Service │
+└───────────────┘    └───────────────┘    └───────────────┘
+                </pre>
+            </div>
+
+            <h3>Key Design Decisions</h3>
+
+            <div class="concept-card">
+                <h4>Feed Loading Strategy</h4>
+                <ul>
+                    <li>Cursor-based pagination for infinite scroll</li>
+                    <li>Cache first page for instant load</li>
+                    <li>Pre-fetch next page when 50% scrolled</li>
+                    <li>WebSocket for real-time new post notifications</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <h4>Media Handling</h4>
+                <ul>
+                    <li>Progressive image loading (thumbnail → full)</li>
+                    <li>Video: load poster first, stream on play</li>
+                    <li>Aggressive media caching with LRU eviction</li>
+                    <li>Background upload for new posts</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <h4>Offline Support</h4>
+                <ul>
+                    <li>Cache viewed feed items in SQLite</li>
+                    <li>Queue likes/comments when offline</li>
+                    <li>Sync queue when back online</li>
+                    <li>Show offline indicator</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Design: Chat App -->
+        <section id="design-chat" class="section">
+            <h2>💬 Design: Chat Application</h2>
+            
+            <div class="interview-q">
+                <h4>Design a real-time chat app like WhatsApp</h4>
+                <span class="difficulty hard">Hard</span>
+            </div>
+
+            <h3>Requirements</h3>
+            <ul>
+                <li>1-on-1 and group chats</li>
+                <li>Text, images, voice messages</li>
+                <li>Real-time message delivery</li>
+                <li>Read receipts, typing indicators</li>
+                <li>Works offline, syncs when online</li>
+                <li>End-to-end encryption</li>
+            </ul>
+
+            <h3>Message Flow</h3>
+            <div class="diagram-box">
+                <pre>
+User A (Sender)                               User B (Receiver)
+     │                                              │
+     │ 1. Compose message                           │
+     ▼                                              │
+┌──────────┐                                        │
+│  Store   │                                        │
+│  Locally │ (status: sending)                      │
+└──────────┘                                        │
+     │                                              │
+     │ 2. Send via WebSocket                        │
+     ▼                                              │
+┌─────────────────────────────────────────────────────────┐
+│                     Chat Server                          │
+│  - Store message                                         │
+│  - Forward to receiver                                   │
+│  - Send ACK to sender                                    │
+└─────────────────────────────────────────────────────────┘
+     │                                              │
+     │ 3. ACK (status: sent)                       │ 4. Receive message
+     ▼                                              ▼
+┌──────────┐                               ┌──────────┐
+│  Update  │                               │  Store   │
+│  Status  │ ✓                             │  Locally │
+└──────────┘                               └──────────┘
+     │                                              │
+     │                                              │ 5. Delivery ACK
+     │                                              ▼
+     │                     ┌─────────────────────────────┐
+     │ ◄────────────────── │  Server forwards ACK        │
+     │                     └─────────────────────────────┘
+     │                                              │
+     │ 6. Update to delivered ✓✓                   │ 6. User reads
+     ▼                                              ▼
+┌──────────┐                               ┌──────────┐
+│  Status: │                               │   Send   │
+│ Delivered│ ✓✓                            │ Read ACK │
+└──────────┘                               └──────────┘
+                </pre>
+            </div>
+
+            <h3>Key Design Decisions</h3>
+
+            <div class="concept-card">
+                <h4>Message Ordering</h4>
+                <ul>
+                    <li>Use server timestamps for ordering</li>
+                    <li>Client timestamps for optimistic display</li>
+                    <li>Handle out-of-order messages gracefully</li>
+                    <li>Message IDs for deduplication</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <h4>Offline Message Queue</h4>
+                <pre><code><span class="comment">// SQLite schema for offline queue</span>
+CREATE TABLE pending_messages (
+    id TEXT PRIMARY KEY,
+    chat_id TEXT,
+    content TEXT,
+    created_at INTEGER,
+    retry_count INTEGER DEFAULT 0,
+    status TEXT DEFAULT 'pending'
+);</code></pre>
+            </div>
+
+            <div class="concept-card">
+                <h4>End-to-End Encryption</h4>
+                <ul>
+                    <li>Generate key pairs on device</li>
+                    <li>Exchange public keys via server</li>
+                    <li>Encrypt messages client-side</li>
+                    <li>Server cannot read message content</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Design: E-commerce -->
+        <section id="design-ecommerce" class="section">
+            <h2>🛒 Design: E-commerce App</h2>
+            
+            <div class="interview-q">
+                <h4>Design a mobile e-commerce app like Amazon</h4>
+                <span class="difficulty hard">Hard</span>
+            </div>
+
+            <h3>Requirements</h3>
+            <ul>
+                <li>Product catalog with search and filters</li>
+                <li>Product details with images, reviews</li>
+                <li>Shopping cart (persisted)</li>
+                <li>Checkout flow with payments</li>
+                <li>Order tracking</li>
+                <li>User reviews and ratings</li>
+            </ul>
+
+            <h3>App Architecture</h3>
+            <div class="diagram-box">
+                <pre>
+┌─────────────────────────────────────────────────────────────┐
+│                      E-commerce App                          │
+├─────────────────────────────────────────────────────────────┤
+│                      Feature Modules                         │
+│  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐   │
+│  │  Home  │ │ Search │ │Product │ │  Cart  │ │ Orders │   │
+│  │        │ │        │ │Details │ │        │ │        │   │
+│  └────────┘ └────────┘ └────────┘ └────────┘ └────────┘   │
+├─────────────────────────────────────────────────────────────┤
+│                      Shared Services                         │
+│  ┌──────────────┐ ┌──────────────┐ ┌──────────────────────┐│
+│  │  Auth        │ │  Analytics   │ │  Payment Service     ││
+│  │  Service     │ │  Service     │ │  (Stripe/Razorpay)   ││
+│  └──────────────┘ └──────────────┘ └──────────────────────┘│
+├─────────────────────────────────────────────────────────────┤
+│                      Data Layer                              │
+│  ┌──────────────┐ ┌──────────────┐ ┌──────────────────────┐│
+│  │  Product     │ │  Cart        │ │  User Preferences    ││
+│  │  Cache       │ │  Persistence │ │  (MMKV)              ││
+│  │  (React Q)   │ │  (SQLite)    │ │                      ││
+│  └──────────────┘ └──────────────┘ └──────────────────────┘│
+└─────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+
+            <h3>Key Design Decisions</h3>
+
+            <div class="concept-card">
+                <h4>Product Catalog</h4>
+                <ul>
+                    <li>Search with debouncing (300ms)</li>
+                    <li>Filter/sort on client for small results</li>
+                    <li>Server-side for large catalogs</li>
+                    <li>Cache popular products aggressively</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <h4>Cart Strategy</h4>
+                <ul>
+                    <li>Persist cart locally (works offline)</li>
+                    <li>Sync with server when online</li>
+                    <li>Handle inventory conflicts (item out of stock)</li>
+                    <li>Merge guest cart on login</li>
+                </ul>
+                <pre><code><span class="comment">// Cart merge on login</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">mergeCartsOnLogin</span>() {
+    <span class="keyword">const</span> localCart = <span class="keyword">await</span> storage.<span class="function">getCart</span>();
+    <span class="keyword">const</span> serverCart = <span class="keyword">await</span> api.<span class="function">getCart</span>();
+    
+    <span class="keyword">const</span> merged = <span class="function">mergeCarts</span>(localCart, serverCart);
+    
+    <span class="keyword">await</span> api.<span class="function">updateCart</span>(merged);
+    <span class="keyword">await</span> storage.<span class="function">setCart</span>(merged);
+}</code></pre>
+            </div>
+
+            <div class="concept-card">
+                <h4>Checkout Flow</h4>
+                <ol>
+                    <li>Validate cart items (availability, prices)</li>
+                    <li>Collect shipping address</li>
+                    <li>Show shipping options</li>
+                    <li>Payment selection</li>
+                    <li>Order confirmation</li>
+                    <li>Push notification for order updates</li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <strong>Security Considerations:</strong>
+                <ul>
+                    <li>Never store full card numbers locally</li>
+                    <li>Use payment provider SDKs (Stripe, Razorpay)</li>
+                    <li>Validate prices server-side (never trust client)</li>
+                    <li>Implement certificate pinning for API calls</li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="tip-box" style="margin-top: 40px;">
+            <h3>📚 Continue Learning</h3>
+            <p>Return to <a href="progress-tracker.html" style="color: var(--primary);">Progress Tracker</a> to track your study progress and access more resources.</p>
+        </div>
+    </main>
+
+    <script>
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
