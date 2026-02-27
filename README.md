@@ -82,7 +82,7 @@ Award Image Filename
 AI White Belt ai-white-belt-2025.png
 Team Star Award 2025 team-star-award-2025.png
 Standing Ovation Award 2025 standing-ovation-2025.png
-Leadership Learning Program 2025 leadership-learning-program-2025.png
+Leadership Learning Program 2026 leadership-learning-program-2026.png
 Information Security and Data Privacy info-security-data-privacy-2025.png
 AQT Ninja Award 2022 aqt-ninja-award-2022.png
 Express Delivery - First Winner express-delivery-first-winner-2021.png

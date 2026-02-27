@@ -15,8 +15,19 @@ export interface AwardYearGroup {
 
 export const awardsData: AwardYearGroup[] = [
   {
-    year: "2025",
+    year: "2025-2026",
     items: [
+      {
+        title: "Leadership Learning - ASCEND Program 2026",
+        issuer: "Tech Mahindra",
+        date: "2026",
+        description:
+          "5 Months Leadership Learning - ASCEND Program to develop leadership skills and capabilities.",
+        type: "program",
+        certificate: "/awards/leadership-learning-program-2026.png",
+        thumbnail:
+          "/awards/thumbnails/leadership-learning-program-2026-thumb.png",
+      },
       {
         title: "AI White Belt",
         issuer: "Tech Mahindra",
@@ -46,17 +57,6 @@ export const awardsData: AwardYearGroup[] = [
         type: "award",
         certificate: "/awards/standing-ovation-2025.png",
         thumbnail: "/awards/thumbnails/standing-ovation-2025-thumb.png",
-      },
-      {
-        title: "Leadership Learning Program 2025",
-        issuer: "Tech Mahindra",
-        date: "2025",
-        description:
-          "Completed Leadership Learning Program demonstrating leadership capabilities.",
-        type: "program",
-        certificate: "/awards/leadership-learning-program-2025.png",
-        thumbnail:
-          "/awards/thumbnails/leadership-learning-program-2025-thumb.png",
       },
       {
         title: "Information Security and Data Privacy",
