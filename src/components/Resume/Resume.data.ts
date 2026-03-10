@@ -6,23 +6,25 @@ export interface ResumeVersion {
   features: string[];
   filename: string;
   color: string;
+  isVisible: boolean;
 }
 
 export const resumeVersions: ResumeVersion[] = [
   {
     id: "v1",
     title: "Resume Version 1",
-    subtitle: "Single Page - Compact Format",
+    subtitle: "Two Page - Detailed Format",
     description:
-      "A concise one-page resume highlighting key skills, experience, and achievements in a professional compact layout.",
+      "Comprehensive two-page resume with detailed skills, experience, achievements, and technical expertise in a professional layout.",
     features: [
-      "Single page format",
+      "Two page detailed format",
       "Key highlights focused",
       "Clean & professional",
-      "Quick overview",
+      "Technical expertise showcase",
     ],
     filename: "Resume_v1.pdf",
     color: "#6366f1",
+    isVisible: true,
   },
   {
     id: "v2",
@@ -38,5 +40,6 @@ export const resumeVersions: ResumeVersion[] = [
     ],
     filename: "Resume_v2.pdf",
     color: "#8b5cf6",
+    isVisible: false,
   },
 ];

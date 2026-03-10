@@ -8,7 +8,11 @@ import "./Resume.css";
 const Resume = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [selectedVersion, setSelectedVersion] = useState("v1");
+  
+  const visibleResumes = resumeVersions.filter((v) => v.isVisible);
+  const [selectedVersion, setSelectedVersion] = useState(
+    visibleResumes[0]?.id || "v1"
+  );
 
   return (
     <section id="resume" className="resume section" ref={ref}>
@@ -21,13 +25,15 @@ const Resume = () => {
         >
           <h2 className="section-title">See My Resume</h2>
           <p className="section-subtitle">
-            Choose from two professionally crafted resume versions
+            {visibleResumes.length > 1
+              ? `Choose from ${visibleResumes.length} professionally crafted resume versions`
+              : "Download my professionally crafted resume"}
           </p>
         </motion.div>
 
         <div className="resume-content">
           <div className="resume-cards">
-            {resumeVersions.map((version, index) => (
+            {visibleResumes.map((version, index) => (
               <motion.div
                 key={version.id}
                 className={`resume-card card ${
@@ -103,12 +109,12 @@ const Resume = () => {
             <div className="preview-header">
               <span className="preview-title">
                 <FiFileText />
-                {resumeVersions.find((v) => v.id === selectedVersion)?.title}
+                {visibleResumes.find((v) => v.id === selectedVersion)?.title}
               </span>
               <div className="preview-actions">
                 <a
                   href={`/resumes/${
-                    resumeVersions.find((v) => v.id === selectedVersion)
+                    visibleResumes.find((v) => v.id === selectedVersion)
                       ?.filename
                   }`}
                   target="_blank"
@@ -122,7 +128,7 @@ const Resume = () => {
             <div className="preview-frame">
               <iframe
                 src={`/resumes/${
-                  resumeVersions.find((v) => v.id === selectedVersion)?.filename
+                  visibleResumes.find((v) => v.id === selectedVersion)?.filename
                 }`}
                 title="Resume Preview"
                 className="resume-iframe"
@@ -131,6 +137,7 @@ const Resume = () => {
           </motion.div>
         </div>
 
+{visibleResumes.length > 1 && (
         <motion.div
           className="resume-note"
           initial={{ opacity: 0, y: 20 }}
@@ -143,6 +150,7 @@ const Resume = () => {
             both for your reference.
           </p>
         </motion.div>
+)}
       </div>
     </section>
   );

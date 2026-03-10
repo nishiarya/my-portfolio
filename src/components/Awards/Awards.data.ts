@@ -18,9 +18,19 @@ export const awardsData: AwardYearGroup[] = [
     year: "2025-2026",
     items: [
       {
+        title: "Pat on Back Award 2026",
+        issuer: "Tech Mahindra",
+        date: "Mar 2026",
+        description:
+          'Awarded for dependable performance, positive attitude, and quiet excellence that keeps everything moving forward. \n\n"Nishant consistently demonstrated strong leadership and ownership by taking full responsibility for the team and ensuring successful and timely delivery of commitments. He fostered excellent professional relationships within the team as well as with the customer, contributing to a collaborative and trust‑based working environment. His effective team coordination and communication skills played a key role in achieving delivery excellence and customer satisfaction."',
+        type: "award",
+        certificate: "/awards/pat-on-back-2026.png",
+        thumbnail: "/awards/thumbnails/pat-on-back-2026-thumb.png",
+      },
+      {
         title: "Leadership Learning - ASCEND Program 2026",
         issuer: "Tech Mahindra",
-        date: "2026",
+        date: "Feb 2026",
         description:
           "5 Months Leadership Learning - ASCEND Program to develop leadership skills and capabilities.",
         type: "program",
