@@ -12,10 +12,10 @@ export interface ResumeVersion {
 export const resumeVersions: ResumeVersion[] = [
   {
     id: "v1",
-    title: "Resume Version 1",
-    subtitle: "Two Page - Detailed Format",
+    title: "Resume PDF Version",
+    subtitle: "Detailed Format",
     description:
-      "Comprehensive two-page resume with detailed skills, experience, achievements, and technical expertise in a professional layout.",
+      "Comprehensive resume version with detailed skills, experience, achievements, and technical expertise in a professional layout.",
     features: [
       "Two page detailed format",
       "Key highlights focused",
