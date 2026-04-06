@@ -14,7 +14,7 @@ const highlightKeywords = [
   "Wolters Kluwer",
   "Sunrise Communications",
   "99% security vulnerability remediation",
-  "8960+ risk points",
+  "10,000+ risk points",
   "36 processes digitized",
   "2M+ downloads",
   "two weeks",
@@ -37,7 +37,10 @@ const highlightText = (text: string): React.ReactNode => {
 
     for (const keyword of highlightKeywords) {
       const index = remainingText.toLowerCase().indexOf(keyword.toLowerCase());
-      if (index !== -1 && (earliestMatch === null || index < earliestMatch.index)) {
+      if (
+        index !== -1 &&
+        (earliestMatch === null || index < earliestMatch.index)
+      ) {
         earliestMatch = { keyword, index };
       }
     }
@@ -50,16 +53,16 @@ const highlightText = (text: string): React.ReactNode => {
       // Add the highlighted keyword
       const actualKeyword = remainingText.substring(
         earliestMatch.index,
-        earliestMatch.index + earliestMatch.keyword.length
+        earliestMatch.index + earliestMatch.keyword.length,
       );
       result.push(
         <span key={keyIndex++} className="highlight">
           {actualKeyword}
-        </span>
+        </span>,
       );
       // Continue with remaining text
       remainingText = remainingText.substring(
-        earliestMatch.index + earliestMatch.keyword.length
+        earliestMatch.index + earliestMatch.keyword.length,
       );
     } else {
       // No more matches, add remaining text
@@ -99,9 +102,11 @@ const About = () => {
           >
             <div className="about-card">
               <h3>{aboutData.professionalSummary.title}</h3>
-              {aboutData.professionalSummary.paragraphs.map((paragraph, index) => (
-                <p key={index}>{highlightText(paragraph)}</p>
-              ))}
+              {aboutData.professionalSummary.paragraphs.map(
+                (paragraph, index) => (
+                  <p key={index}>{highlightText(paragraph)}</p>
+                ),
+              )}
               <p className="core-values">
                 <strong>Core Values:</strong>{" "}
                 {aboutData.professionalSummary.coreValues.join(" | ")}

@@ -113,10 +113,10 @@ export const caseStudies: CaseStudy[] = [
       "Logging & Monitoring",
     ],
     metrics: [
-      { label: "Support Calls Reduced", value: "40%" },
+      { label: "Support Calls Reduced", value: "60%" },
       { label: "User Engagement", value: "+65%" },
-      { label: "App Rating", value: "4.5★" },
-      { label: "Active Users", value: "500K+" },
+      { label: "App Rating", value: "4.7★" },
+      { label: "Active Users", value: "2M+" },
     ],
     color: "#a855f7",
   },

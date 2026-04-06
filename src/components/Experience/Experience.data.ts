@@ -79,6 +79,6 @@ export const experiences: Experience[] = [
 export const experienceSummary: ExperienceSummary = {
   yearsExperience: "15.6+",
   companies: 3,
-  projectsDelivered: "20+",
+  projectsDelivered: "35+",
   teamMembersMentored: "50+",
 };
