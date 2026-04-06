@@ -31,7 +31,7 @@ export const contactInfo: ContactInfo[] = [
     icon: FiLinkedin,
     label: "LinkedIn",
     value: "Connect on LinkedIn",
-    href: "https://www.linkedin.com/in/nishant-singh-ba161a22",
+    href: "https://www.linkedin.com/in/singhni/",
   },
 ];
 

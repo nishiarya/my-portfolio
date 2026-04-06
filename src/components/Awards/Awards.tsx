@@ -180,7 +180,7 @@ const Awards = () => {
           transition={{ duration: 0.6, delay: 0.6 }}
         >
           <a
-            href="https://www.linkedin.com/in/nishant-singh-ba161a22/details/honors/"
+            href="https://www.linkedin.com/in/singhni/details/honors/"
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-secondary"

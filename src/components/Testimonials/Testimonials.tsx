@@ -299,7 +299,7 @@ const Testimonials = () => {
                 Your feedback helps me grow and serve future teams better.
               </p>
               <a
-                href="https://www.linkedin.com/in/nishant-singh-ba161a22/"
+                href="https://www.linkedin.com/in/singhni/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="cta-button"

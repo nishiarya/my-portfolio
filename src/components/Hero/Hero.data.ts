@@ -23,7 +23,7 @@ export const heroData: HeroData = {
   location: "Noida, India",
   phone: "+91-9958101777",
   email: "nishant.bitindia@gmail.com",
-  linkedIn: "https://www.linkedin.com/in/nishant-singh-ba161a22",
+  linkedIn: "https://www.linkedin.com/in/singhni/",
   availabilityText: "Available for opportunities",
   bannerText: "Mobile Solution Architect & Tech Lead",
   bannerHighlight: "Open to Work",

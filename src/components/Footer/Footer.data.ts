@@ -27,6 +27,6 @@ export const footerData = {
   contact: {
     email: "nishant.bitindia@gmail.com",
     phone: "+91-9958101777",
-    linkedIn: "https://www.linkedin.com/in/nishant-singh-ba161a22",
+    linkedIn: "https://www.linkedin.com/in/singhni/",
   } as FooterContact,
 };
