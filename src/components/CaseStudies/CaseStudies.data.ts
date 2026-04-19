@@ -81,8 +81,8 @@ export const caseStudies: CaseStudy[] = [
     ],
     metrics: [
       { label: "Processes Digitized", value: "36" },
-      { label: "Cost Reduction", value: "60%" },
-      { label: "Customer Satisfaction", value: "95%" },
+      { label: "Operating Cost Reduction", value: "50%" },
+      { label: "Customer Satisfaction", value: "100%" },
       { label: "Awards Won", value: "3" },
     ],
     color: "#8b5cf6",
